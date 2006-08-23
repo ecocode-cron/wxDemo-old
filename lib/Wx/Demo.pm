@@ -5,18 +5,15 @@ use Wx;
 use strict;
 use base qw(Wx::Frame Class::Accessor::Fast);
 
-use Wx qw(:textctrl :sizer :window);
+use Wx qw(:textctrl :sizer :window :id);
 use Wx qw(wxDefaultPosition wxDefaultSize
           wxDEFAULT_FRAME_STYLE wxNO_FULL_REPAINT_ON_RESIZE wxCLIP_CHILDREN);
-use Wx::Event qw(EVT_TREE_SEL_CHANGED);
+use Wx::Event qw(EVT_TREE_SEL_CHANGED EVT_MENU);
 use File::Slurp;
 use File::Basename qw();
 use File::Spec;
-use Module::Pluggable::Fast
-  name     => 'modules',
-  search   => [ qw(Wx::DemoModules) ],
-  require  => 1,
-  ;
+use UNIVERSAL::require;
+use Module::Pluggable::Object;
 
 __PACKAGE__->mk_ro_accessors( qw(tree source notebook) );
 
@@ -27,6 +24,19 @@ sub new {
         wxDEFAULT_FRAME_STYLE|wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN );
 
     Wx::InitAllImageHandlers();
+
+    # create menu bar
+      my $bar = Wx::MenuBar->new;
+    my $file = Wx::Menu->new;
+    $file->Append( wxID_EXIT, "E&xit" );
+
+    my $help = Wx::Menu->new;
+    $help->Append( wxID_ABOUT, "&About..." );
+
+    $bar->Append( $file, "&File" );
+    $bar->Append( $help, "&Help" );
+
+    $self->SetMenuBar( $bar );
 
     # create splitters
     my $split1 = Wx::SplitterWindow->new
@@ -58,6 +68,9 @@ sub new {
 
     EVT_TREE_SEL_CHANGED( $self, $tree, \&on_show_module );
 
+    EVT_MENU( $self, wxID_ABOUT, \&on_about );
+    EVT_MENU( $self, wxID_EXIT, sub { $self->Close } );
+
     $self->populate_modules;
 
     $self->SetIcon( Wx::GetWxPerlIcon() );
@@ -66,6 +79,15 @@ sub new {
     Wx::LogMessage( "Welcome to wxPerl!" );
 
     return $self;
+}
+
+sub on_about {
+    my( $self ) = @_;
+    use Wx qw(wxOK wxCENTRE wxVERSION_STRING);
+
+    Wx::MessageBox( "wxPerl demo, (c) 2001-2006 Mattia Barbon\n" .
+                    "wxPerl $Wx::VERSION, " . wxVERSION_STRING,
+                    "About wxPerl demo", wxOK|wxCENTRE, $self );
 }
 
 sub on_show_module {
@@ -90,6 +112,22 @@ sub _module_file {
     return $INC{$mod_file}
 }
 
+sub _add_menus {
+    my( $self, %menus ) = @_;
+
+    while( my( $title, $menu ) = each %menus ) {
+        $self->GetMenuBar->Insert( 1, $menu, $title );
+    }
+}
+
+sub _remove_menus {
+    my( $self ) = @_;
+
+    while( $self->GetMenuBar->GetMenuCount > 2 ) {
+        $self->GetMenuBar->Remove( 1 )->Destroy;
+    }
+}
+
 sub show_module {
     my( $self, $module ) = @_;
 
@@ -103,7 +141,7 @@ sub show_module {
     if( $nb->GetPageCount == 2 ) {
         $nb->SetSelection( 0 ) if $sel == 1;
         $nb->DeletePage( 1 );
-        # $this->remove_menu;
+        $self->_remove_menus;
     }
     if( ref( $window ) ) {
         if( !$window->IsTopLevel ) {
@@ -112,7 +150,7 @@ sub show_module {
         } else {
             $window->Show;
         }
-        # $this->add_menu( $obj->menu );
+        $self->_add_menus( $window->menu ) if $window->can( 'menu' );
     }
 }
 
@@ -128,7 +166,7 @@ my @tags =
 
 sub d($) { Wx::TreeItemData->new( $_[0] ) }
 
-# ppor man's insertion sort
+# poor man's insertion sort
 sub add_item {
     my( $tree, $id, $module ) = @_;
 
@@ -158,7 +196,7 @@ sub add_item {
 sub populate_modules {
     my( $self ) = @_;
     my $tree = $self->tree;
-    my @modules = $self->modules;
+    my @modules = $self->load_plugins;
 
     my $root_id = $tree->AddRoot( 'wxPerl', -1, -1 );
     my %tag_map;
@@ -171,6 +209,7 @@ sub populate_modules {
             $parent_id = $root_id;
         }
         die "'$tag' has no parent" unless $parent_id;
+        next if $tag_map{$tag->[0]};
         my $id = $tree->AppendItem( $parent_id, $tag->[1], -1, -1 );
         $tag_map{$tag->[0]} = $id;
     }
@@ -184,6 +223,32 @@ sub populate_modules {
     }
 
     $tree->Expand( $root_id );
+}
+
+# allow ignoring load failures
+sub load_plugins {
+    my( $self ) = @_;
+    my $finder = Module::Pluggable::Object->new
+      ( search_path => [ qw(Wx::DemoModules) ],
+        require     => 0,
+        filename    => __FILE__,
+        );
+
+    foreach my $package ( $finder->plugins ) {
+        unless( $package->require ) {
+            Wx::LogWarning( "Skipping module '%s'", $package );
+            Wx::LogWarning( $_ ) foreach split /\n/, $@;
+            my $f = "$package.pm"; $f =~ s{::}{/}g;
+            $INC{$f} = 'skip it';
+        };
+    }
+
+    # search inner packages
+    return Module::Pluggable::Object->new
+      ( search_path => [ qw(Wx::DemoModules) ],
+        require     => 1,
+        filename    => __FILE__,
+        )->plugins;
 }
 
 sub get_data_file {
@@ -220,7 +285,7 @@ sub new {
         my $font = Wx::Font->new( 10, wxTELETYPE, wxNORMAL, wxNORMAL );
 
         $self->SetFont( $font );
-        $self->StyleSetFont(wxSTC_STYLE_DEFAULT, $font);
+        $self->StyleSetFont( wxSTC_STYLE_DEFAULT, $font );
         $self->StyleClearAll();
 
         $self->StyleSetForeground(0, Wx::Colour->new(0x00, 0x00, 0x7f));
@@ -263,9 +328,6 @@ sub new {
 
         #Set a style 12 bold
         $self->StyleSetBold(12,  1);
-
-        # Add new keyword. Not sure about applying style yet. This is currently dark blue, style 10?
-        $self->SetKeyWords(0,"wxPerl_rocks");
 
         # Apply tag style for selected lexer (blue)
         $self->StyleSetSpec( wxSTC_H_TAG, "fore:#0000ff" );

@@ -9,13 +9,14 @@ WriteMakefile
     VERSION_FROM    => 'bin/wxperl_demo.pl',
     PREREQ_PM       => { 'File::Spec'              => 0.8,
                          'Wx'                      => 0.57,
-                         'Module::Pluggable::Fast' => 0.18,
+                         'Module::Pluggable'       => 3.1,
+                         'UNIVERSAL::require'      => 0.10,
                          'Class::Accessor::Fast'   => 0.20,
                          'File::Slurp'             => 0.01,
                          'File::chdir'             => 0.06,
                          'IO::String'              => 1.08,
                          },
-    EXE_FILES       => [qw(bin/wxperl_demo.pl)],
+    EXE_FILES       => [ qw(bin/wxperl_demo.pl) ],
     ( $] >= 5.005 ?
       ( AUTHOR          => 'Mattia Barbon <mbarbon@cpan.org>' ) :
       () ),
