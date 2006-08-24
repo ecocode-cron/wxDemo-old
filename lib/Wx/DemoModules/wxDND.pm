@@ -4,7 +4,7 @@
 ## Author:      Mattia Barbon
 ## Modified by:
 ## Created:     12/09/2001
-## RCS-ID:      $Id: wxDND.pm,v 1.1 2006/08/14 20:00:46 mbarbon Exp $
+## RCS-ID:      $Id: wxDND.pm,v 1.2 2006/08/24 20:15:05 mbarbon Exp $
 ## Copyright:   (c) 2001, 2004, 2006 Mattia Barbon
 ## Licence:     This program is free software; you can redistribute it and/or
 ##              modify it under the same terms as Perl itself
@@ -32,11 +32,11 @@ sub new {
     ( Wx::DemoModules::wxDND::TextDropTarget->new( $droptext ) );
 
   # bitmap drop target
-  Wx::StaticText->new( $this, -1, 'Drop bitmap below', [ 200, 10 ] );
-  my $window = Wx::Panel->new( $this, -1, [ 200, 40 ], [ 80, 50 ] );
+  Wx::StaticText->new( $this, -1, 'Drop bitmap below', [ 180, 10 ] );
+  my $window = Wx::Panel->new( $this, -1, [ 180, 40 ], [ 80, 50 ] );
   $window->SetBackgroundColour( wxRED );
   my $dropbitmap = Wx::StaticBitmap->new( $this, -1, wxNullBitmap,
-                                          [ 200, 100 ], [ 200, 200 ] );
+                                          [ 180, 100 ], [ 200, 200 ] );
   $window->SetDropTarget
     ( Wx::DemoModules::wxDND::BitmapDropTarget->new( $dropbitmap ) );
   $dropbitmap->SetBitmap( Wx::Bitmap->new( wxTheApp->GetStdIcon( wxICON_HAND ) ) );
@@ -52,13 +52,25 @@ sub new {
     Wx::DemoModules::wxDND::DropSource->new( $this, -1, [ 10, 230 ] );
 
   # tree control; you can drop on items
-  $tree = Wx::TreeCtrl->new( $this, -1, [ 300, 10 ], [ 100, 150 ] );
+  Wx::StaticText->new( $this, -1, 'Drop bitmap in tree below', [ 300, 10 ] );
+  $tree = Wx::TreeCtrl->new( $this, -1, [ 300, 40 ], [ 100, 90 ] );
   my $root = $tree->AddRoot( "Drop here" );
   $tree->AppendItem( $root, "and here" );
   $tree->AppendItem( $root, "and here" );
   $tree->AppendItem( $root, "and here" );
+  $tree->Expand( $root );
   $tree->SetDropTarget
     ( Wx::DemoModules::wxDND::TreeDropTarget->new( $tree, $dropbitmap ) );
+
+  # native perl data drop target
+  Wx::StaticText->new( $this, -1, 'Drop data below', [ 300, 140 ] );
+  my $dropdata = Wx::TextCtrl->new( $this, -1, '', [ 300, 170 ], [ 100, 50 ] );
+  $dropdata->SetDropTarget
+    ( Wx::DemoModules::wxDND::DataDropTarget->new( $dropdata ) );
+
+  # drop data source
+  my $dragdatasource =
+    Wx::DemoModules::wxDND::DropDataSource->new( $this, -1, [ 300, 230 ] );
 
   return $this;
 }
@@ -230,6 +242,79 @@ sub OnData {
 
   $this->GetData;
   $this->canvas->SetBitmap( $this->data->GetBitmap );
+
+  return $def;
+}
+
+package Wx::DemoModules::wxDND::DropDataSource;
+
+use strict;
+use base qw(Wx::Window);
+
+use Wx::Event qw(EVT_LEFT_DOWN EVT_PAINT);
+
+use Wx::DemoModules::lib::DataObjects;
+
+sub new {
+  my $class = shift;
+  my $this = $class->SUPER::new( @_[0,1,2], [200,50] );
+
+  EVT_PAINT( $this, \&OnPaint );
+  EVT_LEFT_DOWN( $this, \&OnDrag );
+
+  return $this;
+}
+
+sub OnPaint {
+  my( $this, $event ) = @_;
+  my $dc = Wx::PaintDC->new( $this );
+  $dc->DrawText( "Drag perl data from here", 2, 2 );
+}
+
+sub OnDrag {
+  my( $this, $event ) = @_;
+
+  my $PerlData = { fruit => 'lemon', colour => 'yellow' };
+  my $data = get_perl_data_object( $PerlData );
+  my $source = Wx::DropSource->new( $this );
+  $source->SetData( $data );
+  Wx::LogMessage( "OnDrag Status: %d", $source->DoDragDrop( 1 ) );
+}
+
+package Wx::DemoModules::wxDND::DataDropTarget;
+
+use strict;
+use base qw(Wx::DropTarget);
+use Wx::DemoModules::lib::DataObjects;
+
+sub new {
+  my $class = shift;
+  my $this = $class->SUPER::new;
+
+  my $data = get_perl_data_object();
+  $this->SetDataObject( $data );
+  $this->{DATA} = $data;
+  $this->{TEXTCTRL} = $_[0];
+
+  return $this;
+}
+
+sub data { $_[0]->{DATA} }
+sub textctrl { $_[0]->{TEXTCTRL} }
+
+sub OnData {
+  my( $this, $x, $y, $def ) = @_;
+
+  Wx::LogMessage( "Dropped perl data at ($x, $y)" );
+  $this->GetData;
+  my $PerlData = $this->data->GetPerlData;
+  my $text = '';
+  foreach (keys %$PerlData) {
+	  $text .= "$_ = $PerlData->{$_} ";
+  }
+  Wx::LogMessage( "( $text )" );
+
+  $this->textctrl->SetValue( $text );
 
   return $def;
 }
