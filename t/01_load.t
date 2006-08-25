@@ -1,9 +1,10 @@
 #!/usr/bin/perl -w
 
 use strict;
-use Test::More tests => 41;
+use Test::More tests => 42;
 
 use_ok( 'Wx::Demo' );
+use_ok( 'Wx::DemoModules::lib::BaseModule' );
 use_ok( 'Wx::DemoModules::lib::DataObjects' );
 use_ok( 'Wx::DemoModules::wxBitmapButton' );
 use_ok( 'Wx::DemoModules::wxBoxSizer' );

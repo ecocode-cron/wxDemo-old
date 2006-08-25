@@ -4,7 +4,7 @@
 ## Author:      Mattia Barbon
 ## Modified by:
 ## Created:     13/08/2006
-## RCS-ID:      $Id: wxRadioButton.pm,v 1.1 2006/08/14 20:00:51 mbarbon Exp $
+## RCS-ID:      $Id: wxRadioButton.pm,v 1.2 2006/08/25 21:19:03 mbarbon Exp $
 ## Copyright:   (c) 2000, 2003, 2005-2006 Mattia Barbon
 ## Licence:     This program is free software; you can redistribute it and/or
 ##              modify it under the same terms as Perl itself
@@ -47,7 +47,7 @@ sub new {
     $rb21->SetValue( 1 );
 
     EVT_BUTTON( $self, $b1, \&OnRadioButton_Sel1 );
-    EVT_BUTTON( $self, $b2, \&OnRadioBButton_Sel2 );
+    EVT_BUTTON( $self, $b2, \&OnRadioButton_Sel2 );
     foreach my $rb ( $rb11, $rb12, $rb21, $rb22, $rb23 ) {
         EVT_RADIOBUTTON( $self, $rb, \&OnRadio );
     }

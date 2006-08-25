@@ -4,7 +4,7 @@
 ## Author:      Mattia Barbon
 ## Modified by:
 ## Created:     13/08/2006
-## RCS-ID:      $Id: wxGauge.pm,v 1.1 2006/08/14 20:00:51 mbarbon Exp $
+## RCS-ID:      $Id: wxGauge.pm,v 1.2 2006/08/25 21:19:03 mbarbon Exp $
 ## Copyright:   (c) 2000, 2003, 2005-2006 Mattia Barbon
 ## Licence:     This program is free software; you can redistribute it and/or
 ##              modify it under the same terms as Perl itself
@@ -13,24 +13,41 @@
 package Wx::DemoModules::wxGauge;
 
 use strict;
-use base qw(Wx::Panel Class::Accessor::Fast);
+use base qw(Wx::DemoModules::lib::BaseModule Class::Accessor::Fast);
 
 use Wx qw(:gauge :font wxNOT_FOUND);
 use Wx::Event qw();
 
-__PACKAGE__->mk_ro_accessors( qw(gauge) );
+__PACKAGE__->mk_accessors( qw(gauge timer) );
 
-sub new {
-    my( $class, $parent ) = @_;
-    my $self = $class->SUPER::new( $parent );
+sub create_control {
+    my( $self ) = @_;
 
-    $self->{gauge} = Wx::Gauge->new( $self, -1, 200,
-                                     [18, 90], [155, -1],
-                                     wxGA_HORIZONTAL );
+    my $gauge = Wx::Gauge->new
+      ( $self, -1, 200, [-1, -1], [-1, -1], $self->style );
+    $self->gauge( $gauge );
+}
 
-    $self->gauge->SetValue( 120 );
+sub styles {
+    my( $self ) = @_;
 
-    return $self;
+    return ( [ wxGA_HORIZONTAL, 'Horizontal' ],
+             [ wxGA_VERTICAL, 'Vertical' ],
+             );
+}
+
+sub commands {
+    my( $self ) = @_;
+
+    return ( { with_value  => 1,
+               label       => 'Set Value',
+               action      => sub { $self->gauge->SetValue( $_[0] ) },
+               },
+             { with_value  => 1,
+               label       => 'Set Range',
+               action      => sub { $self->gauge->SetRange( $_[0] ) },
+               },
+               );
 }
 
 sub add_to_tags { qw(controls) }

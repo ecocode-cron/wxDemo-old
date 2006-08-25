@@ -14,6 +14,7 @@ lib/Wx/DemoModules/files/xrc/fuzzy.gif
 lib/Wx/DemoModules/files/xrc/quotes.gif
 lib/Wx/DemoModules/files/xrc/resource.xrc
 lib/Wx/DemoModules/files/xrc/update.gif
+lib/Wx/DemoModules/lib/BaseModule.pm
 lib/Wx/DemoModules/lib/DataObjects.pm
 lib/Wx/DemoModules/wxBitmapButton.pm
 lib/Wx/DemoModules/wxBoxSizer.pm
