@@ -4,7 +4,7 @@
 ## Author:      Mattia Barbon
 ## Modified by:
 ## Created:     13/08/2006
-## RCS-ID:      $Id: wxChoice.pm,v 1.2 2006/08/25 21:19:03 mbarbon Exp $
+## RCS-ID:      $Id: wxChoice.pm,v 1.3 2006/08/26 15:26:28 mbarbon Exp $
 ## Copyright:   (c) 2000, 2003, 2005-2006 Mattia Barbon
 ## Licence:     This program is free software; you can redistribute it and/or
 ##              modify it under the same terms as Perl itself
@@ -30,20 +30,24 @@ sub styles {
 sub commands {
     my( $self ) = @_;
 
-    return ( { label       => 'Select #2',
-               action      => \&OnChoiceButtons_SelNum,
+    return ( { label       => 'Select item',
+               with_value  => 1,
+               action      => sub { $self->choice->SetSelection( $_[0] ) },
                },
-             { label       => 'Select \'This\'',
-               action      => \&OnChoiceButtons_SelStr,
+             { label       => 'Select string',
+               with_value  => 1,
+               action      => sub { $self->choice
+                                      ->SetStringSelection( $_[0] ) },
                },
              { label       => 'Clear',
-               action      => \&OnChoiceButtons_Clear,
+               action      => sub { $self->choice->Clear },
                },
-             { label       => 'Append \'Hi\'',
-               action      => \&OnChoiceButtons_Append,
+             { label       => 'Append',
+               with_value  => 1,
+               action      => sub { $self->choice->Append( $_[0] ) },
                },
              { label       => 'Delete selected item',
-               action      => \&OnChoiceButtons_Delete,
+               action      => \&on_delete_selected,
                },
                );
 }
@@ -71,31 +75,7 @@ sub OnChoice {
                     $self->choice->GetStringSelection(), "'" );
 }
 
-sub OnChoiceButtons_SelNum {
-    my( $self, $event ) = @_;
-
-    $self->choice->SetSelection( 2 );
-}
-
-sub OnChoiceButtons_SelStr {
-    my( $self, $event ) = @_;
-
-    $self->choice->SetStringSelection( "This" );
-}
-
-sub OnChoiceButtons_Clear {
-    my( $self ) = @_;
-
-    $self->choice->Clear();
-}
-
-sub OnChoiceButtons_Append {
-    my( $self ) = @_;
-
-    $self->choice->Append( 'Hi!' );
-}
-
-sub OnChoiceButtons_Delete {
+sub on_delete_selected {
     my( $self ) = @_;
     my( $idx );
 

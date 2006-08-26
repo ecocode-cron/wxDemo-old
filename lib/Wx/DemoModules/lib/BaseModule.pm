@@ -4,7 +4,7 @@
 ## Author:      Mattia Barbon
 ## Modified by:
 ## Created:     25/08/2006
-## RCS-ID:      $Id: BaseModule.pm,v 1.1 2006/08/25 21:19:04 mbarbon Exp $
+## RCS-ID:      $Id: BaseModule.pm,v 1.2 2006/08/26 15:26:28 mbarbon Exp $
 ## Copyright:   (c) 2006 Mattia Barbon
 ## Licence:     This program is free software; you can redistribute it and/or
 ##              modify it under the same terms as Perl itself
@@ -27,15 +27,36 @@ sub new {
     my $sizer = Wx::BoxSizer->new( wxHORIZONTAL );
 
     $self->style( 0 );
-    $self->add_styles( $sizer );
-    $self->add_commands( $sizer );
 
-    my $box = Wx::StaticBox->new( $self, -1, 'Control' );
-    my $ctrlsz = Wx::StaticBoxSizer->new( $box, wxVERTICAL );
+    # styles
+    if( $self->styles ) {
+        my $box = Wx::StaticBox->new( $self, -1, 'Styles' );
+        my $stysizer = Wx::StaticBoxSizer->new( $box, wxVERTICAL );
 
-    $self->control_sizer( $ctrlsz );
-    $ctrlsz->Add( $self->create_control, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
-    $sizer->Add( $ctrlsz, 1, wxGROW|wxALL, 5 );
+        $self->add_styles( $stysizer );
+        $sizer->Add( $stysizer, 0, wxGROW|wxALL, 5 );
+    }
+
+    # commands
+    if( $self->commands ) {
+        my $box = Wx::StaticBox->new( $self, -1, 'Commands' );
+        my $cmdsizer = Wx::StaticBoxSizer->new( $box, wxVERTICAL );
+
+        $self->add_commands( $cmdsizer );
+        $sizer->Add( $cmdsizer, 0, wxGROW|wxALL, 5 );
+    }
+
+    # the control
+    if( my $control = $self->create_control ) {
+        my $box = Wx::StaticBox->new( $self, -1, 'Control' );
+        my $ctrlsz = Wx::StaticBoxSizer->new( $box, wxVERTICAL );
+
+        $self->control_sizer( $ctrlsz );
+        $ctrlsz->Add( $control, 0,
+                      wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL,
+                      5 );
+        $sizer->Add( $ctrlsz, 1, wxGROW|wxALL, 5 );
+    }
 
     $self->SetSizerAndFit( $sizer );
 
@@ -43,15 +64,9 @@ sub new {
 }
 
 sub add_styles {
-    my( $self, $topsizer ) = @_;
-    my @styles = $self->styles;
+    my( $self, $sizer ) = @_;
 
-    return unless @styles;
-
-    my $box = Wx::StaticBox->new( $self, -1, 'Styles' );
-    my $sizer = Wx::StaticBoxSizer->new( $box, wxVERTICAL );
-
-    foreach my $style ( @styles ) {
+    foreach my $style ( $self->styles ) {
         my $cbox = Wx::CheckBox->new( $self, -1, $style->[1] );
         EVT_CHECKBOX( $self, $cbox, sub {
                           my( $self, $event ) = @_;
@@ -65,28 +80,21 @@ sub add_styles {
                       } );
         $sizer->Add( $cbox, 0, wxGROW|wxALL, 3 );
     }
-
-    $topsizer->Add( $sizer, 0, wxGROW|wxALL, 5 );
 }
 
 sub add_commands {
-    my( $self, $topsizer ) = @_;
-    my @commands = $self->commands;
+    my( $self, $sizer ) = @_;
 
-    return unless @commands;
-
-    my $box = Wx::StaticBox->new( $self, -1, 'Commands' );
-    my $sizer = Wx::StaticBoxSizer->new( $box, wxVERTICAL );
-
-    foreach my $command ( @commands ) {
+    foreach my $command ( $self->commands ) {
         if( $command->{with_value} ) {
             my $sz = Wx::BoxSizer->new( wxHORIZONTAL );
             my $but = Wx::Button->new( $self, -1, $command->{label} );
-            my $val = Wx::TextCtrl->new( $self, -1, '' );
+            my @val = map { Wx::TextCtrl->new( $self, -1, '' ) }
+                          ( 1 .. $command->{with_value} );
             $sz->Add( $but, 1, wxRIGHT, 5 );
-            $sz->Add( $val, 1 );
+            $sz->Add( $_, 1 ) foreach @val;
             EVT_BUTTON( $self, $but, sub {
-                            $command->{action}->( $val->GetValue );
+                            $command->{action}->( map { $_->GetValue } @val );
                         } );
             $sizer->Add( $sz, 0, wxGROW|wxALL, 3 );
         } else {
@@ -95,22 +103,24 @@ sub add_commands {
             $sizer->Add( $but, 0, wxGROW|wxALL, 3 );
         }
     }
-
-    $topsizer->Add( $sizer, 0, wxGROW|wxALL, 5 );
 }
 
 sub recreate_control {
     my( $self ) = @_;
 
-    $self->control_sizer->GetItem( 0 )->DeleteWindows;
-    $self->control_sizer->Detach( 0 );
+    if( $self->control_sizer ) {
+        $self->control_sizer->GetItem( 0 )->DeleteWindows;
+        $self->control_sizer->Detach( 0 );
 
-    $self->control_sizer->Add( $self->create_control,
-                               0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
-    $self->Layout;
+        $self->control_sizer->Add
+          ( $self->create_control, 0, 
+            wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
+        $self->Layout;
+    }
 }
 
 sub styles { }
 sub commands { }
+sub create_control { }
 
 1;

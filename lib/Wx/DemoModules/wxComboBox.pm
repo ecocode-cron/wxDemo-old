@@ -4,7 +4,7 @@
 ## Author:      Mattia Barbon
 ## Modified by:
 ## Created:     13/08/2006
-## RCS-ID:      $Id: wxComboBox.pm,v 1.1 2006/08/14 20:00:50 mbarbon Exp $
+## RCS-ID:      $Id: wxComboBox.pm,v 1.2 2006/08/26 15:26:28 mbarbon Exp $
 ## Copyright:   (c) 2000, 2003, 2005-2006 Mattia Barbon
 ## Licence:     This program is free software; you can redistribute it and/or
 ##              modify it under the same terms as Perl itself
@@ -13,50 +13,64 @@
 package Wx::DemoModules::wxComboBox;
 
 use strict;
-use base qw(Wx::Panel Class::Accessor::Fast);
+use base qw(Wx::DemoModules::lib::BaseModule Class::Accessor::Fast);
 
-use Wx qw(:combobox :font :textctrl wxNOT_FOUND);
-use Wx::Event qw(EVT_COMBOBOX EVT_BUTTON EVT_TEXT EVT_TEXT_ENTER);
+use Wx qw(:combobox :textctrl wxNOT_FOUND);
+use Wx::Event qw(EVT_COMBOBOX EVT_TEXT EVT_TEXT_ENTER);
 
-__PACKAGE__->mk_ro_accessors( qw(combobox) );
+__PACKAGE__->mk_accessors( qw(combobox) );
 
-sub new {
-    my( $class, $parent ) = @_;
-    my $self = $class->SUPER::new( $parent );
+sub styles {
+    my( $self ) = @_;
+
+    return ( [ wxCB_SORT, 'Sorted' ],
+             [ wxCB_SIMPLE, 'Simple' ],
+             [ wxCB_DROPDOWN, 'Dropdown' ],
+             [ wxCB_READONLY, 'Read-only' ],
+             [ wxTE_PROCESS_ENTER, 'Process enter' ],
+             );
+}
+
+sub commands {
+    my( $self ) = @_;
+
+    return ( { label       => 'Select item',
+               with_value  => 1,
+               action      => sub { $self->combobox->SetSelection( $_[0] ) },
+               },
+             { label       => 'Select string',
+               with_value  => 1,
+               action      => sub { $self->combobox
+                                      ->SetStringSelection( $_[0] ) },
+               },
+             { label       => 'Clear',
+               action      => sub { $self->combobox->Clear },
+               },
+             { label       => 'Append',
+               with_value  => 1,
+               action      => sub { $self->combobox->Append( $_[0] ) }
+               },
+             { label       => 'Delete selected item',
+               action      => \&on_delete_selected,
+               },
+               );
+}
+
+sub create_control {
+    my( $self ) = @_;
 
     my $choices = [ 'This', 'is one of my',
                     'really', 'wonderful', 'examples', ];
 
-    $self->{combobox} = Wx::DemoModules::wxComboBox::Custom->new
-        ( $self, -1, "This", [20, 25], [120, -1],
-          $choices, wxTE_PROCESS_ENTER );
-    $self->combobox->SetToolTip( <<EOT );
-This is a natural combobox
-can you believe me?
-EOT
+    my $combobox = Wx::DemoModules::wxComboBox::Custom->new
+        ( $self, -1, "This", [-1, -1], [-1, -1],
+          $choices, $self->style );
 
-    my $b1 = Wx::Button->new( $self, -1, 'Select #&2', [180, 30], [140, 30] );
-    my $b2 = Wx::Button->new( $self, -1, '&Select \'This\'',
-                              [340, 30], [140, 30] );
-    my $b3 = Wx::Button->new( $self, -1, '&Clear', [180, 80], [140, 30] );
-    my $b4 = Wx::Button->new( $self, -1, '&Append \'Hi!\'', 
-                              [340, 80], [140, 30] );
-    my $b5 = Wx::Button->new( $self, -1, 'D&elete selected item',
-                              [180, 130], [140, 30] );
-    my $b6 = Wx::Button->new( $self, -1, 'Set &Italic font',
-                              [340, 130], [140, 30] );
+    EVT_COMBOBOX( $self, $combobox, \&OnCombo );
+    EVT_TEXT( $self, $combobox, \&OnComboTextChanged );
+    EVT_TEXT_ENTER( $self, $combobox, \&OnComboTextEnter );
 
-    EVT_BUTTON( $self, $b1, \&OnComboButtons_SelNum );
-    EVT_BUTTON( $self, $b2, \&OnComboButtons_SelStr );
-    EVT_BUTTON( $self, $b3, \&OnComboButtons_Clear );
-    EVT_BUTTON( $self, $b4, \&OnComboButtons_Append );
-    EVT_BUTTON( $self, $b5, \&OnComboButtons_Delete );
-    EVT_BUTTON( $self, $b6, \&OnComboButtons_Font );
-    EVT_COMBOBOX( $self, $self->combobox, \&OnCombo );
-    EVT_TEXT( $self, $self->combobox, \&OnComboTextChanged );
-    EVT_TEXT_ENTER( $self, $self->combobox, \&OnComboTextEnter );
-
-    return $self;
+    return $self->combobox( $combobox );
 }
 
 sub OnCombo {
@@ -82,50 +96,13 @@ sub OnComboTextEnter {
                     $self->combobox->GetValue() );
 }
 
-sub OnComboButtons_Enable {
-    my( $self, $event ) = @_;
-
-    my( $e ) = $event->GetInt() == 0;
-    $self->combobox->Enable( $e );
-}
-
-sub OnComboButtons_SelNum {
-    my( $self, $event ) = @_;
-
-    $self->combobox->SetSelection( 2 );
-}
-
-sub OnComboButtons_SelStr {
-    my( $self, $event ) = @_;
-
-    $self->combobox->SetStringSelection( "This" );
-}
-
-sub OnComboButtons_Clear {
-    my( $self ) = @_;
-
-    $self->combobox->Clear();
-}
-
-sub OnComboButtons_Append {
-    my( $self ) = @_;
-
-    $self->combobox->Append( 'Hi!' );
-}
-
-sub OnComboButtons_Delete {
+sub on_delete_selected {
     my( $self ) = @_;
     my( $idx );
 
     if( ( $idx = $self->combobox->GetSelection() ) != wxNOT_FOUND ) {
         $self->combobox->Delete( $idx );
     }
-}
-
-sub OnComboButtons_Font {
-    my( $self ) = @_;
-
-    $self->combobox->SetFont( wxITALIC_FONT );
 }
 
 sub add_to_tags { qw(controls) }

@@ -4,7 +4,7 @@
 ## Author:      Mattia Barbon
 ## Modified by:
 ## Created:     13/08/2006
-## RCS-ID:      $Id: wxStaticText.pm,v 1.1 2006/08/14 20:00:51 mbarbon Exp $
+## RCS-ID:      $Id: wxStaticText.pm,v 1.2 2006/08/26 15:26:28 mbarbon Exp $
 ## Copyright:   (c) 2000, 2003, 2005-2006 Mattia Barbon
 ## Licence:     This program is free software; you can redistribute it and/or
 ##              modify it under the same terms as Perl itself
@@ -13,32 +13,40 @@
 package Wx::DemoModules::wxStaticText;
 
 use strict;
-use base qw(Wx::Panel Class::Accessor::Fast);
+use base qw(Wx::DemoModules::lib::BaseModule Class::Accessor::Fast);
 
-use Wx qw();
-use Wx::Event qw(EVT_BUTTON);
+use Wx qw(:statictext);
 
-__PACKAGE__->mk_ro_accessors( qw(statictext1 statictext2) );
+__PACKAGE__->mk_accessors( qw(statictext) );
 
-sub new {
-    my( $class, $parent ) = @_;
-    my $self = $class->SUPER::new( $parent );
+sub styles {
+    my( $self ) = @_;
 
-    $self->{statictext1} =
-      Wx::StaticText->new( $self, -1, 'A label', [10, 10] );
-    $self->{statictext2} =
-      Wx::StaticText->new( $self, -1, '', [80, 10] );
-
-    EVT_BUTTON( $self, Wx::Button->new( $self, -1, 'Set text', [10, 80] ),
-                \&OnSetText );
-
-    return $self;
+    return ( [ wxALIGN_LEFT, 'Align left' ],
+             [ wxALIGN_CENTER, 'Align center' ],
+             [ wxALIGN_RIGHT, 'Align right' ],
+             [ wxST_NO_AUTORESIZE, 'No autoresize' ],
+             );
 }
 
-sub OnSetText {
-    my( $self, $event ) = @_;
+sub commands {
+    my( $self ) = @_;
 
-    $self->statictext2->SetLabel( 'A l' . 'o' x 40 . 'ng text' );
+    return ( { with_value  => 1,
+               label       => 'Set label',
+               action      => sub { $self->statictext->SetLabel( $_[0] ) },
+               },
+             );
+}
+
+sub create_control {
+    my( $self ) = @_;
+
+    my $statictext = Wx::StaticText->new( $self, -1, 'A label',
+                                          [-1, -1], [100, 200],
+                                          $self->style );
+
+    return $self->statictext( $statictext );
 }
 
 sub add_to_tags { qw(controls) }

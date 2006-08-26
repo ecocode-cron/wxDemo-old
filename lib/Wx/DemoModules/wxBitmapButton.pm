@@ -4,7 +4,7 @@
 ## Author:      Mattia Barbon
 ## Modified by:
 ## Created:     13/08/2006
-## RCS-ID:      $Id: wxBitmapButton.pm,v 1.1 2006/08/14 20:00:51 mbarbon Exp $
+## RCS-ID:      $Id: wxBitmapButton.pm,v 1.2 2006/08/26 15:26:28 mbarbon Exp $
 ## Copyright:   (c) 2000, 2003, 2005-2006 Mattia Barbon
 ## Licence:     This program is free software; you can redistribute it and/or
 ##              modify it under the same terms as Perl itself
@@ -13,31 +13,59 @@
 package Wx::DemoModules::wxBitmapButton;
 
 use strict;
-use base qw(Wx::Panel Class::Accessor::Fast);
+use base qw(Wx::DemoModules::lib::BaseModule Class::Accessor::Fast);
 
-use Wx qw(:icon wxTheApp);
+use Wx qw(:icon wxTheApp wxNullBitmap);
 use Wx::Event qw(EVT_BUTTON);
 
-__PACKAGE__->mk_ro_accessors( qw(button) );
+__PACKAGE__->mk_accessors( qw(button) );
 
-sub new {
-    my( $class, $parent ) = @_;
-    my $self = $class->SUPER::new( $parent );
+sub commands {
+    my( $self ) = @_;
+
+    my $bmp1 = Wx::Bitmap->new( wxTheApp->GetStdIcon( wxICON_INFORMATION ) );
+    my $bmp2 = Wx::Bitmap->new( wxTheApp->GetStdIcon( wxICON_WARNING ) );
+    my $bmp3 = Wx::Bitmap->new( wxTheApp->GetStdIcon( wxICON_QUESTION ) );
+    my $null = wxNullBitmap;
+
+    return ( { label       => 'Clear bitmap',
+               action      => sub { $self->button->SetBitmapLabel( $null ) },
+               },
+             { label       => 'Set bitmap',
+               action      => sub { $self->button->SetBitmapLabel( $bmp1 ) },
+               },
+             { label       => 'Clear selected bitmap',
+               action      => sub { $self->button->SetBitmapSelected( $null ) },
+               },
+             { label       => 'Set selected bitmap',
+               action      => sub { $self->button->SetBitmapSelected( $bmp2 ) },
+               },
+             { label       => 'Clear focus bitmap',
+               action      => sub { $self->button->SetBitmapFocus( $null ) },
+               },
+             { label       => 'Set focus bitmap',
+               action      => sub { $self->button->SetBitmapFocus( $bmp3 ) },
+               },
+               );
+}
+
+sub create_control {
+    my( $self ) = @_;
 
     my $bmp1 = Wx::Bitmap->new( wxTheApp->GetStdIcon( wxICON_INFORMATION ) );
     my $bmp2 = Wx::Bitmap->new( wxTheApp->GetStdIcon( wxICON_WARNING ) );
     my $bmp3 = Wx::Bitmap->new( wxTheApp->GetStdIcon( wxICON_QUESTION ) );
 
-    $self->{button} = Wx::BitmapButton->new( $self, -1, $bmp1, [30, 50] );
-    $self->button->SetBitmapSelected( $bmp2 );
-    $self->button->SetBitmapFocus( $bmp3 );
+    my $button = Wx::BitmapButton->new( $self, -1, $bmp1, [-1, -1] );
+    $button->SetBitmapSelected( $bmp2 );
+    $button->SetBitmapFocus( $bmp3 );
 
-    EVT_BUTTON( $self, $self->button, \&OnClick );
+    EVT_BUTTON( $self, $button, \&on_click );
 
-    return $self;
+    return $self->button( $button );
 }
 
-sub OnClick {
+sub on_click {
     my( $self, $event ) = @_;
 
     Wx::LogMessage( 'Button clicked' );

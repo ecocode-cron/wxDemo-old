@@ -4,7 +4,7 @@
 ## Author:      Mattia Barbon
 ## Modified by:
 ## Created:     13/08/2006
-## RCS-ID:      $Id: wxSlider.pm,v 1.1 2006/08/14 20:00:51 mbarbon Exp $
+## RCS-ID:      $Id: wxSlider.pm,v 1.2 2006/08/26 15:26:28 mbarbon Exp $
 ## Copyright:   (c) 2000, 2003, 2005-2006 Mattia Barbon
 ## Licence:     This program is free software; you can redistribute it and/or
 ##              modify it under the same terms as Perl itself
@@ -13,24 +13,49 @@
 package Wx::DemoModules::wxSlider;
 
 use strict;
-use base qw(Wx::Panel Class::Accessor::Fast);
+use base qw(Wx::DemoModules::lib::BaseModule Class::Accessor::Fast);
 
 use Wx qw(:slider :font wxNOT_FOUND);
 use Wx::Event qw(EVT_SLIDER);
 
-__PACKAGE__->mk_ro_accessors( qw(slider) );
+__PACKAGE__->mk_accessors( qw(slider) );
 
-sub new {
-    my( $class, $parent ) = @_;
-    my $self = $class->SUPER::new( $parent );
+sub styles {
+    my( $self ) = @_;
 
-    $self->{slider} = Wx::Slider->new( $self, -1, 0, 0, 200,
-                                       [18, 90], [155, -1],
-                                       wxSL_LABELS );
+    return ( [ wxSL_HORIZONTAL, 'Horizontal' ],
+             [ wxSL_VERTICAL, 'Vertical' ],
+             [ wxSL_AUTOTICKS, 'Show ticks' ],
+             [ wxSL_LABELS, 'Show labels' ],
+             );
+}
 
-    EVT_SLIDER( $self, $self->slider, \&OnSlider );
+sub commands {
+    my( $self ) = @_;
 
-    return $self;
+    return ( { with_value  => 1,
+               label       => 'Set Value',
+               action      => sub { $self->slider->SetValue( $_[0] ) },
+               },
+             { with_value  => 2,
+               label       => 'Set Range',
+               action      => sub { $self->slider->SetRange( $_[0], $_[1] ) },
+               },
+               );
+}
+
+sub create_control {
+    my( $self ) = @_;
+
+    my $size = [ ( $self->style & wxSL_HORIZONTAL ) ? 200 : -1,
+                 ( $self->style & wxSL_VERTICAL ) ? 200 : -1 ];
+    my $slider = Wx::Slider->new( $self, -1, 0, 0, 200,
+                                  [-1, -1], $size,
+                                  $self->style );
+
+    EVT_SLIDER( $self, $slider, \&OnSlider );
+
+    return $self->slider( $slider );
 }
 
 sub OnSlider {
