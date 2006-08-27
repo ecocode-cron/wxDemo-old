@@ -4,7 +4,7 @@
 ## Author:      Mattia Barbon
 ## Modified by:
 ## Created:     25/08/2006
-## RCS-ID:      $Id: BaseModule.pm,v 1.2 2006/08/26 15:26:28 mbarbon Exp $
+## RCS-ID:      $Id: BaseModule.pm,v 1.3 2006/08/27 15:32:49 mbarbon Exp $
 ## Copyright:   (c) 2006 Mattia Barbon
 ## Licence:     This program is free software; you can redistribute it and/or
 ##              modify it under the same terms as Perl itself
@@ -46,9 +46,9 @@ sub new {
         $sizer->Add( $cmdsizer, 0, wxGROW|wxALL, 5 );
     }
 
-    # the control
+    # the control (for Mac, the box must be created before the control)
+    my $box = Wx::StaticBox->new( $self, -1, 'Control' );
     if( my $control = $self->create_control ) {
-        my $box = Wx::StaticBox->new( $self, -1, 'Control' );
         my $ctrlsz = Wx::StaticBoxSizer->new( $box, wxVERTICAL );
 
         $self->control_sizer( $ctrlsz );
@@ -56,6 +56,8 @@ sub new {
                       wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL,
                       5 );
         $sizer->Add( $ctrlsz, 1, wxGROW|wxALL, 5 );
+    } else {
+        $box->Destroy;
     }
 
     $self->SetSizerAndFit( $sizer );

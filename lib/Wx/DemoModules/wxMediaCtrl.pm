@@ -4,7 +4,7 @@
 ## Author:      Mattia Barbon
 ## Modified by:
 ## Created:     03/04/2006
-## RCS-ID:      $Id: wxMediaCtrl.pm,v 1.1 2006/08/14 20:00:48 mbarbon Exp $
+## RCS-ID:      $Id: wxMediaCtrl.pm,v 1.2 2006/08/27 15:32:49 mbarbon Exp $
 ## Copyright:   (c) 2006 Mattia Barbon
 ## Licence:     This program is free software; you can redistribute it and/or
 ##              modify it under the same terms as Perl itself
@@ -65,4 +65,4 @@ sub on_media_load {
 sub add_to_tags { qw(controls) }
 sub title { 'wxMediaCtrl' }
 
-1;
+defined &Wx::MediaCtrl::new ? 1 : 0;

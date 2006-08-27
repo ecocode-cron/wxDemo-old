@@ -228,6 +228,7 @@ sub populate_modules {
 # allow ignoring load failures
 sub load_plugins {
     my( $self ) = @_;
+    my %skip;
     my $finder = Module::Pluggable::Object->new
       ( search_path => [ qw(Wx::DemoModules) ],
         require     => 0,
@@ -240,11 +241,12 @@ sub load_plugins {
             Wx::LogWarning( $_ ) foreach split /\n/, $@;
             my $f = "$package.pm"; $f =~ s{::}{/}g;
             $INC{$f} = 'skip it';
+            $skip{$package} = 1;
         };
     }
 
     # search inner packages
-    return Module::Pluggable::Object->new
+    return grep !$skip{$_}, Module::Pluggable::Object->new
       ( search_path => [ qw(Wx::DemoModules) ],
         require     => 1,
         filename    => __FILE__,

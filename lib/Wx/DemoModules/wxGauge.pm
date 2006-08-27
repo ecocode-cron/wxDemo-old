@@ -4,7 +4,7 @@
 ## Author:      Mattia Barbon
 ## Modified by:
 ## Created:     13/08/2006
-## RCS-ID:      $Id: wxGauge.pm,v 1.2 2006/08/25 21:19:03 mbarbon Exp $
+## RCS-ID:      $Id: wxGauge.pm,v 1.3 2006/08/27 15:32:49 mbarbon Exp $
 ## Copyright:   (c) 2000, 2003, 2005-2006 Mattia Barbon
 ## Licence:     This program is free software; you can redistribute it and/or
 ##              modify it under the same terms as Perl itself
@@ -23,8 +23,10 @@ __PACKAGE__->mk_accessors( qw(gauge timer) );
 sub create_control {
     my( $self ) = @_;
 
+    my $size = [ ( $self->style & wxGA_HORIZONTAL ) ? 200 : -1,
+                 ( $self->style & wxGA_VERTICAL ) ? 200 : -1 ];
     my $gauge = Wx::Gauge->new
-      ( $self, -1, 200, [-1, -1], [-1, -1], $self->style );
+      ( $self, -1, 200, [-1, -1], $size, $self->style );
     $self->gauge( $gauge );
 }
 
@@ -33,6 +35,7 @@ sub styles {
 
     return ( [ wxGA_HORIZONTAL, 'Horizontal' ],
              [ wxGA_VERTICAL, 'Vertical' ],
+             [ wxGA_SMOOTH, 'Smooth' ],
              );
 }
 

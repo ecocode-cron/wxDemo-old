@@ -18,5 +18,5 @@ wxperl_demo.pl
 
 BUGS
 
-The examples are inconsistent and incomplete. This will be fixed.
-It is no wors than what was previously inside the wxPerl distribution.
+The examples are sometimes inconsistent and incomplete. This will be fixed.
+It is no worst than what was previously inside the wxPerl distribution.

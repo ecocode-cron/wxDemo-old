@@ -4,7 +4,7 @@
 ## Author:      Mattia Barbon
 ## Modified by:
 ## Created:     27/05/2003
-## RCS-ID:      $Id: wxScrollBar.pm,v 1.2 2006/08/26 15:26:28 mbarbon Exp $
+## RCS-ID:      $Id: wxScrollBar.pm,v 1.3 2006/08/27 15:32:49 mbarbon Exp $
 ## Copyright:   (c) 2003, 2005-2006 Mattia Barbon
 ## Licence:     This program is free software; you can redistribute it and/or
 ##              modify it under the same terms as Perl itself
@@ -15,7 +15,7 @@ package Wx::DemoModules::wxScrollBar;
 use strict;
 use base qw(Wx::DemoModules::lib::BaseModule Class::Accessor::Fast);
 use Wx qw(:sizer :scrollbar wxWHITE wxHORIZONTAL wxVERTICAL);
-use Wx::Event qw(EVT_BUTTON /EVT_SCROLL_*/);
+use Wx::Event qw(/EVT_SCROLL_*/ EVT_BUTTON);
 
 __PACKAGE__->mk_accessors( qw(scrollbar) );
 
