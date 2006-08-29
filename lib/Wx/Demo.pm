@@ -1,5 +1,11 @@
 package Wx::Demo;
 
+=head1 NAME
+
+Wx::Demo - the wxPerl demo
+
+=cut
+
 use Wx;
 
 use strict;

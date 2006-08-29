@@ -4,7 +4,7 @@
 ## Author:      Mattia Barbon
 ## Modified by:
 ## Created:     25/08/2006
-## RCS-ID:      $Id: BaseModule.pm,v 1.3 2006/08/27 15:32:49 mbarbon Exp $
+## RCS-ID:      $Id: BaseModule.pm,v 1.4 2006/08/29 19:25:47 mbarbon Exp $
 ## Copyright:   (c) 2006 Mattia Barbon
 ## Licence:     This program is free software; you can redistribute it and/or
 ##              modify it under the same terms as Perl itself
@@ -111,8 +111,12 @@ sub recreate_control {
     my( $self ) = @_;
 
     if( $self->control_sizer ) {
-        $self->control_sizer->GetItem( 0 )->DeleteWindows;
-        $self->control_sizer->Detach( 0 );
+        # work with 2.5.3 amd 2.6.3 (and hopefully other versions)
+        if( $self->control_sizer->GetChildren ) {
+            my $window = $self->control_sizer->GetItem( 0 )->GetWindow;
+            $self->control_sizer->Detach( 0 );
+            $window->Destroy;
+        }
 
         $self->control_sizer->Add
           ( $self->create_control, 0, 

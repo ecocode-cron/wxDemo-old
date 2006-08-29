@@ -4,7 +4,7 @@ use strict;
 
 use Wx::Demo;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 my $app = Wx::SimpleApp->new;
 Wx::Demo->new;

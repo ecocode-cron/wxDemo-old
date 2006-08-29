@@ -1,4 +1,7 @@
 Revision history for Perl application Wx::Demo.
 
+0.02  Tue Aug 29 21:24:53 CEST 2006
+	- Work with wxWidgets 2.5.3.
+
 0.01  Sun Aug 27 17:30:34 CEST 2006
-	- First public release
+	- First public release.

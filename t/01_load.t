@@ -32,7 +32,11 @@ use_ok( 'Wx::DemoModules::wxHtmlWindow' );
 use_ok( 'Wx::DemoModules::wxListBox' );
 use_ok( 'Wx::DemoModules::wxListCtrl' );
 use_ok( 'Wx::DemoModules::wxMDI' );
+
+# naughty me...
+defined &Wx::MediaCtrl::new || eval 'sub Wx::MediaCtrl::new { }';
 use_ok( 'Wx::DemoModules::wxMediaCtrl' );
+
 use_ok( 'Wx::DemoModules::wxMultiChoiceDialog' );
 use_ok( 'Wx::DemoModules::wxPrinting' );
 use_ok( 'Wx::DemoModules::wxProgressDialog' );
