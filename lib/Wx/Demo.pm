@@ -29,10 +29,11 @@ sub new {
       ( undef, -1, 'wxPerl demo', wxDefaultPosition, [ 600, 500 ],
         wxDEFAULT_FRAME_STYLE|wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN );
 
+    # $self->SetLayoutDirection( Wx::wxLayout_RightToLeft() );
     Wx::InitAllImageHandlers();
 
     # create menu bar
-      my $bar = Wx::MenuBar->new;
+    my $bar = Wx::MenuBar->new;
     my $file = Wx::Menu->new;
     $file->Append( wxID_EXIT, "E&xit" );
 
@@ -224,6 +225,11 @@ sub populate_modules {
         foreach my $tag ( $module->add_to_tags ) {
             my $parent_id = $tag_map{$tag};
 
+            unless( $parent_id ) {
+                Wx::LogWarning( 'Wrong parent: %s', $tag );
+                next;
+            }
+
             add_item( $tree, $parent_id, $module );
         }
     }
@@ -276,7 +282,7 @@ package Wx::Demo::Source;
 use strict;
 
 use Wx qw(:stc :textctrl :font wxDefaultPosition wxDefaultSize
-          wxNO_FULL_REPAINT_ON_RESIZE);
+          wxNO_FULL_REPAINT_ON_RESIZE wxLayout_LeftToRight);
 
 our @ISA = ( eval 'require Wx::STC' ) ? 'Wx::StyledTextCtrl' : 'Wx::TextCtrl';
 
@@ -342,6 +348,9 @@ sub new {
 
         $self->SetLexer( wxSTC_LEX_PERL );
     }
+
+    $self->SetLayoutDirection( wxLayout_LeftToRight )
+      if $self->can( 'SetLayoutDirection' );
 
     return $self;
 }

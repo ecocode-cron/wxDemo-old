@@ -4,7 +4,7 @@
 ## Author:      Mattia Barbon
 ## Modified by:
 ## Created:     11/02/2001
-## RCS-ID:      $Id: wxFileDialog.pm,v 1.1 2006/08/26 15:26:28 mbarbon Exp $
+## RCS-ID:      $Id: wxFileDialog.pm,v 1.2 2006/10/01 13:10:13 mbarbon Exp $
 ## Copyright:   (c) 2001, 2003, 2006 Mattia Barbon
 ## Licence:     This program is free software; you can redistribute it and/or
 ##              modify it under the same terms as Perl itself
@@ -35,7 +35,7 @@ sub file_dialog {
         $self->previous_file || '',
         ( join '|', 'BMP files (*.bmp)|*.bmp', 'Text files (*.txt)|*.txt',
                     'Foo files (*.foo)|*.foo', 'All files (*.*)|*.*' ),
-        wxOPEN|wxMULTIPLE );
+        wxFD_OPEN|wxFD_MULTIPLE );
 
     if( $dialog->ShowModal == wxID_CANCEL ) {
         Wx::LogMessage( "User cancelled the dialog" );

@@ -8,7 +8,7 @@ WriteMakefile
   ( NAME            => 'Wx::Demo',
     VERSION_FROM    => 'bin/wxperl_demo.pl',
     PREREQ_PM       => { 'File::Spec'              => 0.8,
-                         'Wx'                      => 0.57,
+                         'Wx'                      => 0.58,
                          'Module::Pluggable'       => 3.1,
                          'UNIVERSAL::require'      => 0.10,
                          'Class::Accessor::Fast'   => 0.20,
