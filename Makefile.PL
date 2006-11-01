@@ -3,6 +3,14 @@
 use strict;
 
 use ExtUtils::MakeMaker;
+eval {
+    require ExtUtils::MY_Metafile;
+    ExtUtils::MY_Metafile->import;
+
+    my_metafile( {
+        license  => 'perl',
+    } );
+};
 
 WriteMakefile
   ( NAME            => 'Wx::Demo',

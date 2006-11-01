@@ -1,5 +1,8 @@
 Revision history for Perl application Wx::Demo.
 
+0.03
+	Added demos for the book and picker controls.
+
 0.02  Tue Aug 29 21:24:53 CEST 2006
 	- Work with wxWidgets 2.5.3.
 

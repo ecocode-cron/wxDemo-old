@@ -4,7 +4,7 @@
 ## Author:      Mattia Barbon
 ## Modified by:
 ## Created:     18/03/2005
-## RCS-ID:      $Id: wxDatePickerCtrl.pm,v 1.1 2006/08/14 20:00:48 mbarbon Exp $
+## RCS-ID:      $Id: wxDatePickerCtrl.pm,v 1.2 2006/11/01 17:59:43 mbarbon Exp $
 ## Copyright:   (c) 2005-2006 Mattia Barbon
 ## Licence:     This program is free software; you can redistribute it and/or
 ##              modify it under the same terms as Perl itself
@@ -48,7 +48,7 @@ sub new {
   return $this;
 }
 
-sub add_to_tags { qw(controls) }
+sub add_to_tags { qw(controls/picker) }
 sub title { 'wxDatePickerCtrl' }
 
 1;
