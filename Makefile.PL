@@ -9,6 +9,7 @@ eval {
 
     my_metafile( {
         license  => 'perl',
+        abstract => 'the wxPerl demo',
     } );
 };
 

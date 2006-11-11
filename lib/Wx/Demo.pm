@@ -4,6 +4,15 @@ package Wx::Demo;
 
 Wx::Demo - the wxPerl demo
 
+=head1 AUTHOR
+
+Mattia Barbon <mbarbon@cpan.org>
+
+=head1 LICENSE
+
+This program is free software; you can redistribute it and/or
+modify it under the same terms as Perl itself.
+
 =cut
 
 use Wx;
