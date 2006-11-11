@@ -55,6 +55,7 @@ lib/Wx/DemoModules/wxPrinting.pm
 lib/Wx/DemoModules/wxProgressDialog.pm
 lib/Wx/DemoModules/wxRadioBox.pm
 lib/Wx/DemoModules/wxRadioButton.pm
+lib/Wx/DemoModules/wxRichTextCtrl.pm
 lib/Wx/DemoModules/wxScrollBar.pm
 lib/Wx/DemoModules/wxScrolledWindow.pm
 lib/Wx/DemoModules/wxSimpleHtmlListBox.pm
