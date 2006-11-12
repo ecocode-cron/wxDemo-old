@@ -1,5 +1,9 @@
 Revision history for Perl application Wx::Demo.
 
+0.04  Sun Nov 12 18:20:32 CET 2006
+	- Added demo for Advanced User Interface (AUI).
+	- Improved the wxRichTextCtrl demo.
+
 0.03  Sat Nov 11 16:50:00 CET 2006
 	- Added demos for the book and picker controls.
 	- Added demo for wxRichTextCtrl.

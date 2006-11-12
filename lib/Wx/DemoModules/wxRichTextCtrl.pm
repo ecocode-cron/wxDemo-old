@@ -4,7 +4,7 @@
 ## Author:      Mattia Barbon
 ## Modified by:
 ## Created:     11/11/2006
-## RCS-ID:      $Id: wxRichTextCtrl.pm,v 1.1 2006/11/11 14:55:40 mbarbon Exp $
+## RCS-ID:      $Id: wxRichTextCtrl.pm,v 1.2 2006/11/12 17:21:29 mbarbon Exp $
 ## Copyright:   (c) 2006 Mattia Barbon
 ## Licence:     This program is free software; you can redistribute it and/or
 ##              modify it under the same terms as Perl itself
@@ -16,22 +16,16 @@ use strict;
 BEGIN { eval { require Wx::RichText; } }
 use base qw(Wx::DemoModules::lib::BaseModule Class::Accessor::Fast);
 
-use Wx qw(:richtextctrl :textctrl :font);
+use Wx qw(:richtextctrl :textctrl :font :sizer :color);
 # use Wx::Event qw(EVT_SPINCTRL EVT_SPIN EVT_SPIN_DOWN EVT_SPIN_UP);
 
-__PACKAGE__->mk_accessors( qw(richtext) );
+__PACKAGE__->mk_accessors( qw(richtext stylesheet control) );
 
-=pod
-
-sub styles {
+sub DESTROY {
     my( $self ) = @_;
 
-    return ( [ wxSP_ARROW_KEYS, 'Allow arrow keys' ],
-             [ wxSP_WRAP, 'Wrap' ],
-             );
+    $self->stylesheet( undef );
 }
-
-=cut
 
 sub commands {
     my( $self ) = @_;
@@ -46,10 +40,86 @@ sub commands {
 sub create_control {
     my( $self ) = @_;
 
-    my $richtext = Wx::RichTextCtrl->new( $self, -1, 'Rich text', [-1, -1],
+    my $panel = Wx::Panel->new( $self, -1 );
+    my $richtext = Wx::RichTextCtrl->new( $panel, -1, 'Rich text', [-1, -1],
                                           [400, 300] );
+    my $stylectrl = Wx::RichTextStyleListCtrl->new( $panel, -1, [-1, -1],
+                                                    [100, -1]);
 
-    return $self->richtext( $richtext );
+    $self->richtext( $richtext );
+
+    my $sizer = Wx::BoxSizer->new( wxHORIZONTAL );
+
+    $sizer->Add( $stylectrl, 0, wxGROW|wxALL, 5 );
+    $sizer->Add( $richtext, 1, wxGROW|wxALL, 5 );
+
+    $panel->SetSizerAndFit( $sizer );
+
+    $self->stylesheet( $self->create_style_sheet );
+    $stylectrl->SetRichTextCtrl( $richtext );
+    $stylectrl->SetStyleSheet( $self->stylesheet );
+    $stylectrl->GetStyleListBox->SetApplyOnSelection( 1 );
+    $stylectrl->UpdateStyles;
+
+    $self->control( $panel );
+
+    return $panel;
+}
+
+sub create_style_sheet {
+    my( $self ) = @_;
+
+    my $charstyle1 = Wx::RichTextCharacterStyleDefinition->new( "red" );
+    my $charstyle2 = Wx::RichTextCharacterStyleDefinition->new( "italic blue" );
+    my $parstyle1 = Wx::RichTextParagraphStyleDefinition->new( "bold red" );
+    my $parstyle2 = Wx::RichTextParagraphStyleDefinition->new( "indented" );
+    my $liststyle1 = Wx::RichTextListStyleDefinition->new( "numbered" );
+    my $liststyle2 = Wx::RichTextListStyleDefinition->new( "symbols" );
+
+    my $stylesheet = Wx::RichTextStyleSheet->new;
+
+    my $attr;
+
+    $attr = Wx::RichTextAttr->new;
+    $attr->SetTextColour( wxRED );
+    $charstyle1->SetStyle( $attr );
+
+    $attr = Wx::RichTextAttr->new;
+    $attr->SetTextColour( wxBLUE );
+    $attr->SetFontStyle( wxITALIC );
+    $charstyle2->SetStyle( $attr );
+
+    $attr = Wx::RichTextAttr->new;
+    $attr->SetTextColour( wxRED );
+    $attr->SetFontStyle( wxBOLD );
+    $parstyle1->SetStyle( $attr );
+
+    $attr = Wx::RichTextAttr->new;
+    $attr->SetLeftIndent( 100, 200 );
+    $attr->SetRightIndent( 200 );
+    $parstyle2->SetStyle( $attr );
+
+    $attr = Wx::RichTextAttr->new;
+    $attr->SetTextColour( wxRED );
+    $liststyle1->SetStyle( $attr );
+    $liststyle1->SetAttributes( 0, 50, 70, wxTEXT_ATTR_BULLET_STYLE_ARABIC );
+    $liststyle1->SetAttributes( 1, 50, 70, wxTEXT_ATTR_BULLET_STYLE_ROMAN_UPPER );
+    $liststyle1->SetAttributes( 2, 50, 70, wxTEXT_ATTR_BULLET_STYLE_ROMAN_LOWER );
+
+    $liststyle2->SetAttributes( 0, 50, 70, wxTEXT_ATTR_BULLET_STYLE_SYMBOL, "*" );
+    $liststyle2->SetAttributes( 1, 50, 70, wxTEXT_ATTR_BULLET_STYLE_SYMBOL, "-" );
+    $liststyle2->SetAttributes( 2, 50, 70, wxTEXT_ATTR_BULLET_STYLE_SYMBOL, "+" );
+    $liststyle2->SetAttributes( 3, 50, 70, wxTEXT_ATTR_BULLET_STYLE_SYMBOL, "*" );
+    $liststyle2->SetAttributes( 4, 50, 70, wxTEXT_ATTR_BULLET_STYLE_SYMBOL, "-" );
+
+    $stylesheet->AddCharacterStyle( $charstyle1 );
+    $stylesheet->AddCharacterStyle( $charstyle2 );
+    $stylesheet->AddParagraphStyle( $parstyle1 );
+    $stylesheet->AddParagraphStyle( $parstyle2 );
+    $stylesheet->AddListStyle( $liststyle1 );
+    $stylesheet->AddListStyle( $liststyle2 );
+
+    return $stylesheet;
 }
 
 sub add_styled_text {
@@ -140,7 +210,6 @@ sub add_styled_text {
     $r->Newline;
     $r->WriteText("Compatibility with wxTextCtrl API");
     $r->EndSymbolBullet;
-    $r->WriteText("Note: this sample content was generated programmatically from within the MyFrame constructor in the demo. The images were loaded from inline XPMs. Enjoy wxRichTextCtrl!");
     $r->EndSuppressUndo;
 }
 
