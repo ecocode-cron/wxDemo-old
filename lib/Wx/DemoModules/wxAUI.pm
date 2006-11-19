@@ -4,7 +4,7 @@
 ## Author:      Mattia Barbon
 ## Modified by:
 ## Created:     12/11/2006
-## RCS-ID:      $Id: wxAUI.pm,v 1.1 2006/11/12 17:21:29 mbarbon Exp $
+## RCS-ID:      $Id: wxAUI.pm,v 1.2 2006/11/19 16:22:25 mbarbon Exp $
 ## Copyright:   (c) 2006 Mattia Barbon
 ## Licence:     This program is free software; you can redistribute it and/or
 ##              modify it under the same terms as Perl itself
@@ -16,7 +16,7 @@ use strict;
 use base qw(Wx::Frame Class::Accessor::Fast);
 
 use Wx::AUI;
-use Wx qw(:misc :frame :toolbar :textctrl);
+use Wx qw(:misc :frame :toolbar :textctrl :aui);
 use Wx::Event qw();
 use Wx::ArtProvider qw(:artid);
 
@@ -49,11 +49,16 @@ sub new {
 
     $self->manager->AddPane
       ( $self->create_textctrl, Wx::AuiPaneInfo->new->Name( "text_control" )
-        ->CenterPane );
+        ->CenterPane->Position( 1 )->Resizable );
     $self->manager->AddPane
       ( $self->create_textctrl, Wx::AuiPaneInfo->new->Name( "text_control" )
         ->CenterPane->TopDockable->BottomDockable->Floatable->Movable
-        ->PinButton->Caption( "Floating" )->CaptionVisible->Float );
+        ->PinButton->Caption( "Floating" )->CaptionVisible->Float
+        ->Resizable );
+    $self->manager->AddPane
+      ( $self->create_notebook, Wx::AuiPaneInfo->new->Name( "notebook" )
+        ->CenterPane->TopDockable->BottomDockable->Floatable->Movable
+        ->PinButton->Caption( "Notebook" )->CaptionVisible->Position( 2 ) );
 
     $self->manager->AddPane
       ( $tb1, Wx::AuiPaneInfo->new->Name( "tb1" )->Caption( "Toolbar 1" )
@@ -74,12 +79,34 @@ sub DESTROY {
 }
 
 my $count = 0;
+sub _create_textctrl {
+    my( $self, $parent, $text ) = @_;
+
+    $text ||= sprintf "This is text box %d", ++$count;
+    return Wx::TextCtrl->new( $parent, -1, $text, [0, 0], [150, 90],
+                              wxNO_BORDER | wxTE_MULTILINE );
+}
+
 sub create_textctrl {
     my( $self, $text ) = @_;
 
-    $text ||= sprintf "This is text box %d", ++$count;
-    return Wx::TextCtrl->new( $self, -1, $text, [0, 0], [150, 90],
-                              wxNO_BORDER | wxTE_MULTILINE );
+    return $self->_create_textctrl( $self, $text );
+}
+
+sub create_notebook {
+    my( $self ) = @_;
+    my $book = Wx::AuiNotebook->new( $self, -1, [-1, -1], [300, 300],
+                                     wxAUI_NB_TAB_MOVE|wxAUI_NB_TAB_SPLIT);
+
+    my $icon = Wx::GetWxPerlIcon;
+    $book->AddPage( $self->_create_textctrl( $book ),
+                    "Notebook page 1", 0, $icon );
+    $book->AddPage( $self->_create_textctrl( $book ),
+                    "Notebook page 2", 0, $icon );
+    $book->AddPage( $self->_create_textctrl( $book ),
+                    "Notebook page 3", 0, $icon );
+
+    return $book;
 }
 
 sub add_to_tags { qw(managed) }
