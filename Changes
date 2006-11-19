@@ -1,5 +1,8 @@
 Revision history for Perl application Wx::Demo.
 
+0.05
+	- Added wxAuiNotebook to the AUI demo.
+
 0.04  Sun Nov 12 18:20:32 CET 2006
 	- Added demo for Advanced User Interface (AUI).
 	- Improved the wxRichTextCtrl demo.
