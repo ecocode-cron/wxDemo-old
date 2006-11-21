@@ -4,7 +4,7 @@
 ## Author:      Mattia Barbon
 ## Modified by:
 ## Created:     05/06/2003
-## RCS-ID:      $Id: wxGridCER.pm,v 1.1 2006/08/14 20:00:46 mbarbon Exp $
+## RCS-ID:      $Id: wxGridCER.pm,v 1.2 2006/11/21 21:06:19 mbarbon Exp $
 ## Copyright:   (c) 2003, 2005-2006 Mattia Barbon
 ## Licence:     This program is free software; you can redistribute it and/or
 ##              modify it under the same terms as Perl itself
@@ -23,7 +23,7 @@ sub new {
   # set every cell read-only
   for my $x ( 1 .. 7 ) {
     for my $y ( 1 .. 3 ) {
-      $this->SetReadOnly( $x, $y );
+      $this->SetReadOnly( $y, $x, 1 ); # rows, cols
     }
   }
 
@@ -55,7 +55,7 @@ package Wx::DemoModules::wxGridCER::CustomRenderer;
 
 use strict;
 use base 'Wx::PlGridCellRenderer';
-use Wx qw(wxBLACK_PEN wxWHITE_BRUSH);
+use Wx qw(wxBLACK_PEN wxWHITE_BRUSH wxSYS_DEFAULT_GUI_FONT);
 
 sub Draw {
   my( $self, $grid, $attr, $dc, $rect, $row, $col, $sel ) = ( shift, @_ );
@@ -64,6 +64,7 @@ sub Draw {
 
   $dc->SetPen( wxBLACK_PEN );
   $dc->SetBrush( wxWHITE_BRUSH );
+  $dc->SetFont(Wx::SystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT ));
   $dc->DrawEllipse( $rect->x, $rect->y, $rect->width, $rect->height );
   $dc->DrawText( $grid->GetCellValue( $row, $col ), $rect->x, $rect->y );
 }
