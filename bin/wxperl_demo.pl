@@ -4,7 +4,7 @@ use strict;
 
 use Wx::Demo;
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 my $app = Wx::SimpleApp->new;
 my $locale = Wx::Locale->new( Wx::Locale::GetSystemLanguage );
