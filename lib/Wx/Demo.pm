@@ -23,7 +23,7 @@ use base qw(Wx::Frame Class::Accessor::Fast);
 use Wx qw(:textctrl :sizer :window :id);
 use Wx qw(wxDefaultPosition wxDefaultSize
           wxDEFAULT_FRAME_STYLE wxNO_FULL_REPAINT_ON_RESIZE wxCLIP_CHILDREN);
-use Wx::Event qw(EVT_TREE_SEL_CHANGED EVT_MENU);
+use Wx::Event qw(EVT_TREE_SEL_CHANGED EVT_MENU EVT_CLOSE);
 use File::Slurp;
 use File::Basename qw();
 use File::Spec;
@@ -83,7 +83,7 @@ sub new {
     $self->{notebook} = $nb;
 
     EVT_TREE_SEL_CHANGED( $self, $tree, \&on_show_module );
-
+    EVT_CLOSE( $self, \&on_close );
     EVT_MENU( $self, wxID_ABOUT, \&on_about );
     EVT_MENU( $self, wxID_EXIT, sub { $self->Close } );
 
@@ -95,6 +95,13 @@ sub new {
     Wx::LogMessage( "Welcome to wxPerl!" );
 
     return $self;
+}
+
+sub on_close {
+    my( $self, $event ) = @_;
+
+    Wx::Log::SetActiveTarget( $self->{old_log} );
+    $event->Skip;
 }
 
 sub on_about {
