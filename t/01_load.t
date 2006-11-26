@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 
 use strict;
-use Test::More tests => 49;
+use Test::More tests => 50;
 
 use_ok( 'Wx::Demo' );
 use_ok( 'Wx::DemoModules::lib::BaseModule' );
@@ -52,6 +52,7 @@ use_ok( 'Wx::DemoModules::wxSplashScreen' );
 use_ok( 'Wx::DemoModules::wxStaticBitmap' );
 use_ok( 'Wx::DemoModules::wxStaticText' );
 use_ok( 'Wx::DemoModules::wxTextEntryDialog' );
+use_ok( 'Wx::DemoModules::wxTreeCtrl' );
 use_ok( 'Wx::DemoModules::wxValidator' );
 use_ok( 'Wx::DemoModules::wxWizard' );
 use_ok( 'Wx::DemoModules::wxXrc' );

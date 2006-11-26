@@ -69,6 +69,7 @@ lib/Wx/DemoModules/wxSplitterWindow.pm
 lib/Wx/DemoModules/wxStaticBitmap.pm
 lib/Wx/DemoModules/wxStaticText.pm
 lib/Wx/DemoModules/wxTextEntryDialog.pm
+lib/Wx/DemoModules/wxTreeCtrl.pm
 lib/Wx/DemoModules/wxVListBox.pm
 lib/Wx/DemoModules/wxValidator.pm
 lib/Wx/DemoModules/wxWizard.pm
