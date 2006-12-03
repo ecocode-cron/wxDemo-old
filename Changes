@@ -1,5 +1,7 @@
 Revision history for Perl application Wx::Demo.
 
+0.06
+
 0.05  Sun Nov 26 18:23:54 CET 2006
 	- Added wxAuiNotebook to the AUI demo.
 	- Added examples for more wxGrid editors/renderers.
