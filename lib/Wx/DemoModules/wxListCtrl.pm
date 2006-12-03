@@ -4,7 +4,7 @@
 ## Author:      Mattia Barbon
 ## Modified by:
 ## Created:     12/09/2001
-## RCS-ID:      $Id: wxListCtrl.pm,v 1.2 2006/11/26 16:59:28 mbarbon Exp $
+## RCS-ID:      $Id: wxListCtrl.pm,v 1.3 2006/12/03 14:59:03 mbarbon Exp $
 ## Copyright:   (c) 2001, 2003-2004, 2006 Mattia Barbon
 ## Licence:     This program is free software; you can redistribute it and/or
 ##              modify it under the same terms as Perl itself
@@ -13,6 +13,7 @@
 package Wx::DemoModules::wxListCtrl;
 
 use strict;
+use Wx::DemoModules::lib::Utility;
 
 use Wx qw(:icon wxTheApp :listctrl);
 use Wx::Event
@@ -29,6 +30,9 @@ sub create_image_lists {
     my $images_no = Wx::ImageList->new( 32, 32, 1 );
 
     $images_sm->Add( Wx::GetWxPerlIcon( 1 ) );
+    $images_sm->Add( resize_to( wxTheApp->GetStdIcon( wxICON_EXCLAMATION ),
+                                16 ) );
+    $images_sm->Add( resize_to( wxTheApp->GetStdIcon( wxICON_ERROR ), 16 ) );
 
     $images_no->Add( Wx::GetWxPerlIcon() );
     $images_no->Add( wxTheApp->GetStdIcon( wxICON_HAND ) );
@@ -269,6 +273,10 @@ sub new {
     $self->bind_events;
     $self->create_menu;
 
+    my( $small, $normal ) = $self->create_image_lists;
+    $self->AssignImageList( $small, wxIMAGE_LIST_SMALL );
+    $self->AssignImageList( $normal, wxIMAGE_LIST_NORMAL );
+
     $self->InsertColumn( 1, "Column 1" );
     $self->InsertColumn( 2, "Column 2" );
     $self->InsertColumn( 3, "Column 3" );
@@ -298,7 +306,15 @@ sub OnGetItemAttr {
 }
 
 sub OnGetItemImage {
+    my( $self, $item ) = @_;
+
     return 0;
+}
+
+sub OnGetItemColumnImage {
+    my( $self, $item, $column ) = @_;
+
+    return $column % 3;
 }
 
 sub add_to_tags { qw(controls/listctrl) }

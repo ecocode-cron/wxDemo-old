@@ -4,7 +4,7 @@
 ## Author:      Mattia Barbon
 ## Modified by:
 ## Created:     17/02/2001
-## RCS-ID:      $Id: wxTreeCtrl.pm,v 1.1 2006/11/26 17:00:58 mbarbon Exp $
+## RCS-ID:      $Id: wxTreeCtrl.pm,v 1.2 2006/12/03 14:59:03 mbarbon Exp $
 ## Copyright:   (c) 2001, 2004, 2006 Mattia Barbon
 ## Licence:     This program is free software; you can redistribute it and/or
 ##              modify it under the same terms as Perl itself
@@ -18,17 +18,7 @@ use base qw(Wx::TreeCtrl);
 use Wx qw(:treectrl :window wxDefaultPosition wxDefaultSize);
 use Wx::Event qw(EVT_TREE_BEGIN_DRAG EVT_TREE_END_DRAG
                  EVT_TREE_SEL_CHANGED EVT_MENU);
-
-sub ResizeTo {
-    my( $image, $size ) = @_;
-
-    if( $image->GetWidth != $size || $image->GetHeight != $size ) {
-        return Wx::Bitmap->new
-          ( Wx::Image->new( $image )->Rescale( $size, $size ) );
-    } else {
-        return $image;
-    }
-}
+use Wx::DemoModules::lib::Utility;
 
 sub new {
     my( $class, $parent ) = @_;
@@ -39,8 +29,8 @@ sub new {
     my $imagelist = Wx::ImageList->new( 16, 16, 1 );
     $imagelist->Add( Wx::GetWxPerlIcon( 1 ) );
     $imagelist->Add
-      ( ResizeTo( Wx::wxTheApp()->GetStdIcon( Wx::wxICON_EXCLAMATION() ),
-                  16 ) );
+      ( resize_to( Wx::wxTheApp()->GetStdIcon( Wx::wxICON_EXCLAMATION() ),
+                   16 ) );
 
     $self->AssignImageList( $imagelist );
     $self->PopulateTree( 2, 3 );
