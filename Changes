@@ -1,6 +1,6 @@
 Revision history for Perl application Wx::Demo.
 
-0.06
+0.06  Thu Mar 22 00:08:44 CET 2007
 	- Added demo for wxToolBar (moved the code from the wxPerl one).
 	- Added demo for wxCaret (moved the code from the wxPerl one).
 	- Added demo for wxArtProvider (moved the code from the wxPerl one).
