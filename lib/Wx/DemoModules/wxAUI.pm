@@ -4,8 +4,8 @@
 ## Author:      Mattia Barbon
 ## Modified by:
 ## Created:     12/11/2006
-## RCS-ID:      $Id: wxAUI.pm,v 1.2 2006/11/19 16:22:25 mbarbon Exp $
-## Copyright:   (c) 2006 Mattia Barbon
+## RCS-ID:      $Id: wxAUI.pm,v 1.3 2007/03/21 22:08:28 mbarbon Exp $
+## Copyright:   (c) 2006-2007 Mattia Barbon
 ## Licence:     This program is free software; you can redistribute it and/or
 ##              modify it under the same terms as Perl itself
 #############################################################################
@@ -51,7 +51,7 @@ sub new {
       ( $self->create_textctrl, Wx::AuiPaneInfo->new->Name( "text_control" )
         ->CenterPane->Position( 1 )->Resizable );
     $self->manager->AddPane
-      ( $self->create_textctrl, Wx::AuiPaneInfo->new->Name( "text_control" )
+      ( $self->create_textctrl, Wx::AuiPaneInfo->new->Name( "text_control2" )
         ->CenterPane->TopDockable->BottomDockable->Floatable->Movable
         ->PinButton->Caption( "Floating" )->CaptionVisible->Float
         ->Resizable );
@@ -98,7 +98,7 @@ sub create_notebook {
     my $book = Wx::AuiNotebook->new( $self, -1, [-1, -1], [300, 300],
                                      wxAUI_NB_TAB_MOVE|wxAUI_NB_TAB_SPLIT);
 
-    my $icon = Wx::GetWxPerlIcon;
+    my $icon = Wx::Bitmap->new( Wx::GetWxPerlIcon );
     $book->AddPage( $self->_create_textctrl( $book ),
                     "Notebook page 1", 0, $icon );
     $book->AddPage( $self->_create_textctrl( $book ),
