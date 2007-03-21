@@ -4,6 +4,7 @@ Revision history for Perl application Wx::Demo.
 	- Added demo for wxToolBar (moved the code from the wxPerl one).
 	- Added demo for wxCaret (moved the code from the wxPerl one).
 	- Added demo for wxArtProvider (moved the code from the wxPerl one).
+	- Added demo for Document/View framework (contributed by Simon Flack in 2002).
 
 0.05  Sun Nov 26 18:23:54 CET 2006
 	- Added wxAuiNotebook to the AUI demo.

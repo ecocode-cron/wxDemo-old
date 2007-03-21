@@ -33,6 +33,7 @@ lib/Wx/DemoModules/wxCheckListBox.pm
 lib/Wx/DemoModules/wxChoice.pm
 lib/Wx/DemoModules/wxClipboard.pm
 lib/Wx/DemoModules/wxColourDialog.pm
+lib/Wx/DemoModules/wxDocView.pm
 lib/Wx/DemoModules/wxColourPickerCtrl.pm
 lib/Wx/DemoModules/wxComboBox.pm
 lib/Wx/DemoModules/wxDND.pm
