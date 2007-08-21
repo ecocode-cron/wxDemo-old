@@ -69,6 +69,7 @@ lib/Wx/DemoModules/wxGridCER.pm
 lib/Wx/DemoModules/wxGridER.pm
 lib/Wx/DemoModules/wxGridSizer.pm
 lib/Wx/DemoModules/wxGridTable.pm
+lib/Wx/DemoModules/wxHVScrolledWindow.pm
 lib/Wx/DemoModules/wxHelpController.pm
 lib/Wx/DemoModules/wxHelpEvent.pm
 lib/Wx/DemoModules/wxHtmlDynamic.pm
@@ -101,6 +102,7 @@ lib/Wx/DemoModules/wxTextEntryDialog.pm
 lib/Wx/DemoModules/wxToolBar.pm
 lib/Wx/DemoModules/wxTreeCtrl.pm
 lib/Wx/DemoModules/wxVListBox.pm
+lib/Wx/DemoModules/wxVScrolledWindow.pm
 lib/Wx/DemoModules/wxValidator.pm
 lib/Wx/DemoModules/wxWizard.pm
 lib/Wx/DemoModules/wxXrc.pm
