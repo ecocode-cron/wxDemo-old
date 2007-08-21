@@ -1,3 +1,15 @@
+#############################################################################
+## Name:        lib/Wx/Demo.pm
+## Purpose:     wxPerl demo main module
+## Author:      Mattia Barbon
+## Modified by:
+## Created:     20/08/2006
+## RCS-ID:      $Id$
+## Copyright:   (c) 2006-2007 Mattia Barbon
+## Licence:     This program is free software; you can redistribute it and/or
+##              modify it under the same terms as Perl itself
+#############################################################################
+
 package Wx::Demo;
 
 =head1 NAME
@@ -151,6 +163,23 @@ sub _remove_menus {
     }
 }
 
+sub activate_module {
+    my( $self, $module ) = @_;
+
+    my( $package ) = grep $_->title eq $module,
+                     grep $_->can( 'title' ),
+                          $self->plugins;
+    return unless $package;
+    $self->show_module( $package );
+    $self->show_demo_window;
+}
+
+sub show_demo_window {
+    my( $self ) = @_;
+
+    $self->notebook->SetSelection( 1 ) if $self->notebook->GetPageCount == 2;
+}
+
 sub show_module {
     my( $self, $module ) = @_;
 
@@ -219,7 +248,7 @@ sub add_item {
 sub populate_modules {
     my( $self ) = @_;
     my $tree = $self->tree;
-    my @modules = $self->load_plugins;
+    my @modules = $self->plugins;
 
     my $root_id = $tree->AddRoot( 'wxPerl', -1, -1 );
     my %tag_map;
@@ -251,6 +280,15 @@ sub populate_modules {
     }
 
     $tree->Expand( $root_id );
+}
+
+sub plugins {
+    my( $self ) = @_;
+    return @{$self->{plugins}} if $self->{plugins};
+
+    $self->{plugins} = [ $self->load_plugins ];
+
+    return @{$self->{plugins}};
 }
 
 # allow ignoring load failures
