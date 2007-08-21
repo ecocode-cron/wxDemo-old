@@ -4,7 +4,7 @@
 ## Author:      Simon Flack
 ## Modified by:
 ## Created:     28/08/2002
-## RCS-ID:      $Id: wxDocView.pm,v 1.3 2007/03/21 23:11:38 mbarbon Exp $
+## RCS-ID:      $Id$
 ## Copyright:   (c) 2002, 2005-2007 Simon Flack and Mattia Barbon
 ## Licence:     This program is free software; you can redistribute it and/or
 ##              modify it under the same terms as Perl itself

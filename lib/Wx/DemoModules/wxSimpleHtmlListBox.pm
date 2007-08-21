@@ -4,7 +4,7 @@
 ## Author:      Mattia Barbon
 ## Modified by:
 ## Created:     01/11/2006
-## RCS-ID:      $Id: wxSimpleHtmlListBox.pm,v 1.1 2006/11/02 18:28:33 mbarbon Exp $
+## RCS-ID:      $Id$
 ## Copyright:   (c) 2006 Mattia Barbon
 ## Licence:     This program is free software; you can redistribute it and/or
 ##              modify it under the same terms as Perl itself

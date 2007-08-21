@@ -4,7 +4,7 @@
 ## Author:      Mattia Barbon
 ## Modified by:
 ## Created:     11/02/2001
-## RCS-ID:      $Id: wxFileDialog.pm,v 1.2 2006/10/01 13:10:13 mbarbon Exp $
+## RCS-ID:      $Id$
 ## Copyright:   (c) 2001, 2003, 2006 Mattia Barbon
 ## Licence:     This program is free software; you can redistribute it and/or
 ##              modify it under the same terms as Perl itself

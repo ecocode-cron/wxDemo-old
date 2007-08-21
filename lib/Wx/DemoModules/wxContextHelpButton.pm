@@ -4,7 +4,7 @@
 ## Author:      Mattia Barbon
 ## Modified by:
 ## Created:     28/03/2007
-## RCS-ID:      $Id: wxContextHelpButton.pm,v 1.1 2007/03/28 20:56:56 mbarbon Exp $
+## RCS-ID:      $Id$
 ## Copyright:   (c) 2001, 2007 Mattia Barbon
 ## Licence:     This program is free software; you can redistribute it and/or
 ##              modify it under the same terms as Perl itself

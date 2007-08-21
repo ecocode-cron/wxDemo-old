@@ -3,7 +3,7 @@
 ## Purpose:     wxWidgets' XML Resources demo
 ## Author:      Mattia Barbon
 ## Created:     25/08/2003
-## RCS-ID:      $Id: wxXrcCustom.pm,v 1.1 2006/08/14 20:00:49 mbarbon Exp $
+## RCS-ID:      $Id$
 ## Copyright:   (c) 2003, 2006 Mattia Barbon
 ## Licence:     This program is free software; you can redistribute it and/or
 ##              modify it under the same terms as Perl itself

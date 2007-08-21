@@ -4,7 +4,7 @@
 ## Author:      Mattia Barbon
 ## Modified by:
 ## Created:     27/05/2003
-## RCS-ID:      $Id: wxScrollBar.pm,v 1.3 2006/08/27 15:32:49 mbarbon Exp $
+## RCS-ID:      $Id$
 ## Copyright:   (c) 2003, 2005-2006 Mattia Barbon
 ## Licence:     This program is free software; you can redistribute it and/or
 ##              modify it under the same terms as Perl itself

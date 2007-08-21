@@ -4,7 +4,7 @@
 ## Author:      Mattia Barbon
 ## Modified by:
 ## Created:     25/09/2006
-## RCS-ID:      $Id: wxPopupWindow.pm,v 1.1 2006/10/01 13:10:13 mbarbon Exp $
+## RCS-ID:      $Id$
 ## Copyright:   (c) 2006 Mattia Barbon
 ## Licence:     This program is free software; you can redistribute it and/or
 ##              modify it under the same terms as Perl itself

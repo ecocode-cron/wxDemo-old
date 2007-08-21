@@ -4,7 +4,7 @@
 ## Author:      Mattia Barbon
 ## Modified by:
 ## Created:     03/12/2006
-## RCS-ID:      $Id: Utility.pm,v 1.1 2006/12/03 14:59:03 mbarbon Exp $
+## RCS-ID:      $Id$
 ## Copyright:   (c) 2006 Mattia Barbon
 ## Licence:     This program is free software; you can redistribute it and/or
 ##              modify it under the same terms as Perl itself

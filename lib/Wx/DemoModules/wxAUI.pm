@@ -4,7 +4,7 @@
 ## Author:      Mattia Barbon
 ## Modified by:
 ## Created:     12/11/2006
-## RCS-ID:      $Id: wxAUI.pm,v 1.3 2007/03/21 22:08:28 mbarbon Exp $
+## RCS-ID:      $Id$
 ## Copyright:   (c) 2006-2007 Mattia Barbon
 ## Licence:     This program is free software; you can redistribute it and/or
 ##              modify it under the same terms as Perl itself
