@@ -1,5 +1,9 @@
 Revision history for Perl application Wx::Demo.
 
+0.08
+	- Added demo for wxVScrolledWindow and wxHVScrolledWindow.
+	- Added demo for wxComboCtrl.
+
 0.07  Wed Mar 28 22:57:39 CEST 2007
 	- Added demo for some of the wxWidgets help classes.
 

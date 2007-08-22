@@ -52,6 +52,7 @@ lib/Wx/DemoModules/wxClipboard.pm
 lib/Wx/DemoModules/wxColourDialog.pm
 lib/Wx/DemoModules/wxColourPickerCtrl.pm
 lib/Wx/DemoModules/wxComboBox.pm
+lib/Wx/DemoModules/wxComboCtrl.pm
 lib/Wx/DemoModules/wxContextHelpButton.pm
 lib/Wx/DemoModules/wxDND.pm
 lib/Wx/DemoModules/wxDatePickerCtrl.pm
