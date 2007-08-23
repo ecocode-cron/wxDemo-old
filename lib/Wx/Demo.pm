@@ -207,7 +207,8 @@ sub show_module {
 }
 
 my @tags =
-  ( [ controls   => 'Controls' ],
+  ( [ new        => 'New' ],
+    [ controls   => 'Controls' ],
     [ windows    => 'Windows' ],
     [ managed    => 'Managed Windows' ],
     [ dialogs    => 'Dialogs' ],

@@ -41,7 +41,7 @@ sub create_control {
     return $self->comboctrl( $comboctrl );
 }
 
-sub add_to_tags { qw(controls) }
+sub add_to_tags { qw(controls new) }
 sub title { 'wxComboCtrl' }
 
 package Wx::DemoModules::wxComboCtrl::Popup;

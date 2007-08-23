@@ -89,7 +89,7 @@ sub OnPaint {
   }
 }
 
-sub add_to_tags  { qw(windows) }
+sub add_to_tags  { qw(windows new) }
 sub title { 'wxVScrolledWindow' }
 
 1;
