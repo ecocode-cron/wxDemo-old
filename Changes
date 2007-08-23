@@ -1,5 +1,7 @@
 Revision history for Perl application Wx::Demo.
 
+0.09
+
 0.08  Thu Aug 23 21:56:10 CEST 2007
 	- Added "New" category for demos new since last version.
 	- Added demo for wxVScrolledWindow and wxHVScrolledWindow.
