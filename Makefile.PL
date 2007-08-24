@@ -34,7 +34,7 @@ WriteMakefile
                          'Class::Accessor::Fast'   => 0.20,
                          'File::Slurp'             => 0.01,
                          'File::chdir'             => 0.06,
-                         'IO::String'              => 1.08,
+                         'IO::Scalar'              => 2.00,
                          },
     EXE_FILES       => [ qw(bin/wxperl_demo.pl) ],
     ( $] >= 5.005 ?
