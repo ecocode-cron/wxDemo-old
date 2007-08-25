@@ -16,7 +16,7 @@ use strict;
 use Wx::Demo;
 use Getopt::Long;
 
-our $VERSION = '0.09';
+our $VERSION = '0.10';
 
 GetOptions( 'show=s'   => \( my $module ),
             );
