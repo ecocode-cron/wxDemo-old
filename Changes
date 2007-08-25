@@ -1,6 +1,9 @@
 Revision history for Perl application Wx::Demo.
 
-0.09
+0.09  Sun Aug 26 01:10:56 CEST 2007
+	- Added demo for wxHyperlinkCtrl.
+	- Added demo for wxTipDialog.
+	- Added demo for wxPasswordEntryDialog.
 
 0.08  Thu Aug 23 21:56:10 CEST 2007
 	- Added "New" category for demos new since last version.

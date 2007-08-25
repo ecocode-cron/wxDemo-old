@@ -30,6 +30,7 @@ lib/Wx/DemoModules/files/html/index.html
 lib/Wx/DemoModules/files/html/page.html
 lib/Wx/DemoModules/files/splash/logo.jpg
 lib/Wx/DemoModules/files/splash/splash.pl
+lib/Wx/DemoModules/files/tipdialog/tips.txt
 lib/Wx/DemoModules/files/xrc/fileopen.gif
 lib/Wx/DemoModules/files/xrc/filesave.gif
 lib/Wx/DemoModules/files/xrc/fuzzy.gif
@@ -79,11 +80,13 @@ lib/Wx/DemoModules/wxHtmlDynamic.pm
 lib/Wx/DemoModules/wxHtmlListBox.pm
 lib/Wx/DemoModules/wxHtmlTag.pm
 lib/Wx/DemoModules/wxHtmlWindow.pm
+lib/Wx/DemoModules/wxHyperlinkCtrl.pm
 lib/Wx/DemoModules/wxListBox.pm
 lib/Wx/DemoModules/wxListCtrl.pm
 lib/Wx/DemoModules/wxMDI.pm
 lib/Wx/DemoModules/wxMediaCtrl.pm
 lib/Wx/DemoModules/wxMultiChoiceDialog.pm
+lib/Wx/DemoModules/wxPasswordEntryDialog.pm
 lib/Wx/DemoModules/wxPopupWindow.pm
 lib/Wx/DemoModules/wxPrinting.pm
 lib/Wx/DemoModules/wxProgressDialog.pm
@@ -103,6 +106,7 @@ lib/Wx/DemoModules/wxSplitterWindow.pm
 lib/Wx/DemoModules/wxStaticBitmap.pm
 lib/Wx/DemoModules/wxStaticText.pm
 lib/Wx/DemoModules/wxTextEntryDialog.pm
+lib/Wx/DemoModules/wxTipDialog.pm
 lib/Wx/DemoModules/wxToolBar.pm
 lib/Wx/DemoModules/wxTreeCtrl.pm
 lib/Wx/DemoModules/wxVListBox.pm
