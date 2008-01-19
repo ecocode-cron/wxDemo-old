@@ -238,9 +238,9 @@ sub new {
     $self->AssignImageList( $small, wxIMAGE_LIST_SMALL );
     $self->AssignImageList( $normal, wxIMAGE_LIST_NORMAL );
 
-    $self->InsertColumn( 1, "Type" );
-    $self->InsertColumn( 2, "Amount" );
-    $self->InsertColumn( 3, "Price" );
+    $self->InsertColumn( 0, "Type" );
+    $self->InsertColumn( 1, "Amount" );
+    $self->InsertColumn( 2, "Price" );
 
     foreach my $i ( 0 .. 50 ) {
         my $t = ( rand() * 100 ) % 3;
@@ -277,11 +277,11 @@ sub new {
     $self->AssignImageList( $small, wxIMAGE_LIST_SMALL );
     $self->AssignImageList( $normal, wxIMAGE_LIST_NORMAL );
 
-    $self->InsertColumn( 1, "Column 1" );
-    $self->InsertColumn( 2, "Column 2" );
-    $self->InsertColumn( 3, "Column 3" );
-    $self->InsertColumn( 4, "Column 4" );
-    $self->InsertColumn( 5, "Column 5" );
+    $self->InsertColumn( 0, "Column 1" );
+    $self->InsertColumn( 1, "Column 2" );
+    $self->InsertColumn( 2, "Column 3" );
+    $self->InsertColumn( 3, "Column 4" );
+    $self->InsertColumn( 4, "Column 5" );
     $self->SetItemCount( 100000 );
 
     return $self;
