@@ -307,7 +307,7 @@ sub load_plugins {
             Wx::LogWarning( "Skipping module '%s'", $package );
             Wx::LogWarning( $_ ) foreach split /\n/, $@;
             my $f = "$package.pm"; $f =~ s{::}{/}g;
-            $INC{$f} = 'skip it';
+            eval { $INC{$f} = 'skip it'; };
             $skip{$package} = 1;
         };
     }
