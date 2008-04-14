@@ -28,6 +28,14 @@ lib/Wx/DemoModules/files/help/source/topic2.html
 lib/Wx/DemoModules/files/help/source/topic3.html
 lib/Wx/DemoModules/files/html/index.html
 lib/Wx/DemoModules/files/html/page.html
+lib/Wx/DemoModules/files/locale/de.mo
+lib/Wx/DemoModules/files/locale/de.po
+lib/Wx/DemoModules/files/locale/es.mo
+lib/Wx/DemoModules/files/locale/es.po
+lib/Wx/DemoModules/files/locale/fr.mo
+lib/Wx/DemoModules/files/locale/fr.po
+lib/Wx/DemoModules/files/locale/it.mo
+lib/Wx/DemoModules/files/locale/it.po
 lib/Wx/DemoModules/files/splash/logo.jpg
 lib/Wx/DemoModules/files/splash/splash.pl
 lib/Wx/DemoModules/files/tipdialog/tips.txt
@@ -84,6 +92,7 @@ lib/Wx/DemoModules/wxHtmlWindow.pm
 lib/Wx/DemoModules/wxHyperlinkCtrl.pm
 lib/Wx/DemoModules/wxListBox.pm
 lib/Wx/DemoModules/wxListCtrl.pm
+lib/Wx/DemoModules/wxLocale.pm
 lib/Wx/DemoModules/wxMDI.pm
 lib/Wx/DemoModules/wxMediaCtrl.pm
 lib/Wx/DemoModules/wxMultiChoiceDialog.pm
