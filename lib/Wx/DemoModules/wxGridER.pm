@@ -42,7 +42,9 @@ my @editors_renderers =
 sub new {
   my( $class, $parent ) = @_;
   my $this = $class->SUPER::new( $parent, -1 );
+  
   $this->CreateGrid( 2 * @editors_renderers + 1, 7 );
+  
   # set every cell read-only
   for my $x ( 1 .. $this->GetNumberCols ) { # cols
     for my $y ( 1 .. $this->GetNumberRows ) { # rows
@@ -63,6 +65,7 @@ sub new {
     if( $er->[0] ) {
       eval {
           $this->SetCellEditor( $row, 2, &{$er->[2]} ) if $er->[2];
+          $this->SetCellOverflow( $row, 2, 0);
           $this->SetCellValue( $row, 1, $er->[0] );
           $this->SetCellValue( $row, 2, $er->[1] );
           $this->SetReadOnly( $row, 2, 0 );
@@ -71,6 +74,7 @@ sub new {
     if( $er->[3] ) {
       eval {
           $this->SetCellRenderer( $row, 5, &{$er->[5]} ) if $er->[5];
+          $this->SetCellOverflow( $row, 5, 0);
           $this->SetCellValue( $row, 4, $er->[3] );
           $this->SetCellValue( $row, 5, $er->[4] );
           $this->SetReadOnly( $row, 5, 0 );

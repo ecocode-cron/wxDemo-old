@@ -66,7 +66,15 @@ sub Draw {
   $dc->SetBrush( wxWHITE_BRUSH );
   $dc->SetFont(Wx::SystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT ));
   $dc->DrawEllipse( $rect->x, $rect->y, $rect->width, $rect->height );
+  
+  # should check $attr->GetOverflow and then IsEmpty on every cell to the right
+  # to extend $rect if overflow is true.
+  
+  $dc->DestroyClippingRegion();
+  $dc->SetClippingRegion($rect->x, $rect->y, $rect->width, $rect->height);
   $dc->DrawText( $grid->GetCellValue( $row, $col ), $rect->x, $rect->y );
+  $dc->DestroyClippingRegion();
+  
 }
 
 sub Clone {

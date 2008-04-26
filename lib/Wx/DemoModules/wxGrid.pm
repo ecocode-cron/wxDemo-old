@@ -42,6 +42,10 @@ sub new {
   $this->SetCellValue( 2, 2, "Second" );
   $this->SetCellValue( 3, 3, "Third" );
   $this->SetCellValue( 3, 1, "I'm green" );
+  $this->SetCellValue( 5, 1, "I will overflow because the cells to my right are empty.");
+  $this->SetCellValue( 6, 1, "I can stop overflow on an individual cell basis..");
+  $this->SetCellOverflow(6,1,0);
+  
 
   EVT_GRID_CELL_LEFT_CLICK( $this, c_log_skip( "Cell left click" ) );
   EVT_GRID_CELL_RIGHT_CLICK( $this, c_log_skip( "Cell right click" ) );
