@@ -1,7 +1,8 @@
 Revision history for Perl application Wx::Demo.
 
-0.10
+0.10  Sun Jun 29 21:51:39 CEST 2008
 	- Fixed wxListCtrl report mode demo latent bug.
+	- Fixed running under Perl 5.10.
 
 0.09  Sun Aug 26 01:10:56 CEST 2007
 	- Added demo for wxHyperlinkCtrl.

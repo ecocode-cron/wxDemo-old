@@ -303,11 +303,14 @@ sub load_plugins {
         );
 
     foreach my $package ( $finder->plugins ) {
+        next if $skip{$package};
         unless( $package->require ) {
             Wx::LogWarning( "Skipping module '%s'", $package );
             Wx::LogWarning( $_ ) foreach split /\n/, $@;
             my $f = "$package.pm"; $f =~ s{::}{/}g;
-            eval { $INC{$f} = 'skip it'; };
+#            delete $INC{$f}; # for Perl 5.10
+#            $INC{$f} = 'skip it';
+            $INC{$f} = 'skip it' unless exists $INC{$f};
             $skip{$package} = 1;
         };
     }
