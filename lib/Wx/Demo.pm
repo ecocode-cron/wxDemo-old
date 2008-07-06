@@ -120,7 +120,7 @@ sub on_about {
     my( $self ) = @_;
     use Wx qw(wxOK wxCENTRE wxVERSION_STRING);
 
-    Wx::MessageBox( "wxPerl demo, (c) 2001-2007 Mattia Barbon\n" .
+    Wx::MessageBox( "wxPerl demo $main::VERSION, (c) 2001-2008 Mattia Barbon\n" .
                     "wxPerl $Wx::VERSION, " . wxVERSION_STRING,
                     "About wxPerl demo", wxOK|wxCENTRE, $self );
 }
