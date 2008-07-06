@@ -43,6 +43,7 @@ use UNIVERSAL::require;
 use Module::Pluggable::Object;
 
 __PACKAGE__->mk_ro_accessors( qw(tree source notebook) );
+__PACKAGE__->mk_accessors( qw(search_term) );
 
 sub new {
     my( $class ) = @_;
@@ -63,6 +64,7 @@ sub new {
 
     my $edit = Wx::Menu->new;
     $edit->Append( wxID_COPY,  "&Copy" );
+    $edit->Append( wxID_FIND,  "&Search" );
 
     $bar->Append( $file, "&File" );
     $bar->Append( $edit, "&Edit" );
@@ -103,6 +105,7 @@ sub new {
     EVT_MENU( $self, wxID_ABOUT, \&on_about );
     EVT_MENU( $self, wxID_EXIT, sub { $self->Close } );
     EVT_MENU( $self, wxID_COPY, \&on_copy );
+    EVT_MENU( $self, wxID_FIND, \&on_find );
 
     $self->populate_modules;
 
@@ -112,6 +115,36 @@ sub new {
     Wx::LogMessage( "Welcome to wxPerl!" );
 
     return $self;
+}
+
+sub on_find {
+    my( $self ) = @_;
+
+    my $search_term = $self->search_term || '';
+    my $dialog = Wx::TextEntryDialog->new( $self, "", "Search term", $search_term );
+    if ($dialog->ShowModal == wxID_CANCEL) {
+        return;
+    }   
+    $search_term = $dialog->GetValue;
+    $self->search_term($search_term);
+    $dialog->Destroy;
+    return if not $search_term;
+
+    my $code = $self->{source};
+    my ($from, $to) = $code->GetSelection;
+    my $last = $code->isa( 'Wx::TextCtrl' ) ? $code->GetLastPosition()  : $code->GetLength();
+    my $str  = $code->isa( 'Wx::TextCtrl' ) ? $code->GetRange(0, $last) : $code->GetTextRange(0, $last);
+    my $pos = index($str, $search_term, $from+1);
+    if (-1 == $pos) {
+        $pos = index($str, $search_term);
+    }
+    if (-1 == $pos) {
+        return; # not found
+    }
+
+    $code->SetSelection($pos, $pos+length($search_term));
+
+    return;
 }
 
 sub on_close {
