@@ -430,6 +430,12 @@ sub parse_file {
                 next if $name =~ /^Wx::DemoModules/;
                 $widgets->{$name}{$package} = 1;
             }
+            for ($line =~ /\b(wx\w+)\b/g) {
+                $widgets->{$1}{$package} = 1;
+            }
+            for ($line =~ /\b(EVT_\w+)\b/g) {
+                $widgets->{$1}{$package} = 1;
+            }
         }
     } else {
         warn "Could not open $INC{$path} for $path $!";
