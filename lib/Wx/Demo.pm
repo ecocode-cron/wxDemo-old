@@ -42,7 +42,7 @@ use File::Spec;
 use UNIVERSAL::require;
 use Module::Pluggable::Object;
 
-__PACKAGE__->mk_ro_accessors( qw(tree source notebook) );
+__PACKAGE__->mk_ro_accessors( qw(tree widget_tree source notebook left_notebook) );
 __PACKAGE__->mk_accessors( qw(search_term) );
 
 sub new {
@@ -79,7 +79,15 @@ sub new {
     my $split2 = Wx::SplitterWindow->new
       ( $split1, -1, wxDefaultPosition, wxDefaultSize,
         wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN );
-    my $tree = Wx::TreeCtrl->new( $split1, -1 );
+    my $left_nb = Wx::Notebook->new
+      ( $split1, -1, wxDefaultPosition, wxDefaultSize,
+        wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN );
+
+    my $tree = Wx::TreeCtrl->new( $left_nb, -1 );
+    my $widget_tree = Wx::TreeCtrl->new( $left_nb, -1 );
+    $left_nb->AddPage( $tree, "Categories", 0 );
+    $left_nb->AddPage( $widget_tree, "Widgets", 0 );
+
     my $text = Wx::TextCtrl->new
       ( $split2, -1, "", wxDefaultPosition, wxDefaultSize,
         wxTE_READONLY|wxTE_MULTILINE|wxNO_FULL_REPAINT_ON_RESIZE );
@@ -93,14 +101,17 @@ sub new {
 
     $nb->AddPage( $code, "Source", 0 );
 
-    $split1->SplitVertically( $tree, $split2, 150 );
+    $split1->SplitVertically( $left_nb, $split2, 150 );
     $split2->SplitHorizontally( $nb, $text, 300 );
 
     $self->{tree} = $tree;
+    $self->{widget_tree} = $widget_tree;
     $self->{source} = $code;
     $self->{notebook} = $nb;
+    $self->{left_notebook} = $left_nb;
 
-    EVT_TREE_SEL_CHANGED( $self, $tree, \&on_show_module );
+    EVT_TREE_SEL_CHANGED( $self, $tree,        sub { on_show_module($tree, @_) } );
+    EVT_TREE_SEL_CHANGED( $self, $widget_tree, sub { on_show_module($widget_tree, @_) } );
     EVT_CLOSE( $self, \&on_close );
     EVT_MENU( $self, wxID_ABOUT, \&on_about );
     EVT_MENU( $self, wxID_EXIT, sub { $self->Close } );
@@ -108,6 +119,7 @@ sub new {
     EVT_MENU( $self, wxID_FIND, \&on_find );
 
     $self->populate_modules;
+    $self->populate_widgets;
 
     $self->SetIcon( Wx::GetWxPerlIcon() );
     $self->Show;
@@ -179,10 +191,10 @@ sub on_copy {
     return;
 }
 
-sub on_show_module {
-    my( $self, $event ) = @_;
-    my $module = $self->tree->GetPlData( $event->GetItem );
 
+sub on_show_module {
+    my( $tree, $self, $event ) = @_;
+    my $module = $tree->GetPlData( $event->GetItem );
     return unless $module;
 
     $self->show_module( $module );
@@ -300,6 +312,24 @@ sub add_item {
     }
 }
 
+sub populate_widgets {
+    my( $self ) = @_;
+
+    my $widget_tree = $self->widget_tree;
+    my $widgets = $self->widgets;
+
+    my $root_id = $widget_tree->AddRoot( 'wxPerl', -1, -1 );
+    foreach my $widget (sort keys %$widgets) {
+        my $parent_id = $widget_tree->AppendItem( $root_id, $widget, -1, -1 );
+        foreach my $name (sort keys %{ $widgets->{$widget} }) {
+            my $id = $widget_tree->AppendItem( $parent_id, $name, -1, -1, Wx::TreeItemData->new($name) );
+        }
+    }
+
+    $widget_tree->Expand( $root_id );
+    return;
+}
+
 sub populate_modules {
     my( $self ) = @_;
     my $tree = $self->tree;
@@ -341,15 +371,25 @@ sub plugins {
     my( $self ) = @_;
     return @{$self->{plugins}} if $self->{plugins};
 
-    $self->{plugins} = [ $self->load_plugins(sub { Wx::LogWarning( @_ ) }) ];
+    ($self->{plugins}, $self->{widgets}) = $self->load_plugins(sub { Wx::LogWarning( @_ ) });
 
     return @{$self->{plugins}};
+}
+
+sub widgets {
+    my( $self ) = @_;
+    if (not $self->{widgets}) {
+        $self->plugins;
+    }
+
+    return $self->{widgets};
 }
 
 # allow ignoring load failures
 sub load_plugins {
     my( $self , $w ) = @_;
     my %skip;
+    my %widgets;
     my $finder = Module::Pluggable::Object->new
       ( search_path => [ qw(Wx::DemoModules) ],
         require     => 0,
@@ -358,10 +398,12 @@ sub load_plugins {
 
     foreach my $package ( $finder->plugins ) {
         next if $skip{$package};
-        unless( $package->require ) {
+        my $f = "$package.pm"; $f =~ s{::}{/}g;
+        if( $package->require ) {
+            $self->parse_file($package, $f, \%widgets);
+        } else {
             $w->( "Skipping module '%s'", $package );
             $w->( $_ ) foreach split /\n/, $@;
-            my $f = "$package.pm"; $f =~ s{::}{/}g;
 #            delete $INC{$f}; # for Perl 5.10
 #            $INC{$f} = 'skip it';
             $INC{$f} = 'skip it' unless exists $INC{$f};
@@ -370,11 +412,30 @@ sub load_plugins {
     }
 
     # search inner packages
-    return grep !$skip{$_}, Module::Pluggable::Object->new
+    my @plugins = grep !$skip{$_}, Module::Pluggable::Object->new
       ( search_path => [ qw(Wx::DemoModules) ],
         require     => 1,
         filename    => __FILE__,
         )->plugins;
+    return (\@plugins, \%widgets);
+}
+
+sub parse_file {
+    my ($self, $package, $path, $widgets) = @_;
+    
+    if (open my $fh, '<', $INC{$path}) {
+        while (my $line = <$fh>) {
+            for ($line =~ /\b(Wx(::\w+)+)\b/g) {
+                my $name = $1;
+                next if $name =~ /^Wx::DemoModules/;
+                $widgets->{$name}{$package} = 1;
+            }
+        }
+    } else {
+        warn "Could not open $INC{$path} for $path $!";
+    }
+
+    return;
 }
 
 sub get_data_file {
