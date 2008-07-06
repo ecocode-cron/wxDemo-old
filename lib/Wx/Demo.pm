@@ -33,7 +33,7 @@ use strict;
 use base qw(Wx::Frame Class::Accessor::Fast);
 
 use Wx qw(:textctrl :sizer :window :id);
-use Wx qw(wxDefaultPosition wxDefaultSize
+use Wx qw(wxDefaultPosition wxDefaultSize wxTheClipboard 
           wxDEFAULT_FRAME_STYLE wxNO_FULL_REPAINT_ON_RESIZE wxCLIP_CHILDREN);
 use Wx::Event qw(EVT_TREE_SEL_CHANGED EVT_MENU EVT_CLOSE);
 use File::Slurp;
@@ -61,7 +61,11 @@ sub new {
     my $help = Wx::Menu->new;
     $help->Append( wxID_ABOUT, "&About..." );
 
+    my $edit = Wx::Menu->new;
+    $edit->Append( wxID_COPY,  "&Copy" );
+
     $bar->Append( $file, "&File" );
+    $bar->Append( $edit, "&Edit" );
     $bar->Append( $help, "&Help" );
 
     $self->SetMenuBar( $bar );
@@ -98,6 +102,7 @@ sub new {
     EVT_CLOSE( $self, \&on_close );
     EVT_MENU( $self, wxID_ABOUT, \&on_about );
     EVT_MENU( $self, wxID_EXIT, sub { $self->Close } );
+    EVT_MENU( $self, wxID_COPY, \&on_copy );
 
     $self->populate_modules;
 
@@ -123,6 +128,22 @@ sub on_about {
     Wx::MessageBox( "wxPerl demo $main::VERSION, (c) 2001-2008 Mattia Barbon\n" .
                     "wxPerl $Wx::VERSION, " . wxVERSION_STRING,
                     "About wxPerl demo", wxOK|wxCENTRE, $self );
+}
+
+# TODO: disallow copy when not the code is in focus
+# or copy the text from the log window too.
+sub on_copy {
+    my( $self ) = @_;
+
+    my $code = $self->{source};
+    my ($from, $to) = $code->GetSelection;
+    my $str = $code->isa( 'Wx::TextCtrl' ) ? $code->GetRange($from, $to) : $code->GetTextRange($from, $to);
+    if (wxTheClipboard->Open()) {
+        wxTheClipboard->SetData( Wx::TextDataObject->new($str) );
+        wxTheClipboard->Close();
+    }
+
+    return;
 }
 
 sub on_show_module {
