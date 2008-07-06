@@ -308,14 +308,14 @@ sub plugins {
     my( $self ) = @_;
     return @{$self->{plugins}} if $self->{plugins};
 
-    $self->{plugins} = [ $self->load_plugins ];
+    $self->{plugins} = [ $self->load_plugins(sub { Wx::LogWarning( @_ ) }) ];
 
     return @{$self->{plugins}};
 }
 
 # allow ignoring load failures
 sub load_plugins {
-    my( $self ) = @_;
+    my( $self , $w ) = @_;
     my %skip;
     my $finder = Module::Pluggable::Object->new
       ( search_path => [ qw(Wx::DemoModules) ],
@@ -326,8 +326,8 @@ sub load_plugins {
     foreach my $package ( $finder->plugins ) {
         next if $skip{$package};
         unless( $package->require ) {
-            Wx::LogWarning( "Skipping module '%s'", $package );
-            Wx::LogWarning( $_ ) foreach split /\n/, $@;
+            $w->( "Skipping module '%s'", $package );
+            $w->( $_ ) foreach split /\n/, $@;
             my $f = "$package.pm"; $f =~ s{::}{/}g;
 #            delete $INC{$f}; # for Perl 5.10
 #            $INC{$f} = 'skip it';
