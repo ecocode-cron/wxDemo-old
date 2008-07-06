@@ -126,5 +126,7 @@ lib/Wx/DemoModules/wxWizard.pm
 lib/Wx/DemoModules/wxXrc.pm
 lib/Wx/DemoModules/wxXrcCustom.pm
 t/01_load.t
-t/02_load_plugins.t
 t/zz_pod.t
+
+xt/02_load_plugins.t
+
