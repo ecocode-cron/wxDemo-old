@@ -12,9 +12,8 @@ make
 make test
 make install
 
-then run
-
-wxperl_demo.pl
+then run 'wxperl_demo.pl'; under Mac OS X you will need to run
+'wxPerl -S wxperl_demo.pl'.
 
 BUGS
 

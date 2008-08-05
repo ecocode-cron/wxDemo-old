@@ -13,6 +13,11 @@
 
 use strict;
 
+if( $^O eq 'darwin' && $^X !~ m{/wxPerl\.app/} ) {
+    print "On Mac OS X please run the demo with 'wxPerl wxperl_demo.pl'\n";
+    exit 0;
+}
+
 use Wx::Demo;
 use Getopt::Long;
 
