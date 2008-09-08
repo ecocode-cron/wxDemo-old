@@ -55,16 +55,17 @@ sub new {
     Wx::InitAllImageHandlers();
 
     # create menu bar
-    my $bar = Wx::MenuBar->new;
+    my $bar  = Wx::MenuBar->new;
     my $file = Wx::Menu->new;
-    $file->Append( wxID_EXIT, "E&xit" );
-
     my $help = Wx::Menu->new;
-    $help->Append( wxID_ABOUT, "&About..." );
-
     my $edit = Wx::Menu->new;
-    $edit->Append( wxID_COPY,  "&Copy" );
-    $edit->Append( wxID_FIND,  "&Search" );
+
+    $file->Append( wxID_EXIT, '' );
+
+    $help->Append( wxID_ABOUT, '' );
+
+    $edit->Append( wxID_COPY,  '' );
+    $edit->Append( wxID_FIND,  '' );
 
     $bar->Append( $file, "&File" );
     $bar->Append( $edit, "&Edit" );
