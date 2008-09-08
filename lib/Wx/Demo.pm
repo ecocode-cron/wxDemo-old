@@ -74,6 +74,7 @@ sub new {
     $bar->Append( $help, "&Help" );
 
     $self->SetMenuBar( $bar );
+    $self->{menu_count} = $self->GetMenuBar->GetMenuCount;
 
     # create splitters
     my $split1 = Wx::SplitterWindow->new
@@ -226,15 +227,15 @@ sub _add_menus {
     my( $self, %menus ) = @_;
 
     while( my( $title, $menu ) = each %menus ) {
-        $self->GetMenuBar->Insert( 1, $menu, $title );
+        $self->GetMenuBar->Insert( $self->{menu_count}, $menu, $title );
     }
 }
 
 sub _remove_menus {
     my( $self ) = @_;
 
-    while( $self->GetMenuBar->GetMenuCount > 2 ) {
-        $self->GetMenuBar->Remove( 1 )->Destroy;
+    for ($self->{menu_count}+1 .. $self->GetMenuBar->GetMenuCount) {
+        $self->GetMenuBar->Remove( $self->{menu_count} )->Destroy;
     }
 }
 
