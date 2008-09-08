@@ -50,7 +50,7 @@ __PACKAGE__->mk_accessors( qw(search_term) );
 sub new {
     my( $class ) = @_;
     my $self = $class->SUPER::new
-      ( undef, -1, 'wxPerl demo', wxDefaultPosition, [ 600, 500 ],
+      ( undef, -1, 'wxPerl demo', wxDefaultPosition, [ 800, 600 ],
         wxDEFAULT_FRAME_STYLE|wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN );
 
     # $self->SetLayoutDirection( Wx::wxLayout_RightToLeft() );
@@ -138,6 +138,7 @@ sub on_find {
     my $search_term = $self->search_term || '';
     my $dialog = Wx::TextEntryDialog->new( $self, "", "Search term", $search_term );
     if ($dialog->ShowModal == wxID_CANCEL) {
+        $dialog->Destroy;
         return;
     }   
     $search_term = $dialog->GetValue;
