@@ -16,6 +16,49 @@ package Wx::Demo;
 
 Wx::Demo - the wxPerl demo
 
+=head1 DESCRIPTION
+
+Every demo is a module in the Wx::DemoModules::* namespace.
+On startup Wx::Demo collects the lits of Demo Modules, tries to load
+each one of them and displays a list of them based on a categorization
+within the Demo Modules.
+
+You can also locate Demos based on the widget being use or based
+on the event used in the example.
+
+=head2 Demo Modules
+
+Every Demo Module can supply a C<tags> method that should return
+extra deep categorization. It should return a reference to a two element
+array where the first element is the category hierarchy:  maincat/subcat
+and the second element is the title of the given category.
+
+The main categories are hard-coded in the Wx::Demo module
+(new, controls, windows, etc...)
+
+Every module can have an C<add_to_tags> method that should return
+a list of names of the categories the module belongs to so these
+should be strings such as "new", "control", etc... which are 
+main categories or "control/xyz" which is a subcategory definde by
+one of the Demo modules.
+
+*** Actually if there is no add_to_tags or if it does not return anything
+then the demo can only be found from the list of widgets or events so I 
+think we should report on Modules that don't have add_to_tags method.
+
+Every module must have a C<title> method that returns its title. 
+As far as I can see, the titles are usually the same as the filename.
+
+
+When one of the Demo Modules is selected in the left pane, the Demo will
+try to execute its C<window> and if it does not exists then the C<new>
+method.
+
+There is also an optional C<file> method in the Demo Modules. I think
+it is used in case there are more than one Demo Packages in the same
+file.
+
+
 =head1 AUTHOR
 
 Mattia Barbon <mbarbon@cpan.org>
@@ -421,7 +464,7 @@ sub load_plugins {
         next if $skip{$package};
         my $f = "$package.pm"; $f =~ s{::}{/}g;
         if( $package->require ) {
-            $self->parse_file($package, $f, \%widgets);
+            $self->parse_file($package, $f, $w, \%widgets);
         } else {
             $w->( "Skipping module '%s'", $package );
             $w->( $_ ) foreach split /\n/, $@;
@@ -442,7 +485,7 @@ sub load_plugins {
 }
 
 sub parse_file {
-    my ($self, $package, $path, $widgets) = @_;
+    my ($self, $package, $path, $w, $widgets) = @_;
     
     if (open my $fh, '<', $INC{$path}) {
         while (my $line = <$fh>) {
@@ -459,7 +502,7 @@ sub parse_file {
             }
         }
     } else {
-        warn "Could not open $INC{$path} for $path $!";
+        $w->("Could not open $INC{$path} for $path $!");
     }
 
     return;
