@@ -44,7 +44,7 @@ use Module::Pluggable::Object;
 
 use Wx::Demo::Source;
 
-__PACKAGE__->mk_ro_accessors( qw(tree widget_tree source notebook left_notebook) );
+__PACKAGE__->mk_ro_accessors( qw(tree widget_tree events_tree source notebook left_notebook) );
 __PACKAGE__->mk_accessors( qw(search_term) );
 
 sub new {
@@ -86,10 +86,12 @@ sub new {
       ( $split1, -1, wxDefaultPosition, wxDefaultSize,
         wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN );
 
-    my $tree = Wx::TreeCtrl->new( $left_nb, -1 );
+    my $tree        = Wx::TreeCtrl->new( $left_nb, -1 );
     my $widget_tree = Wx::TreeCtrl->new( $left_nb, -1 );
-    $left_nb->AddPage( $tree, "Categories", 0 );
-    $left_nb->AddPage( $widget_tree, "Widgets", 0 );
+    my $events_tree = Wx::TreeCtrl->new( $left_nb, -1 );
+    $left_nb->AddPage( $tree,        'Categories', 0 );
+    $left_nb->AddPage( $widget_tree, 'Widgets',    0 );
+    $left_nb->AddPage( $events_tree, 'Events',     0 );
 
     my $text = Wx::TextCtrl->new
       ( $split2, -1, "", wxDefaultPosition, wxDefaultSize,
@@ -104,18 +106,21 @@ sub new {
 
     $nb->AddPage( $code, "Source", 0 );
 
-    $split1->SplitVertically( $left_nb, $split2, 150 );
+    $split1->SplitVertically( $left_nb, $split2, 250 );
     $split2->SplitHorizontally( $nb, $text, 300 );
 
-    $self->{tree} = $tree;
-    $self->{widget_tree} = $widget_tree;
-    $self->{source} = $code;
-    $self->{notebook} = $nb;
+    $self->{tree}          = $tree;
+    $self->{widget_tree}   = $widget_tree;
+    $self->{events_tree}   = $events_tree;
+    $self->{source}        = $code;
+    $self->{notebook}      = $nb;
     $self->{left_notebook} = $left_nb;
 
     EVT_TREE_SEL_CHANGED( $self, $tree,        sub { on_show_module($tree, @_) } );
     EVT_TREE_SEL_CHANGED( $self, $widget_tree, sub { on_show_module($widget_tree, @_) } );
+    EVT_TREE_SEL_CHANGED( $self, $events_tree, sub { on_show_module($events_tree, @_) } );
     EVT_CLOSE( $self, \&on_close );
+
     EVT_MENU( $self, wxID_ABOUT, \&on_about );
     EVT_MENU( $self, wxID_EXIT, sub { $self->Close } );
     EVT_MENU( $self, wxID_COPY, \&on_copy );
@@ -320,17 +325,28 @@ sub populate_widgets {
     my( $self ) = @_;
 
     my $widget_tree = $self->widget_tree;
+    my $events_tree = $self->events_tree;
     my $widgets = $self->widgets;
 
-    my $root_id = $widget_tree->AddRoot( 'wxPerl', -1, -1 );
+    my $wt_root_id = $widget_tree->AddRoot( 'wxPerl', -1, -1 );
+    my $et_root_id = $events_tree->AddRoot( 'wxPerl', -1, -1 );
+
     foreach my $widget (sort keys %$widgets) {
-        my $parent_id = $widget_tree->AppendItem( $root_id, $widget, -1, -1 );
-        foreach my $name (sort keys %{ $widgets->{$widget} }) {
-            my $id = $widget_tree->AppendItem( $parent_id, $name, -1, -1, Wx::TreeItemData->new($name) );
+        if ($widget =~ /^EVT/) {
+            my $parent_id = $events_tree->AppendItem( $et_root_id, $widget, -1, -1 );
+            foreach my $name (sort keys %{ $widgets->{$widget} }) {
+                my $id = $events_tree->AppendItem( $parent_id, $name, -1, -1, Wx::TreeItemData->new($name) );
+            }
+        } else {
+            my $parent_id = $widget_tree->AppendItem( $wt_root_id, $widget, -1, -1 );
+            foreach my $name (sort keys %{ $widgets->{$widget} }) {
+                my $id = $widget_tree->AppendItem( $parent_id, $name, -1, -1, Wx::TreeItemData->new($name) );
+            }
         }
     }
 
-    $widget_tree->Expand( $root_id );
+    $widget_tree->Expand( $wt_root_id );
+    $events_tree->Expand( $et_root_id );
     return;
 }
 
