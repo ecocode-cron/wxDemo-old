@@ -2,8 +2,12 @@ Changes
 MANIFEST
 Makefile.PL
 README.txt
+
 bin/wxperl_demo.pl
+
 lib/Wx/Demo.pm
+lib/Wx/Demo/Source.pm
+
 lib/Wx/DemoModules/files/artprovider/error.xpm
 lib/Wx/DemoModules/files/artprovider/info.xpm
 lib/Wx/DemoModules/files/artprovider/null.xpm
@@ -125,6 +129,7 @@ lib/Wx/DemoModules/wxValidator.pm
 lib/Wx/DemoModules/wxWizard.pm
 lib/Wx/DemoModules/wxXrc.pm
 lib/Wx/DemoModules/wxXrcCustom.pm
+
 t/01_load.t
 t/zz_pod.t
 
