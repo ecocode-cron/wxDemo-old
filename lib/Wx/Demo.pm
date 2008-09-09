@@ -42,9 +42,12 @@ should be strings such as "new", "control", etc... which are
 main categories or "control/xyz" which is a subcategory definde by
 one of the Demo modules.
 
-*** Actually if there is no add_to_tags or if it does not return anything
-then the demo can only be found from the list of widgets or events so I 
-think we should report on Modules that don't have add_to_tags method.
+If there is no add_to_tags or if it does not return anything
+then the demo can only be found from the list of widgets or events. 
+Currently the reason that some packages might have not add_to_tags method
+is that some of the demos are implemented as several packages in one file.
+In such case only the main package has the add_to_tags method as only that
+needs to be added to the list of demos.
 
 Every module must have a C<title> method that returns its title. 
 As far as I can see, the titles are usually the same as the filename.
@@ -478,7 +481,7 @@ sub load_plugins {
         };
     }
 
-    # search inner packages
+    # search inner packages (needed as there some files with multiple packages inside)
     my @plugins = grep !$skip{$_}, Module::Pluggable::Object->new
       ( search_path => [ qw(Wx::DemoModules) ],
         require     => 1,
