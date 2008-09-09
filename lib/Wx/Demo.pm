@@ -58,6 +58,9 @@ There is also an optional C<file> method in the Demo Modules. I think
 it is used in case there are more than one Demo Packages in the same
 file.
 
+Some of the Demo Modules use L<Wx::DemoModules::lib::BaseModule> as
+a base class.
+
 
 =head1 AUTHOR
 

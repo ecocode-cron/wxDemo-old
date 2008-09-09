@@ -11,14 +11,30 @@
 #############################################################################
 
 package Wx::DemoModules::lib::BaseModule;
-
 use strict;
+
+=head1 NAME
+
+Wx::DemoModules::lib::BaseModule - wxPerl demo helper base class
+
+=head1 METHODS
+
+=cut
+
 use base qw(Wx::Panel Class::Accessor::Fast);
 
 use Wx qw(:sizer);
 use Wx::Event qw(EVT_CHECKBOX EVT_BUTTON EVT_SIZE);
 
 __PACKAGE__->mk_accessors( qw(style control_sizer) );
+
+=head2 new
+
+Constructor.
+
+Called automatically by Wx::Demo when the specific Demo Module is selected.
+
+=cut
 
 sub new {
     my( $class, $parent ) = @_;
@@ -64,6 +80,10 @@ sub new {
 
     return $self;
 }
+
+=head2 add_styles
+
+=cut
 
 sub add_styles {
     my( $self, $sizer ) = @_;
@@ -124,6 +144,45 @@ sub recreate_control {
         $self->Layout;
     }
 }
+
+=head1 METHODS designated to be overridden
+
+=head2 styles
+
+Need to return a list of array refs containing pairs
+of ??? and title.
+
+
+
+  return (
+    [ wxSB_HORIZONTAL, 'Horizontal' ],
+    [ wxSB_VERTICAL,   'Vertical' ],
+  );
+
+
+=head2 commands
+
+Should return a list of hashes.
+Each hash contains a B<label> key with a text value
+and an B<action> key with a subroutine reference to become
+the event handler as the value.
+
+Eg.:
+
+  return (
+    {
+      label       => 'Simple about dialog',
+      action      => \&simple_about_dialog,
+    },
+    { 
+      label       => 'Complex about dialog',
+      action      => \&complex_about_dialog,
+    },
+  );
+
+=head2 create_control
+
+=cut
 
 sub styles { }
 sub commands { }
