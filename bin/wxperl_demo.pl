@@ -25,14 +25,24 @@ our $VERSION = '0.11';
 
 GetOptions( 'show=s'   => \( my $module ),
             'help'     => \( my $help ),
+            'list'     => \( my $list ),
             ) or usage();
 usage() if $help;
 
-my $app = Wx::SimpleApp->new;
+my $app    = Wx::SimpleApp->new;
 my $locale = Wx::Locale->new( Wx::Locale::GetSystemLanguage );
-my $demo = Wx::Demo->new;
+my $demo   = Wx::Demo->new;
 
 $demo->activate_module( $module ) if $module;
+if ($list) {
+    print join "\n",
+          sort
+          map $_->title, 
+          grep $_->can( 'title' ),
+          $demo->plugins;
+
+   exit 0;
+}
 
 $app->MainLoop;
 
@@ -43,5 +53,7 @@ sub usage {
 Usage: $0
            --help        this help
            --show ???    showing the particular Demo
+           --list        list all available modules
 END_USAGE
+
 }
