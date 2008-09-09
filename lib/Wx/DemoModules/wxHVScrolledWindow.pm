@@ -13,10 +13,12 @@
 package Wx::DemoModules::wxHVScrolledWindow;
 
 use strict;
-use base qw(Wx::PlHVScrolledWindow);
 use Wx qw(wxWHITE wxHORIZONTAL wxVERTICAL);
-
 use Wx::Event qw(EVT_PAINT);
+
+use base qw(Wx::PlHVScrolledWindow);
+# Wx::HVScrolledWindow is for wxWidgets 2.9.0
+
 
 sub new {
   my( $class, $parent ) = @_;
