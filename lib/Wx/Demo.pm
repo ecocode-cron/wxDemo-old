@@ -117,6 +117,7 @@ sub new {
 
     $edit->Append( wxID_COPY,  '' );
     $edit->Append( wxID_FIND,  '' );
+    my $find_again = $edit->Append( -1, "Find Again\tF3" );
 
     $bar->Append( $file, "&File" );
     $bar->Append( $edit, "&Edit" );
@@ -175,6 +176,7 @@ sub new {
     EVT_MENU( $self, wxID_EXIT, sub { $self->Close } );
     EVT_MENU( $self, wxID_COPY, \&on_copy );
     EVT_MENU( $self, wxID_FIND, \&on_find );
+    EVT_MENU( $self, $find_again, \&on_find_again );
 
     $self->populate_modules;
     $self->populate_widgets;
@@ -189,6 +191,24 @@ sub new {
 
 sub on_find {
     my( $self ) = @_;
+    $self->get_search_term;
+    $self->search;
+
+    return;
+}
+
+sub on_find_again {
+    my( $self ) = @_;
+    if (not $self->search_term) {
+        $self->get_search_term;
+    }
+    $self->search;
+
+    return;
+}
+
+sub get_search_term {
+    my ($self) = @_;
 
     my $search_term = $self->search_term || '';
     my $dialog = Wx::TextEntryDialog->new( $self, "", "Search term", $search_term );
@@ -199,6 +219,12 @@ sub on_find {
     $search_term = $dialog->GetValue;
     $self->search_term($search_term);
     $dialog->Destroy;
+    return;
+}
+sub search {
+    my ($self) = @_;
+
+    my $search_term = $self->search_term;
     return if not $search_term;
 
     my $code = $self->{source};
