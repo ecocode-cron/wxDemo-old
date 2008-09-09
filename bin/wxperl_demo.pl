@@ -24,7 +24,9 @@ use Getopt::Long;
 our $VERSION = '0.11';
 
 GetOptions( 'show=s'   => \( my $module ),
-            );
+            'help'     => \( my $help ),
+            ) or usage();
+usage() if $help;
 
 my $app = Wx::SimpleApp->new;
 my $locale = Wx::Locale->new( Wx::Locale::GetSystemLanguage );
@@ -35,3 +37,11 @@ $demo->activate_module( $module ) if $module;
 $app->MainLoop;
 
 exit 0;
+
+sub usage {
+    die <<"END_USAGE";
+Usage: $0
+           --help        this help
+           --show ???    showing the particular Demo
+END_USAGE
+}
