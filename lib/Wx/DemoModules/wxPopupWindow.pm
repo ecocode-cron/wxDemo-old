@@ -26,11 +26,17 @@ sub new {
 
     my $popup        = Wx::Button->new( $self, -1, 'Popup',     [ 100, 10 ] );
     my $popdown      = Wx::Button->new( $self, -1, 'Popdown',   [ 100, 40 ] );
-    my $poptransient = Wx::Button->new( $self, -1, 'Transient', [ 100, 70 ] );
+    
 
     EVT_BUTTON( $self, $popup, \&on_popup );
     EVT_BUTTON( $self, $popdown, \&on_popdown );
-    EVT_BUTTON( $self, $poptransient, \&on_poptransient );
+    
+    unless( Wx::wxMAC() ) {
+        # not implemented on Mac
+        my $poptransient = Wx::Button->new( $self, -1, 'Transient', [ 100, 70 ] );
+        EVT_BUTTON( $self, $poptransient, \&on_poptransient );
+    }
+    
 
     return $self;
 }

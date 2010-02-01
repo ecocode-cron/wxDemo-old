@@ -19,7 +19,8 @@ our @EXPORT = qw(resize_to);
 
 sub resize_to {
     my( $image, $size ) = @_;
-
+    # seems not to work on Mac
+    return $image if Wx::wxMAC();
     if( $image->GetWidth != $size || $image->GetHeight != $size ) {
         return Wx::Bitmap->new
           ( Wx::Image->new( $image )->Rescale( $size, $size ) );
