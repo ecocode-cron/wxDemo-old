@@ -226,7 +226,6 @@ sub new {
   $this->SetScrollbars( 1, 1, $x_size, $y_size );
   $this->SetBackgroundColour( wxWHITE );
   $this->SetCursor( Wx::Cursor->new( wxCURSOR_PENCIL ) );
-  eval { $this->{overlay} = Wx::Overlay->new };
 
   EVT_MOTION( $this, \&OnMouseMove );
   EVT_LEFT_DOWN( $this, \&OnButton );
@@ -278,16 +277,8 @@ sub OnMouseMove {
 
   push @{$this->{CURRENT_LINE}}, [ $x, $y ];
   my $elems = @{$this->{CURRENT_LINE}};
-  
-  my $overlaydc;
-  if( $this->{overlay} ) {
-    $overlaydc = Wx::DCOverlay->new($this->{overlay}, $dc);
-    $dc->SetPen( Wx::Pen->new( wxGREEN, 5, wxSOLID ) );
-  } else {
-    $dc->SetPen( Wx::Pen->new( wxRED, 5, wxSOLID ) );
-  }
 
-  
+  $dc->SetPen( Wx::Pen->new( wxRED, 5, wxSOLID ) );
   $dc->DrawLine( @{$this->{CURRENT_LINE}[$elems-2]},
                  @{$this->{CURRENT_LINE}[$elems-1]} );
 
@@ -305,11 +296,6 @@ sub OnButton {
     push @{$this->{CURRENT_LINE}}, [ $x, $y ];
     push @{$this->{LINES}}, $this->{CURRENT_LINE};
     $this->ReleaseMouse();
-    if( $this->{overlay} ) {
-       $this->{overlay}->Reset;
-       $this->Refresh;
-    }
-        
   } else {
     $this->{CURRENT_LINE} = [ [ $x, $y ] ];
     $this->CaptureMouse();
