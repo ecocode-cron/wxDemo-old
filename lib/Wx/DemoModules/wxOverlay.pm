@@ -34,7 +34,7 @@ package Wx::DemoModules::wxOverlay::Canvas;
 
 use strict;
 use Wx qw(:sizer :cursor :colour :pen :brush :font wxSYS_SYSTEM_FONT :window :misc );
-use Wx::Event qw(EVT_MOTION EVT_LEFT_DOWN EVT_LEFT_UP );
+use Wx::Event qw(EVT_MOTION EVT_LEFT_DOWN EVT_LEFT_UP EVT_PAINT);
 
 use base qw(Wx::ScrolledWindow);
 
@@ -57,22 +57,31 @@ sub new {
   EVT_MOTION( $this, \&OnMouseMove );
   EVT_LEFT_DOWN( $this, \&OnButton );
   EVT_LEFT_UP( $this, \&OnButton );
-    
+  EVT_PAINT( $this, \&OnPaint );
   return $this;
 }
 
-my $usegctx = defined &Wx::GraphicsContext::Create;
-# need to fix graphics context impl on GTK (I think wxGCDC needs implementing)
+my ($usegctx, $usegcdc);
+if(defined(&Wx::GraphicsContext::Create)) {
+  
+  $usegcdc = (($Wx::VERSION > 0.965) && (Wx::wxVERSION > 2.0080075));
+  $usegctx = ( $usegcdc ) ? 0 : 1;
+}
+
+# GraphicsContext problems on wxGTK if no wxGCDC
 $usegctx = 0 if Wx::wxGTK;
 
-sub OnDraw {
+sub OnPaint {
   my $this = shift;
-  my $dc = shift;
+  my $dcnew = Wx::PaintDC->new( $this );
   my $pen   = Wx::Pen->new( wxRED, $penwidth, wxSOLID );
   my $brush = Wx::Brush->new(Wx::Colour->new(255, 192, 192, 127 ), wxSOLID );
   my $font = Wx::SystemSettings::GetFont( wxSYS_SYSTEM_FONT );
+  my $drawdc = ( $usegcdc ) ? Wx::GCDC->new( $dcnew ) : $dcnew;
+  $this->PrepareDC( $drawdc );
   if($usegctx) {
-    my $ctx = Wx::GraphicsContext::Create( $dc );
+   
+    my $ctx = Wx::GraphicsContext::Create( $dcnew );
     $ctx->SetBrush( $brush );
     $ctx->SetPen( $pen );
     foreach my $i ( @{$this->{RECTS}} ) {
@@ -80,14 +89,18 @@ sub OnDraw {
     }
     $ctx->SetFont( $font, wxBLACK );
     $ctx->DrawText('Drag the pointer to create rectangles',20,20);
+    $ctx->DrawText('Using GraphicsContext',20,50);
   } else {
-    $dc->SetPen( $pen );
-    $dc->SetBrush ( $brush );
+    
+    $drawdc->SetPen( $pen );
+    $drawdc->SetBrush ( $brush );
     foreach my $i ( @{$this->{RECTS}} ) {
-      $dc->DrawRectangle( $i->x, $i->y, $i->width, $i->height );
+      $drawdc->DrawRectangle( $i->x, $i->y, $i->width, $i->height );
     }
-    $dc->SetFont( $font );
-    $dc->DrawText('Drag the pointer to create rectangles',20,20);
+    $drawdc->SetFont( $font );
+    $drawdc->DrawText('Drag the pointer to create rectangles',20,20);
+    my $text = ($usegcdc) ? 'Using Wx::GCDC' : 'Using Wx::DC';
+    $drawdc->DrawText($text ,20,50);
   }
 }
 
