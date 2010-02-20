@@ -1,6 +1,7 @@
 Revision history for Perl application Wx::Demo.
 
 0.11
+	- Added demo for wxSpinCtrlDouble.
 
 0.10  Sun Jun 29 21:51:39 CEST 2008
 	- Fixed wxListCtrl report mode demo latent bug.

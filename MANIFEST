@@ -115,6 +115,7 @@ lib/Wx/DemoModules/wxSingleChoiceDialog.pm
 lib/Wx/DemoModules/wxSlider.pm
 lib/Wx/DemoModules/wxSpinButton.pm
 lib/Wx/DemoModules/wxSpinCtrl.pm
+lib/Wx/DemoModules/wxSpinCtrlDouble.pm
 lib/Wx/DemoModules/wxSplashScreen.pm
 lib/Wx/DemoModules/wxSplitterWindow.pm
 lib/Wx/DemoModules/wxStaticBitmap.pm
