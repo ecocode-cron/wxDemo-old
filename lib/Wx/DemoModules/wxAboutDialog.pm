@@ -59,7 +59,7 @@ sub complex_about_dialog {
     Wx::AboutBox( $info );
 }
 
-sub add_to_tags { qw(dialogs new) }
+sub add_to_tags { qw(dialogs) }
 sub title { 'wxAboutDialog' }
 
 defined &Wx::AboutBox ? 1 : 0;

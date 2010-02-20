@@ -114,6 +114,7 @@ sub new {
   my $this = $class->SUPER::new( @_ );
 
   $this->LoadPage( Wx::Demo->get_data_file( 'html/index.html' ) );
+  print $this->ToText, "\n";
 
   Wx::LogMessage( Wx::Demo->get_data_file( 'html/index.html' ) );
   return $this;

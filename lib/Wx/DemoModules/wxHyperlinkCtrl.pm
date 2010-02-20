@@ -61,7 +61,7 @@ sub create_control {
     return $self->hyperlink( $hl );
 }
 
-sub add_to_tags { qw(controls new) }
+sub add_to_tags { qw(controls) }
 sub title { 'wxHyperlinkCtrl' }
 
 1;

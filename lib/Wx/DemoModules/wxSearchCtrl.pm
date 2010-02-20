@@ -70,7 +70,7 @@ sub OnCancel {
     Wx::LogMessage( 'Search cancelled' );
 }
 
-sub add_to_tags { qw(controls new) }
+sub add_to_tags { qw(controls) }
 sub title { 'wxSearchCtrl' }
 
 defined &Wx::SearchCtrl::new ? 1 : 0;

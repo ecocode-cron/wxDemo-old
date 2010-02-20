@@ -62,7 +62,7 @@ sub OnPaneChanged {
     Wx::LogMessage( $event->GetCollapsed ? 'Collapsed' : 'Expanded' );
 }
 
-sub add_to_tags { qw(controls new) }
+sub add_to_tags { qw(controls) }
 sub title { 'wxCollapsiblePane' }
 
 defined &Wx::CollapsiblePane::new ? 1 : 0;

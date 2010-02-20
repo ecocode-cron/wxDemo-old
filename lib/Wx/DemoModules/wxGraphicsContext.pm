@@ -54,7 +54,7 @@ sub _on_paint {
     $cxt->DrawText( "At half pixel, rotated", 60.5, 60.5, -3.141/8*3 );
 }
 
-sub add_to_tags  { qw(misc new) }
+sub add_to_tags  { qw(misc) }
 sub title { 'wxGraphicsContext' }
 
 defined &Wx::GraphicsContext::Create;

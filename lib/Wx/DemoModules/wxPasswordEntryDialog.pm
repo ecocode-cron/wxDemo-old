@@ -41,7 +41,7 @@ sub text_entry_dialog {
   $dialog->Destroy;
 }
 
-sub add_to_tags { qw(dialogs new) }
+sub add_to_tags { qw(dialogs) }
 sub title { 'wxPasswordEntryDialog' }
 
 defined &Wx::PasswordEntryDialog::new;

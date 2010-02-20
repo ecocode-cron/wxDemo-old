@@ -46,7 +46,7 @@ sub on_show_tip {
     Wx::LogMessage( 'Current tip is %d', $self->provider->GetCurrentTip );
 }
 
-sub add_to_tags { qw(dialogs new) }
+sub add_to_tags { qw(dialogs) }
 sub title { 'wxTipDialog' }
 
 1;

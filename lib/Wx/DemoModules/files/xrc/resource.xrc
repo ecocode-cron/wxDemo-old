@@ -58,7 +58,7 @@
           <object class="sizeritem">
             <flag>wxLEFT</flag>
             <border>5</border>
-            <object class="wxBitmapButton">
+            <object class="wxBitmapButton" name="bmpbutt">
               <bitmap>fuzzy.gif</bitmap>
               <focus>fileopen.gif</focus>
             </object>

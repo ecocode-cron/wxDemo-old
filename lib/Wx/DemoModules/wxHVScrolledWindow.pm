@@ -76,7 +76,7 @@ sub OnPaint {
   }
 }
 
-sub add_to_tags  { qw(windows new) }
+sub add_to_tags  { qw(windows) }
 sub title { 'wxHVScrolledWindow' }
 
 1;
