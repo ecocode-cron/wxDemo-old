@@ -16,9 +16,9 @@ use strict;
 use Wx qw(wxWHITE wxHORIZONTAL wxVERTICAL);
 use Wx::Event qw(EVT_PAINT);
 
-use base qw(Wx::PlHVScrolledWindow);
+use base (Wx::wxVERSION() > 2.0089 ) ? qw(Wx::PlHVScrolledWindow) : qw( Wx::Window );
 # Wx::HVScrolledWindow is for wxWidgets 2.9.0
-
+# Simply won't be loaded on lower Wx::Widgets (see sub add_to_tags )
 
 sub new {
   my( $class, $parent ) = @_;
@@ -76,7 +76,7 @@ sub OnPaint {
   }
 }
 
-sub add_to_tags  { qw(windows) }
+sub add_to_tags  { ( Wx::wxVERSION() > 2.0089 ) ? qw(windows) : () }
 sub title { 'wxHVScrolledWindow' }
 
 1;
