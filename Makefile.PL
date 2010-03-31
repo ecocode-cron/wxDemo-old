@@ -26,7 +26,7 @@ eval {
 
 WriteMakefile
   ( NAME            => 'Wx::Demo',
-    VERSION_FROM    => 'bin/wxperl_demo.pl',
+    VERSION_FROM    => 'lib/Wx/Demo.pm',
     PREREQ_PM       => { 'File::Spec'              => 0.8,
                          'Wx'                      => 0.64,
                          'Module::Pluggable'       => 3.1,

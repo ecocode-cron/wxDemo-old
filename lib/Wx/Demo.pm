@@ -93,6 +93,8 @@ use Module::Pluggable::Object;
 
 use Wx::Demo::Source;
 
+our $VERSION = '0.11';
+
 __PACKAGE__->mk_ro_accessors( qw(tree widget_tree events_tree source notebook left_notebook) );
 __PACKAGE__->mk_accessors( qw(search_term) );
 

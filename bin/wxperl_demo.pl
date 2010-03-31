@@ -21,7 +21,6 @@ if( $^O eq 'darwin' && $^X !~ m{/wxPerl\.app/} ) {
 use Wx::Demo;
 use Getopt::Long;
 
-our $VERSION = '0.11';
 
 GetOptions( 'show=s'   => \( my $module ),
             'help'     => \( my $help ),
