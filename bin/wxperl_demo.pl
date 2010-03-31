@@ -49,6 +49,8 @@ exit 0;
 
 sub usage {
     die <<"END_USAGE";
+Version: $Wx::Demo::VERSION
+
 Usage: $0
            --help        this help
            --show ???    showing the particular Demo
