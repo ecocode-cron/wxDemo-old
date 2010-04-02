@@ -87,6 +87,7 @@ lib/Wx/DemoModules/wxGridER.pm
 lib/Wx/DemoModules/wxGridSizer.pm
 lib/Wx/DemoModules/wxGridTable.pm
 lib/Wx/DemoModules/wxHVScrolledWindow.pm
+lib/Wx/DemoModules/wxHeaderCtrlSimple.pm
 lib/Wx/DemoModules/wxHelpController.pm
 lib/Wx/DemoModules/wxHelpEvent.pm
 lib/Wx/DemoModules/wxHtmlDynamic.pm
@@ -100,6 +101,7 @@ lib/Wx/DemoModules/wxLocale.pm
 lib/Wx/DemoModules/wxMDI.pm
 lib/Wx/DemoModules/wxMediaCtrl.pm
 lib/Wx/DemoModules/wxMultiChoiceDialog.pm
+lib/Wx/DemoModules/wxOverlay.pm
 lib/Wx/DemoModules/wxPasswordEntryDialog.pm
 lib/Wx/DemoModules/wxPopupWindow.pm
 lib/Wx/DemoModules/wxPrinting.pm
