@@ -1,6 +1,9 @@
 Revision history for Perl application Wx::Demo.
 
-0.11
+0.11  Fri Apr  2 18:34:04 CEST 2010
+	- Allow searching inside the source code (Gabor Szabo).
+	- Add another tab with the list of all wxPerl classes/events
+	  used in the demo (Gabor Szabo).
 	- Added demo for wxSpinCtrlDouble.
 
 0.10  Sun Jun 29 21:51:39 CEST 2008
