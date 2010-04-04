@@ -1,5 +1,7 @@
 Revision history for Perl application Wx::Demo.
 
+	- Some Makefile.PL improvements (Gabor Szabo)
+
 0.11  Fri Apr  2 18:34:04 CEST 2010
 	- Allow searching inside the source code (Gabor Szabo).
 	- Add another tab with the list of all wxPerl classes/events

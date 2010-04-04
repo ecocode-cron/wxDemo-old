@@ -13,20 +13,12 @@
 
 use strict;
 
-use ExtUtils::MakeMaker;
-eval {
-    require ExtUtils::MY_Metafile;
-    ExtUtils::MY_Metafile->import;
-
-    my_metafile( {
-        license  => 'perl',
-        abstract => 'the wxPerl demo',
-    } );
-};
+use ExtUtils::MakeMaker 6.46;
 
 WriteMakefile
   ( NAME            => 'Wx::Demo',
     VERSION_FROM    => 'lib/Wx/Demo.pm',
+    ABSTRACT_FROM   => 'lib/Wx/Demo.pm',
     PREREQ_PM       => { 'File::Spec'              => 0.8,
                          'Wx'                      => 0.64,
                          'Module::Pluggable'       => 3.1,
@@ -40,4 +32,18 @@ WriteMakefile
     ( $] >= 5.005 ?
       ( AUTHOR          => 'Mattia Barbon <mbarbon@cpan.org>' ) :
       () ),
+
+    # needs ExtUtils::MakeMaker 6.46
+    META_MERGE => {
+        no_index => {
+            directory => ['lib/Wx/DemoModules/files/'],
+        },
+        resources => {
+            license     => 'perl', # 'http://dev.perl.org/licenses/',
+            homepage    => 'http://wxperl.sourceforge.net/',
+            repository  => 'https://wxperl.svn.sourceforge.net/svnroot/wxperl/wxDemo/trunk',
+            MailingList => 'wxperl-users@perl.org',
+        },
+    },
 );
+
