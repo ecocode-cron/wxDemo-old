@@ -5,7 +5,7 @@
 ## Modified by:
 ## Created:     11/11/2006
 ## RCS-ID:      $Id$
-## Copyright:   (c) 2006 Mattia Barbon
+## Copyright:   (c) 2006, 2010 Mattia Barbon
 ## Licence:     This program is free software; you can redistribute it and/or
 ##              modify it under the same terms as Perl itself
 #############################################################################
@@ -19,7 +19,7 @@ use base qw(Wx::DemoModules::lib::BaseModule Class::Accessor::Fast);
 use Wx qw(:richtextctrl :textctrl :font :sizer :color);
 # use Wx::Event qw(EVT_SPINCTRL EVT_SPIN EVT_SPIN_DOWN EVT_SPIN_UP);
 
-__PACKAGE__->mk_accessors( qw(richtext stylesheet control) );
+__PACKAGE__->mk_accessors( qw(richtext stylesheet control preview) );
 
 sub DESTROY {
     my( $self ) = @_;
@@ -30,11 +30,26 @@ sub DESTROY {
 sub commands {
     my( $self ) = @_;
 
-    return ( { with_value  => 0,
+    my @commands =  ( { with_value  => 0,
                label       => 'Add styled text',
                action      => \&add_styled_text,
                },
-               );
+                    );
+    
+    push(@commands,
+             ( { with_value  => 0,
+               label       => 'Print Preview',
+               action      => \&print_preview,
+               },
+               { with_value  => 0,
+               label       => 'Page Setup',
+               action      => \&page_setup,
+               },
+             )
+               
+    ) if defined(&Wx::RichTextPrinting::new);
+    
+    return @commands;
 }
 
 sub create_control {
@@ -45,8 +60,14 @@ sub create_control {
                                           [400, 300] );
     my $stylectrl = Wx::RichTextStyleListCtrl->new( $panel, -1, [-1, -1],
                                                     [100, -1]);
-
     $self->richtext( $richtext );
+    
+    if(defined(&Wx::RichTextPrinting::new)) {
+        my $parent = Wx::GetTopLevelParent($self);
+        my $preview = Wx::RichTextPrinting->new('Wx::Demo Printing', $parent);
+        $self->preview( $preview );
+    }
+    
 
     my $sizer = Wx::BoxSizer->new( wxHORIZONTAL );
 
@@ -211,6 +232,26 @@ sub add_styled_text {
     $r->WriteText("Compatibility with wxTextCtrl API");
     $r->EndSymbolBullet;
     $r->EndSuppressUndo;
+}
+
+sub print_preview {
+    my($self) = @_;
+    
+    my $pv = $self->preview;
+    $pv->SetHeaderText('Wx::Demo Richtext Printing',  wxRICHTEXT_PAGE_ALL,  wxRICHTEXT_PAGE_LEFT);
+    $pv->SetFooterText('Page @PAGENUM@ of @PAGESCNT@',  wxRICHTEXT_PAGE_ALL,  wxRICHTEXT_PAGE_RIGHT);
+    $pv->SetShowOnFirstPage(0);
+    
+    # we can only set header / footer margins using wxRichTextHeaderFooterData
+    my $hfdata = $pv->GetHeaderFooterData;
+    $hfdata->SetMargins(100,100);
+    $pv->SetHeaderFooterData($hfdata);
+    $self->preview->PreviewBuffer($self->richtext->GetBuffer());
+}
+
+sub page_setup {
+    my($self) = @_;
+    $self->preview->PageSetup;
 }
 
 sub add_to_tags { qw(controls) }
