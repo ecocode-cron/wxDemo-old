@@ -87,6 +87,7 @@ lib/Wx/DemoModules/wxGridER.pm
 lib/Wx/DemoModules/wxGridSizer.pm
 lib/Wx/DemoModules/wxGridTable.pm
 lib/Wx/DemoModules/wxHVScrolledWindow.pm
+lib/Wx/DemoModules/wxHeaderCtrl.pm
 lib/Wx/DemoModules/wxHeaderCtrlSimple.pm
 lib/Wx/DemoModules/wxHelpController.pm
 lib/Wx/DemoModules/wxHelpEvent.pm
