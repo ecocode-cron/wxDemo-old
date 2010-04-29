@@ -68,7 +68,7 @@ sub OnDoubleClick {
                     $event->GetColumn );
 }
 
-sub add_to_tags { ( Wx::wxVERSION() > 2.0089 ) ? qw(controls new) : () }
+sub add_to_tags { ( Wx::wxVERSION() >= 2.009 ) ? qw(controls new) : () }
 sub title { 'wxHeaderCtrlSimple' }
 
 package Wx::DemoModules::wxHeaderCtrlSimple::Control;

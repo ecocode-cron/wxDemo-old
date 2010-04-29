@@ -26,7 +26,7 @@ sub create_control {
     return $self->headerctrl( $headerctrl );
 }
 
-sub add_to_tags { ( Wx::wxVERSION() > 2.0089 ) ? qw(controls new) : () }
+sub add_to_tags { ( Wx::wxVERSION() >= 2.009 ) ? qw(controls new) : () }
 sub title { 'wxHeaderCtrl' }
 
 package Wx::DemoModules::wxHeaderCtrl::Control;
