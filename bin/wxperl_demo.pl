@@ -12,9 +12,11 @@
 #############################################################################
 
 use strict;
+use Wx;
 
-if( $^O eq 'darwin' && $^X !~ m{/wxPerl\.app/} ) {
-    print "On Mac OS X please run the demo with 'wxPerl wxperl_demo.pl'\n";
+# wxPerl exec only needed on Mac OS X pre Wx 0.98
+if( $Wx::VERSION lt '0.98' && Wx::$^O eq 'darwin' && $^X !~ m{/wxPerl\.app/} ) {
+    print "On Mac OS X please run the demo with 'wxPerl wxperl_demo.pl' or update to Wx >= 0.98.\n";
     exit 0;
 }
 

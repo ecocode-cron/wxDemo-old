@@ -35,7 +35,16 @@ use_ok( 'Wx::DemoModules::wxMDI' );
 
 # naughty me...
 defined &Wx::MediaCtrl::new || eval 'sub Wx::MediaCtrl::new { }';
-use_ok( 'Wx::DemoModules::wxMediaCtrl' );
+# above line tells us in gui if Wx::MediaCtrl is missing
+# SKIP below allows us to pass tests if it is missing or 
+# has problems - (maybe wxWidgets doesnt have working 
+# wxMediaCtrl support)
+
+SKIP: {
+    eval { require Wx::Media; };
+    skip 'Wx::MediaCtrl load failed: '. $@, 1 if $@;
+    use_ok( 'Wx::DemoModules::wxMediaCtrl' );
+}
 
 use_ok( 'Wx::DemoModules::wxMultiChoiceDialog' );
 use_ok( 'Wx::DemoModules::wxPrinting' );
