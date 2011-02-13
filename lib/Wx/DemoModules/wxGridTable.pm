@@ -5,7 +5,7 @@
 ## Modified by:
 ## Created:     05/08/2003
 ## RCS-ID:      $Id$
-## Copyright:   (c) 2003, 2005, 2006 Mattia Barbon
+## Copyright:   (c) 2003, 2005, 2006, 2011 Mattia Barbon
 ## Licence:     This program is free software; you can redistribute it and/or
 ##              modify it under the same terms as Perl itself
 #############################################################################
@@ -16,6 +16,22 @@ package Wx::DemoWindows::wxGridTable::Table;
 
 use strict;
 use base qw(Wx::PlGridTable);
+
+use Wx qw(wxRED wxGREEN);
+
+sub new {
+  my( $class ) = @_;
+  my $self = $class->SUPER::new;
+
+  $self->{default} = Wx::GridCellAttr->new;
+  $self->{red_bg} = Wx::GridCellAttr->new;
+  $self->{green_fg} = Wx::GridCellAttr->new;
+
+  $self->{red_bg}->SetBackgroundColour( wxRED );
+  $self->{green_fg}->SetTextColour( wxGREEN );
+
+  return $self;
+}
 
 sub GetNumberRows { 100000 }
 sub GetNumberCols { 100000 }
@@ -59,6 +75,15 @@ sub GetValueAsDouble {
   my( $this, $r, $c ) = @_;
 
   return $r + $c / 1000;
+}
+
+sub GetAttr {
+  my( $self, $row, $col, $kind ) = @_;
+
+  return $self->{default} if $row % 2 && $col % 2;
+  return $self->{red_bg} if $row % 2;
+  return $self->{green_fg} if $col % 2;
+  return Wx::GridCellAttr->new;
 }
 
 package Wx::DemoModules::wxGridTable;
