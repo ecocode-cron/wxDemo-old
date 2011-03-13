@@ -58,6 +58,7 @@ lib/Wx/DemoModules/wxArtProvider.pm
 lib/Wx/DemoModules/wxBitmapButton.pm
 lib/Wx/DemoModules/wxBookCtrl.pm
 lib/Wx/DemoModules/wxBoxSizer.pm
+lib/Wx/DemoModules/wxButton.pm
 lib/Wx/DemoModules/wxCalendarCtrl.pm
 lib/Wx/DemoModules/wxCaret.pm
 lib/Wx/DemoModules/wxCheckListBox.pm
