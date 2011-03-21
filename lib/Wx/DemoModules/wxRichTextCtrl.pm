@@ -27,6 +27,8 @@ sub DESTROY {
     $self->stylesheet( undef );
 }
 
+sub expandinsizer { 1 };
+
 sub commands {
     my( $self ) = @_;
 

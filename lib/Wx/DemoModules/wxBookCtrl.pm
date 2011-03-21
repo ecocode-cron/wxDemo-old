@@ -26,6 +26,8 @@ use Wx qw(:bookctrl wxNOT_FOUND wxYES_NO wxYES wxICON_QUESTION);
 
 __PACKAGE__->mk_accessors( qw(bookctrl) );
 
+sub expandinsizer { 1 };
+
 sub styles {
     my( $self ) = @_;
 

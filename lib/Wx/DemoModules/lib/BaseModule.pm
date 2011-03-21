@@ -26,7 +26,7 @@ use base qw(Wx::Panel Class::Accessor::Fast);
 use Wx qw(:sizer);
 use Wx::Event qw(EVT_CHECKBOX EVT_BUTTON EVT_SIZE);
 
-__PACKAGE__->mk_accessors( qw(style control_sizer) );
+__PACKAGE__->mk_accessors( qw(style control_sizer ) );
 
 =head2 new
 
@@ -68,9 +68,14 @@ sub new {
         my $ctrlsz = Wx::StaticBoxSizer->new( $box, wxVERTICAL );
 
         $self->control_sizer( $ctrlsz );
-        $ctrlsz->Add( $control, 0,
+        if($self->expandinsizer) {
+            $ctrlsz->Add( $control, 1, wxALL|wxEXPAND, 5 );
+        
+        } else {
+            $ctrlsz->Add( $control, 0,
                       wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL,
                       5 );
+        }
         $sizer->Add( $ctrlsz, 1, wxGROW|wxALL, 5 );
     } else {
         $box->Destroy;
@@ -137,13 +142,23 @@ sub recreate_control {
             $self->control_sizer->Detach( 0 );
             $window->Destroy;
         }
-
-        $self->control_sizer->Add
-          ( $self->create_control, 0, 
+        if($self->expandinsizer) {
+            $self->control_sizer->Add
+                              ( $self->create_control, 1, wxALL|wxEXPAND, 5 );
+                
+        } else {
+            $self->control_sizer->Add
+                  ( $self->create_control, 0, 
             wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
+        }
+
+        
         $self->Layout;
     }
 }
+
+sub expandinsizer { 0 };
+
 
 =head1 METHODS designated to be overridden
 

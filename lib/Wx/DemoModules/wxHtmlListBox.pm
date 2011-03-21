@@ -22,6 +22,8 @@ use Wx::Event qw(EVT_LISTBOX EVT_LISTBOX_DCLICK);
 
 __PACKAGE__->mk_accessors( qw(htmllistbox) );
 
+sub expandinsizer { 1 };
+
 sub styles {
     my( $self ) = @_;
 
