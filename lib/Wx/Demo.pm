@@ -5,7 +5,7 @@
 ## Modified by:
 ## Created:     20/08/2006
 ## RCS-ID:      $Id$
-## Copyright:   (c) 2006-2007 Mattia Barbon
+## Copyright:   (c) 2006-2011 Mattia Barbon
 ## Licence:     This program is free software; you can redistribute it and/or
 ##              modify it under the same terms as Perl itself
 #############################################################################
@@ -93,7 +93,7 @@ use Module::Pluggable::Object;
 
 use Wx::Demo::Source;
 
-our $VERSION = '0.12';
+our $VERSION = '0.13';
 
 __PACKAGE__->mk_ro_accessors( qw(tree widget_tree events_tree source notebook left_notebook) );
 __PACKAGE__->mk_accessors( qw(search_term) );
