@@ -94,7 +94,20 @@ sub OnPaste {
   wxTheClipboard->Open;
 
   my $text = '';
-  if( wxTheClipboard->IsSupported( wxDF_TEXT ) ) {
+  
+  # The cliboard may contain a composite object
+  # in which case, for GTK at least, we need to
+  # check for wxDF_UNICODETEXT in addition to
+  # wxDF_TEXT.
+  # wxDF_UNICODETEXT may not be wrapped in the 
+  # version of Wx installed, so we may have to use
+  # a workaround.
+  
+  my $unicodetext_wxwidgets_id = 13;
+  my $unicodetextformat = ( defined(&Wx::wxDF_UNICODETEXT) ) 
+    ? wxDF_UNICODETEXT() : Wx::DataFormat->newNative( $unicodetext_wxwidgets_id );
+  
+  if( wxTheClipboard->IsSupported( wxDF_TEXT ) || wxTheClipboard->IsSupported( $unicodetextformat ) ) {
     my $data = Wx::TextDataObject->new;
     my $ok = wxTheClipboard->GetData( $data );
     if( $ok ) {
@@ -105,6 +118,7 @@ sub OnPaste {
       $text = '';
     }
   }
+  
   $this->text->SetLabel( $text );
 
   my $bitmap = wxNullBitmap;
@@ -125,18 +139,18 @@ sub OnPaste {
   my $data = get_perl_data_object();
   Wx::LogMessage( "Testing if clipboard supports: " . $data->GetFormat->GetId() );
   if( wxTheClipboard->IsSupported( $data->GetFormat ) ) {
-	Wx::LogMessage( "It does: get data from clipboard" );
-	my $ok = wxTheClipboard->GetData( $data );
-	if( $ok ) {
-	  Wx::LogMessage( "Pasted perl data object" );
-	  my $PerlData = $data->GetPerlData();
-	  foreach (keys %$PerlData) {
-		  $text .= "$_ = $PerlData->{$_} ";
-	  }
-	} else {
-	  Wx::LogMessage( "Error pasting perl data object" );
-	  $text = '';
-	}
+    Wx::LogMessage( "It does: get data from clipboard" );
+    my $ok = wxTheClipboard->GetData( $data );
+    if( $ok ) {
+      Wx::LogMessage( "Pasted perl data object" );
+      my $PerlData = $data->GetPerlData();
+      foreach (keys %$PerlData) {
+          $text .= "$_ = $PerlData->{$_} ";
+      }
+    } else {
+      Wx::LogMessage( "Error pasting perl data object" );
+      $text = '';
+    }
     $this->text->SetLabel( $text );
   }
 
