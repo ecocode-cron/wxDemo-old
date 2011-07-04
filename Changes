@@ -1,5 +1,8 @@
 Revision history for Perl application Wx::Demo.
 
+0.14  TBR
+    - Add wxDF_UNICODETEXT handling in wxClipboard demo
+
 0.13  Thu May 05 08:00:00 BST 2011
     - Wx::PlVlistBox example expanded
     - Add bitmap features of Wx::Button

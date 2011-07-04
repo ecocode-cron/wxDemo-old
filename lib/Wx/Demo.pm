@@ -262,7 +262,7 @@ sub on_about {
     my( $self ) = @_;
     use Wx qw(wxOK wxCENTRE wxVERSION_STRING);
 
-    Wx::MessageBox( "wxPerl demo version $VERSION, (c) 2001-2010 Mattia Barbon\n" .
+    Wx::MessageBox( "wxPerl demo version $VERSION, (c) 2001-2011 Mattia Barbon\n" .
                     "wxPerl $Wx::VERSION, " . wxVERSION_STRING,
                     "About wxPerl demo", wxOK|wxCENTRE, $self );
 }
