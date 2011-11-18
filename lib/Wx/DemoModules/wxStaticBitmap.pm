@@ -49,10 +49,7 @@ sub on_clear_bitmap {
 
 sub on_set_bitmap {
     my( $self ) = @_;
-
-    $self->staticbitmap->SetBitmap
-      ( wxTheApp->GetStdIcon( rand > .5 ? wxICON_QUESTION :
-                                          wxICON_INFORMATION ) );
+    $self->staticbitmap->SetBitmap(Wx::Bitmap->new( wxTheApp->GetStdIcon( rand > .5 ? wxICON_QUESTION : wxICON_INFORMATION ) ) );
     $self->staticbitmap->Refresh;
 }
 

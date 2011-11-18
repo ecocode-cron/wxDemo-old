@@ -35,8 +35,9 @@ sub new {
 
   $sizer->Add( $calendar, 0, wxALL, 10 );
   $sizer->Add( $textctrl, 0, wxGROW|wxALL, 10 );
-
-  $calendar->EnableYearChange;
+  
+  # EnableYearChange not available on native controls
+  $calendar->EnableYearChange if $calendar->can('EnableYearChange');
   $calendar->EnableMonthChange;
 
   # test attributes
