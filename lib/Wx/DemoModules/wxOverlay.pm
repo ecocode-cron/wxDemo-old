@@ -33,7 +33,7 @@ sub new {
 package Wx::DemoModules::wxOverlay::Canvas;
 
 use strict;
-use Wx qw(:sizer :cursor :colour :pen :brush :font wxSYS_SYSTEM_FONT :window :misc );
+use Wx qw(:sizer :cursor :colour :pen :brush :font wxSYS_SYSTEM_FONT wxSYS_DEFAULT_GUI_FONT wxSYS_OEM_FIXED_FONT :window :misc );
 use Wx::Event qw(EVT_MOTION EVT_LEFT_DOWN EVT_LEFT_UP EVT_PAINT);
 
 use base qw(Wx::ScrolledWindow);
@@ -76,7 +76,12 @@ sub OnPaint {
   my $dcnew = Wx::PaintDC->new( $this );
   my $pen   = Wx::Pen->new( wxRED, $penwidth, wxSOLID );
   my $brush = Wx::Brush->new(Wx::Colour->new(255, 192, 192, 127 ), wxSOLID );
-  my $font = Wx::SystemSettings::GetFont( wxSYS_SYSTEM_FONT );
+  
+  my $font = Wx::SystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
+  
+  # This line needed to init the font on MSW with public domain GDIPlus headers (mingw)
+  $font->GetFaceName;
+  
   my $drawdc = ( $usegcdc ) ? Wx::GCDC->new( $dcnew ) : $dcnew;
   $this->PrepareDC( $drawdc );
   if($usegctx) {
@@ -99,7 +104,7 @@ sub OnPaint {
     }
     $drawdc->SetFont( $font );
     $drawdc->DrawText('Drag the pointer to create rectangles',20,20);
-    my $text = ($usegcdc) ? 'Using Wx::GCDC' : 'Using Wx::DC';
+    my $text = ($usegcdc) ? 'Using Graphics CTX Based Wx::GCDC' : 'Using Standard Wx::DC';
     $drawdc->DrawText($text ,20,50);
   }
 }
