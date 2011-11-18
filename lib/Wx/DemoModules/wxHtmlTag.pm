@@ -58,8 +58,8 @@ sub new {
   <h1>Heading</h1>
 
   <wxperlctrl />
-
-Some text
+<br/><br/>
+Calendar Control using custom tag.
 </body>
 </html>
 EOT

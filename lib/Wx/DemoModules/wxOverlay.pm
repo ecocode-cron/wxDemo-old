@@ -77,8 +77,7 @@ sub OnPaint {
   my $pen   = Wx::Pen->new( wxRED, $penwidth, wxSOLID );
   my $brush = Wx::Brush->new(Wx::Colour->new(255, 192, 192, 127 ), wxSOLID );
   
-  my $font = Wx::SystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
-  
+  my $font = wxSMALL_FONT;
   # This line needed to init the font on MSW with public domain GDIPlus headers (mingw)
   $font->GetFaceName;
   
