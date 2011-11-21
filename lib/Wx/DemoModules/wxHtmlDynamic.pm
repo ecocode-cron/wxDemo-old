@@ -91,8 +91,23 @@ $text
 </html>
 EOT
 
-  my $f = Wx::PlFSFile->new( IO::Scalar->new( \$string ),
-                             $location, 'text/html', '' );
+  my $mimetype = 'text/html';
+  my $fh = IO::Scalar->new( \$string );
+  
+  # we could also pass a charset as part of
+  # the mimetype and use IO::String or open
+  
+  # my $mimetype = 'text/html; charset=utf-8';
+  # my $fh = IO::String->new( $string );
+  # open my $fh, '<', \$string;
+  
+  # If our mimetype is 'text/html'  and we use some other tied method, 
+  # it must implement $fh->sref that returns a reference to the 
+  # underlying scalar OR we must pass a charset as part of the mimetype.
+  # This is because of the way the HTMLParser requests the size of the 
+  # input 'file' if no charset is given.
+  
+  my $f = Wx::PlFSFile->new( $fh, $location, $mimetype, '' );
   return $f;
 }
 
