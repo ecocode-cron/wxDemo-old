@@ -1,8 +1,9 @@
 Revision history for Perl application Wx::Demo.
 
-0.14  TBR
+0.14  Tue Feb 28 2012
     - Fix wxOverlay font on MSW + mingw + gdiplus
     - Add wxDF_UNICODETEXT handling in wxClipboard demo
+    - several wxWidgets 2.9.3 compatibility fixes
 
 0.13  Thu May 05 08:00:00 BST 2011
     - Wx::PlVlistBox example expanded
