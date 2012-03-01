@@ -139,8 +139,8 @@ sub OnItemChecked {
 
 sub OnCtrlSorted {
     my ($self, $event) = @_;
-    my $col = $event->GetColumn;
-    Wx::LogMessage('Ctrl Sorted on Column : %s', $col);
+    my ($col, $ascending) = $self->{treelist}->GetSortColumn;
+    Wx::LogMessage('Ctrl Sorted on Column : %s', $col) if defined($col);
     
 }
 
