@@ -9,11 +9,11 @@
 ## Licence:     This program is free software; you can redistribute it and/or
 ##              modify it under the same terms as Perl itself
 #############################################################################
-
-package Wx::DemoModules::wxPropertyGrid;
-use strict;
 use Wx;
 use Wx::PropertyGrid;
+package Wx::DemoModules::wxPropertyGrid;
+use strict;
+
 use Wx qw( :propgrid :misc wxTheApp :id :colour :sizer :window :panel :bitmap :font);
 use base qw( Wx::Panel );
 
@@ -313,7 +313,7 @@ package Wx::DemoModules::wxPropertyGrid::Manager;
 use strict;
 use Wx::PropertyGrid;
 use Wx qw( :propgrid :misc );
-use base qw( Wx::PlPropertyGridManager );
+use base qw( Wx::PropertyGridManager );
 
 sub new { shift->SUPER::new( @_ ) }
 
@@ -324,7 +324,7 @@ package Wx::DemoModules::wxPropertyGrid::Grid;
 use strict;
 use Wx::PropertyGrid;
 use Wx qw( :propgrid :misc );
-use base qw( Wx::PlPropertyGrid );
+use base qw( Wx::PropertyGrid );
 
 sub new { shift->SUPER::new( @_ ) }
 
@@ -335,81 +335,9 @@ package Wx::DemoModules::wxPropertyGrid::Page;
 use strict;
 use Wx::PropertyGrid;
 use Wx qw( :propgrid :misc );
-use base qw( Wx::PlPropertyGridPage );
+use base qw( Wx::PropertyGridPage );
 
 sub new { shift->SUPER::new( @_ ) }
-
-
-######################################################
-
-package Wx::DemoModules::wxPropertyGrid::SampleEditor;
-
-use strict;
-use Wx::PropertyGrid;
-use Wx qw( :propgrid :misc
-    wxEVT_COMMAND_BUTTON_CLICKED
-		 );
-
-use base qw( Wx::PlPGTextCtrlEditor );
-use Wx::ArtProvider qw( :clientid :artid );
-
-sub new {
-	my $class = shift;
-	my $self = $class->SUPER::new( @_ );
-	return $self;
-}
-
-sub CreateControls {
-	my( $self, $propgrid, $property, $position, $size) = @_;
-	
-	# Create and populate buttons-subwindow
-    my $buttons = Wx::PGMultiButton->new( $propgrid, $size );
-	# Add two regular buttons
-    $buttons->Add( '...' );
-    $buttons->Add( 'A' );
-    # Add a bitmap button
-    $buttons->Add( Wx::ArtProvider::GetBitmap( wxART_FOLDER ) );
-	
-	# Create the 'primary' editor control (textctrl in this case)
-	my $windowlist = $self->SUPER::CreateControls(
-			$propgrid, $property, $position, $buttons->GetPrimarySize );
-    
-	# Finally, move buttons-subwindow to correct position and make sure
-    # returned Wx::PGWindowList contains our custom button list.
-    $buttons->Finalize($propgrid, $position);
-
-    $windowlist->SetSecondary( $buttons );
-    return $windowlist;
-}
-
-sub OnEvent {
-	my ( $self, $propgrid, $property, $ctrl, $event ) = @_;
-
-    if ( $event->GetEventType() == wxEVT_COMMAND_BUTTON_CLICKED ) {
-		my $buttons = $propgrid->GetEditorControlSecondary;
-        
-        if ( $event->GetId == $buttons->GetButtonId(0) ) {
-            # Do something when the first button is pressed
-            Wx::LogMessage("First button pressed");
-            return 0;  # Return false since value did not change
-        }
-		
-        if ( $event->GetId == $buttons->GetButtonId(1) ) {
-            # Do something when the second button is pressed
-            Wx::LogMessage("Second button pressed");
-            return 0;  # Return false since value did not change
-        }
-		
-        if ( $event->GetId == $buttons->GetButtonId(2) ) {
-            # Do something when the third button is pressed
-            Wx::LogMessage("Third button pressed");
-            return 0;  # Return false since value did not change
-        }
-    }
-    return $self->SUPER::OnEvent( $propgrid, $property, $ctrl, $event );
-}
-
-
 
 
 eval { return Wx::_wx_optmod_propgrid(); };
