@@ -3,6 +3,7 @@ Revision history for Perl application Wx::Demo.
 0.15  TBR
     - Added wxTreeListCtrl
     - Added wxRibbonControl
+    - Added wxPropertyGrid
 
 0.14  Tue Feb 28 2012
     - Fix wxOverlay font on MSW + mingw + gdiplus
