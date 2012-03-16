@@ -1,6 +1,6 @@
 Revision history for Perl application Wx::Demo.
 
-0.15  TBR
+0.15  Fri Mar 16 2012
     - Added wxTreeListCtrl
     - Added wxRibbonControl
     - Added wxPropertyGrid
