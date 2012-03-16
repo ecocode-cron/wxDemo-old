@@ -20,7 +20,8 @@ use Wx::PropertyGrid;
 package Wx::DemoModules::wxPropertyGrid;
 use strict;
 
-use Wx qw( :propgrid :misc wxTheApp :id :colour :sizer :window :panel :bitmap :font :datepicker :pen :frame :menu);
+use Wx qw( :propgrid :misc wxTheApp :id :colour :sizer :window :panel
+           :bitmap :font :datepicker :pen :frame :menu wxYES_NO wxNO);
 use base qw( Wx::Panel );
 use Wx::DateTime;
 use Wx::ArtProvider qw( wxART_FOLDER );
@@ -130,7 +131,7 @@ sub create_property_grid {
 	# create the manager - note bug causes failure if wxDefaultSize passed
 	# so we pass an actual size [100,100]
 	
-	my $pgman = $self->{manager} = Wx::DemoModules::wxPropertyGrid::Manager->new(
+	my $pgman = $self->{manager} = Wx::PropertyGridManager->new(
 		$self->{panel}, PGID, wxDefaultPosition, wxDefaultSize, $style);
 	
     $self->{propgrid} = $pgman->GetGrid();
@@ -283,6 +284,7 @@ sub create_menu {
     my $m_itemEnable = $menuTools1->Append(ID_ENABLE, "Enable",
         "Toggles item's enabled state." );
     $m_itemEnable->Enable( 0 );
+	$self->{m_itemEnable} = $m_itemEnable;
     $menuTools1->Append(ID_HIDE, "Hide", "Hides a property" );
     $menuTools1->Append(ID_SETREADONLY, "Set as Read-Only",
                        "Set property as read-only" );
@@ -827,13 +829,21 @@ sub finalise_panel {
 
 sub OnPropertyGridSelect {
 	my ( $self, $event ) = @_;
-	
+	my $property = $event->GetProperty();
+    if ( $property ) {
+        $self->{m_itemEnable}->Enable(1);
+        if ( $property->IsEnabled() ) {
+            $self->{m_itemEnable}->SetItemLabel( 'Disable' );
+		} else {
+            $self->{m_itemEnable}->SetItemLabel( 'Enable' );
+		}
+    } else {
+		$self->{m_itemEnable}->Enable( 0 );
+    }
 }
 
 sub OnPropertyGridChange {
 	my ( $self, $event ) = @_;
-	
-		
 	my $property = $event->GetProperty();
     my $name = $property->GetName();
 	
@@ -870,7 +880,7 @@ sub OnPropertyGridChange {
 	#        Wx::IntProperty
 	#        Wx::UIntProperty
 	#
-	# Enumeration and flag types using string values for GetPlValue and SetPlValue
+	# Enumeration and flag types use long integer values for GetPlValue and SetPlValue
 	#
 	#        Wx::EditEnumProperty
 	#        Wx::EnumProperty
@@ -884,9 +894,10 @@ sub OnPropertyGridChange {
 	#        Wx::MultiChoiceProperty
 	#
 	# The following types use appropriate objects for SetPlValue and GetPlValue
-	# ( Wx::Colour, Wx::Font, Wx::DateTime )
+	# ( Wx::Colour, Wx::ColourPropertyValue, Wx::Font, Wx::DateTime )
 	#
 	#        Wx::ColourProperty
+	#        Wx::SystemColourProperty
 	#        Wx::FontProperty
 	#        Wx::DateProperty	
 	#
@@ -903,22 +914,7 @@ sub OnPropertyGridChange {
 	my $objv; # object
 	my @arrv; # array
 	
-	# possible types are
-	#"bool"
-	#"char"
-	#"datetime"
-	#"double"
-	#"list"
-	#"long"
-	#"longlong"
-	#"string"
-	#"ulonglong"
-	#"arrstring"
-	#"void*"
-	#"<objecttypename>"
-	
 	return if $var->IsNull;
-	
 	
 	if( $vtype =~ /^(bool|char|double|long|longlong|string|ulonglong)$/) {
 		$sclv = $property->GetPlValue;
@@ -967,7 +963,21 @@ sub OnPropertyGridChange {
 
 sub OnPropertyGridChanging {
 	my ( $self, $event ) = @_;
-	
+	my $p = $event->GetProperty();
+    if ( $p->GetName eq 'Font' ) {
+		my $res = Wx::MessageBox(
+			sprintf(qq(%s is about to change to %s. \n\nAllow Change?), $p->GetName, $p->GetValueAsString),
+			'Testing wxEVT_PG_CHANGING and Veto',
+			wxYES_NO,
+			$self
+		);
+        if ( $res == wxNO  && $event->CanVeto ) {
+            $event->Veto;
+            # Since we ask a question, it is better if we omit any validation
+            # failure behaviour.
+            $event->SetValidationFailureBehavior(0);
+        }
+    }
 }
 
 sub OnPropertyGridHighlight {
@@ -977,11 +987,22 @@ sub OnPropertyGridHighlight {
 
 sub OnPropertyGridItemRightClick {
 	my ( $self, $event ) = @_;
-	
+	my $prop = $event->GetProperty();
+    if ( $prop ) {
+		# Wx::FlagsProperty uses GetLabel( $n ) where $n is the index of the subitem label required
+		my $label = ( $prop->isa('Wx::FlagsProperty') ) ? $prop->GetName : $prop->GetLabel;
+		Wx::LogMessage('Property Labelled "%s" ( %s ) was right clicked', $label, $prop->GetName );
+    }
 }
 
 sub OnPropertyGridItemDoubleClick {
 	my ( $self, $event ) = @_;
+	my $prop = $event->GetProperty();
+    if ( $prop ) {
+		# Wx::FlagsProperty uses GetLabel( $n ) where $n is the index of the subitem label required
+		my $label = ( $prop->isa('Wx::FlagsProperty') ) ? $prop->GetName : $prop->GetLabel;
+		Wx::LogMessage('Property Labelled "%s" ( %s ) was double clicked', $label, $prop->GetName );
+    }
 	
 }
 
@@ -992,12 +1013,12 @@ sub OnPropertyGridPageChange {
 
 sub OnPropertyGridLabelEditBegin {
 	my ( $self, $event ) = @_;
-	
+    Wx::LogMessage('wxPG_EVT_LABEL_EDIT_BEGIN( %s )', $event->GetProperty->GetLabel);
 }
 
 sub OnPropertyGridLabelEditEnding {
 	my ( $self, $event ) = @_;
-	
+    Wx::LogMessage('wxPG_EVT_LABEL_EDIT_ENDING( %s )', $event->GetProperty->GetLabel);	
 }
 
 sub OnPropertyGridButtonClick {
@@ -1220,37 +1241,6 @@ sub OnSetPropertyValue {
 
 
 ######################################################
-
-package Wx::DemoModules::wxPropertyGrid::Manager;
-
-use strict;
-use Wx::PropertyGrid;
-use Wx qw( :propgrid :misc );
-use base qw( Wx::PropertyGridManager );
-
-sub new { shift->SUPER::new( @_ ) }
-
-######################################################
-
-package Wx::DemoModules::wxPropertyGrid::Grid;
-
-use strict;
-use Wx::PropertyGrid;
-use Wx qw( :propgrid :misc );
-use base qw( Wx::PropertyGrid );
-
-sub new { shift->SUPER::new( @_ ) }
-
-######################################################
-
-package Wx::DemoModules::wxPropertyGrid::Page;
-
-use strict;
-use Wx::PropertyGrid;
-use Wx qw( :propgrid :misc );
-use base qw( Wx::PropertyGridPage );
-
-sub new { shift->SUPER::new( @_ ) }
 
 
 eval { return Wx::_wx_optmod_propgrid(); };

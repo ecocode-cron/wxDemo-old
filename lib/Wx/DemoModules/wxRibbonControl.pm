@@ -27,31 +27,31 @@ use Wx::Event qw( EVT_TOGGLEBUTTON EVT_MENU );
 sub new {
     my $class = shift;
     my $self = $class->SUPER::new($_[0], -1);
-	
-	$self->{menuids} = {
-		position_left_labels => Wx::NewId(),
-		position_left_both => Wx::NewId(),
-		position_top_icons => Wx::NewId(),
-		position_top_both => Wx::NewId(),
-	};
-	
-	$self->{ribbonbar} = Wx::DemoModules::wxRibbonControl::RibbonBar->new($self);
-	
-	my $togglepanels =  Wx::ToggleButton->new($self, wxID_ANY, "&Toggle panels");
+    
+    $self->{menuids} = {
+        position_left_labels => Wx::NewId(),
+        position_left_both => Wx::NewId(),
+        position_top_icons => Wx::NewId(),
+        position_top_both => Wx::NewId(),
+    };
+    
+    $self->{ribbonbar} = Wx::DemoModules::wxRibbonControl::RibbonBar->new($self);
+    
+    my $togglepanels =  Wx::ToggleButton->new($self, wxID_ANY, "&Toggle panels");
     $togglepanels->SetValue(1);
-	$self->{togglepanels} = $togglepanels;
-	
-	
-	EVT_TOGGLEBUTTON($self, $togglepanels, sub { shift->OnTogglePanels( @_ ) } );
-	
-	EVT_MENU($self, $self->{menuids}->{position_left}, sub { shift->OnPositionLeftIcons( @_ ) } );
-	EVT_MENU($self, $self->{menuids}->{position_top}, sub { shift->OnPositionTopLabels( @_ ) } );
-	EVT_MENU($self, $self->{menuids}->{position_left_labels}, sub { shift->OnPositionLeftLabels( @_ ) } );
-	EVT_MENU($self, $self->{menuids}->{position_left_both}, sub { shift->OnPositionLeftBoth( @_ ) } );
-	EVT_MENU($self, $self->{menuids}->{position_top_icons}, sub { shift->OnPositionTopIcons( @_ ) } );
-	EVT_MENU($self, $self->{menuids}->{position_top_both}, sub { shift->OnPositionTopBoth( @_ ) } );
-	
-	my $mainsizer = Wx::BoxSizer->new(wxVERTICAL);
+    $self->{togglepanels} = $togglepanels;
+    
+    
+    EVT_TOGGLEBUTTON($self, $togglepanels, sub { shift->OnTogglePanels( @_ ) } );
+    
+    EVT_MENU($self, $self->{menuids}->{position_left}, sub { shift->OnPositionLeftIcons( @_ ) } );
+    EVT_MENU($self, $self->{menuids}->{position_top}, sub { shift->OnPositionTopLabels( @_ ) } );
+    EVT_MENU($self, $self->{menuids}->{position_left_labels}, sub { shift->OnPositionLeftLabels( @_ ) } );
+    EVT_MENU($self, $self->{menuids}->{position_left_both}, sub { shift->OnPositionLeftBoth( @_ ) } );
+    EVT_MENU($self, $self->{menuids}->{position_top_icons}, sub { shift->OnPositionTopIcons( @_ ) } );
+    EVT_MENU($self, $self->{menuids}->{position_top_both}, sub { shift->OnPositionTopBoth( @_ ) } );
+    
+    my $mainsizer = Wx::BoxSizer->new(wxVERTICAL);
     $mainsizer->Add($self->{ribbonbar}, 0, wxEXPAND);
     $mainsizer->Add($togglepanels, 0);
     $self->SetSizer($mainsizer);
@@ -62,14 +62,14 @@ sub add_to_tags { qw(controls new ) }
 sub title { 'wxRibbonControl' }
 
 sub SetBarStyle {
-	my ($self, $style) = @_;
-	my $ribbon = $self->{ribbonbar};
+    my ($self, $style) = @_;
+    my $ribbon = $self->{ribbonbar};
     $ribbon->Freeze();
     $ribbon->SetWindowStyleFlag($style);
-	my $toolbar = $ribbon->{maintoolbar};
-	
+    my $toolbar = $ribbon->{maintoolbar};
+    
     my $topsizer = $self->GetSizer;
-	
+    
     if($style & wxRIBBON_BAR_FLOW_VERTICAL)
     {
         $ribbon->SetTabCtrlMargins(10, 10);
@@ -85,28 +85,28 @@ sub SetBarStyle {
     $ribbon->Realize();
     $self->Layout();
     $ribbon->Thaw();
-	$self->Refresh();
+    $self->Refresh();
 }
 
 sub OnHoveredColourChange {
-	my ($self, $event) = @_;
-
+    my ($self, $event) = @_;
+    
     ## Set the background of the gallery to the hovered colour, or back to the
     ## default if there is no longer a hovered item.
-
-	my $ribbon = $self->{ribbonbar};
-	my $gallery = $event->GetGallery;
+    
+    my $ribbon = $self->{ribbonbar};
+    my $gallery = $event->GetGallery;
     my $provider = $gallery->GetArtProvider();
-
+    
     if( my $gitem = $event->GetGalleryItem() ) {
         if( $provider == $ribbon->GetArtProvider() )
         {
             $provider = $provider->Clone();
             $gallery->SetArtProvider($provider);
         }
-		my $clientdata = $ribbon->GetGalleryColour( $gallery, $gitem );
+        my $clientdata = $ribbon->GetGalleryColour( $gallery, $gitem );
         $provider->SetColour(wxRIBBON_ART_GALLERY_HOVER_BACKGROUND_COLOUR, $clientdata->{colour});
-			
+            
     } else {
         if( $provider != $ribbon->GetArtProvider())
         {
@@ -116,40 +116,40 @@ sub OnHoveredColourChange {
 }
 
 sub OnPrimaryColourSelect {
-	my ($self, $event) = @_;
+    my ($self, $event) = @_;
     my $ribbon = $self->{ribbonbar};
-	my $clientdata = $ribbon->GetGalleryColour($event->GetGallery(), $event->GetGalleryItem());
-	Wx::LogMessage('Colour "%s" selected as primary', $clientdata->{name});
-	my( $primary, $secondary, $tertiary ) = $ribbon->GetArtProvider->GetColourScheme();
-	$ribbon->GetArtProvider->SetColourScheme( $clientdata->{colour}, $secondary, $tertiary );
+    my $clientdata = $ribbon->GetGalleryColour($event->GetGallery(), $event->GetGalleryItem());
+    Wx::LogMessage('Colour "%s" selected as primary', $clientdata->{name});
+    my( $primary, $secondary, $tertiary ) = $ribbon->GetArtProvider->GetColourScheme();
+    $ribbon->GetArtProvider->SetColourScheme( $clientdata->{colour}, $secondary, $tertiary );
     $self->ResetGalleryArtProviders();
     $ribbon->Refresh();
 }
 
 sub OnSecondaryColourSelect {
-	my ($self, $event) = @_;
+    my ($self, $event) = @_;
     my $ribbon = $self->{ribbonbar};
-	my $clientdata = $ribbon->GetGalleryColour($event->GetGallery(), $event->GetGalleryItem());
-	Wx::LogMessage('Colour "%s" selected as secondary', $clientdata->{name});
-	my( $primary, $secondary, $tertiary ) = $ribbon->GetArtProvider->GetColourScheme();
-	$ribbon->GetArtProvider->SetColourScheme($primary, $clientdata->{colour}, $tertiary );
+    my $clientdata = $ribbon->GetGalleryColour($event->GetGallery(), $event->GetGalleryItem());
+    Wx::LogMessage('Colour "%s" selected as secondary', $clientdata->{name});
+    my( $primary, $secondary, $tertiary ) = $ribbon->GetArtProvider->GetColourScheme();
+    $ribbon->GetArtProvider->SetColourScheme($primary, $clientdata->{colour}, $tertiary );
     $self->ResetGalleryArtProviders();
     $ribbon->Refresh();
 }
 
 sub ResetGalleryArtProviders {
-	my ( $self ) = @_;
-	my $ribbon = $self->{ribbonbar};
-	my $primaryartprovider = $ribbon->{primary_gallery}->GetArtProvider();
-	my $secondaryartprovider = $ribbon->{secondary_gallery}->GetArtProvider();
-	
+    my ( $self ) = @_;
+    my $ribbon = $self->{ribbonbar};
+    my $primaryartprovider = $ribbon->{primary_gallery}->GetArtProvider();
+    my $secondaryartprovider = $ribbon->{secondary_gallery}->GetArtProvider();
+    
     if( $primaryartprovider != $ribbon->GetArtProvider()) {
-		Wx::LogMessage('Resetting primary gallery art provider');
+        Wx::LogMessage('Resetting primary gallery art provider');
         $ribbon->{primary_gallery}->SetArtProvider($ribbon->GetArtProvider());
     }
-	
+    
     if( $secondaryartprovider != $ribbon->GetArtProvider()) {
-		Wx::LogMessage('Resetting secondary gallery art provider');
+        Wx::LogMessage('Resetting secondary gallery art provider');
         $ribbon->{secondary_gallery}->SetArtProvider($ribbon->GetArtProvider());
     }
 }
@@ -200,7 +200,7 @@ sub OnTriangleDropdown {
 
 sub OnPolygonDropdown {
     my ( $self, $event ) = @_;
-	my $menu = Wx::Menu->new();
+    my $menu = Wx::Menu->new();
     $menu->Append(wxID_ANY, "Pentagon (5 sided)");
     $menu->Append(wxID_ANY, "Hexagon (6 sided)");
     $menu->Append(wxID_ANY, "Heptagon (7 sided)");
@@ -217,7 +217,7 @@ sub OnNew {
 
 sub OnNewDropdown {
     my ( $self, $event ) = @_;
-	my $menu = Wx::Menu->new();
+    my $menu = Wx::Menu->new();
     $menu->Append(wxID_ANY, "New Document");
     $menu->Append(wxID_ANY, "New Template");
     $menu->Append(wxID_ANY, "New Mail");
@@ -442,116 +442,116 @@ sub new {
 	my $tbpanel = Wx::RibbonPanel->new( $page, wxID_ANY, 'Toolbar', wxNullBitmap,
 			wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE);
 	
-    my $toolbar = Wx::RibbonToolBar->new($tbpanel, wxID_ANY);
+	my $toolbar = Wx::RibbonToolBar->new($tbpanel, wxID_ANY);
 	$self->{maintoolbar} = $toolbar;
 	
 	$toolbar->AddTool(wxID_ANY, _loadxpm( 'align_left' ));
-    $toolbar->AddTool(wxID_ANY, _loadxpm( 'align_center' ));
-    $toolbar->AddTool(wxID_ANY, _loadxpm( 'align_right' ));
-    $toolbar->AddSeparator();
-    $toolbar->AddHybridTool(wxID_NEW, _ap_bmp(wxART_NEW, wxART_OTHER, Wx::Size->new(16, 15)));
+	$toolbar->AddTool(wxID_ANY, _loadxpm( 'align_center' ));
+	$toolbar->AddTool(wxID_ANY, _loadxpm( 'align_right' ));
+	$toolbar->AddSeparator();
+	$toolbar->AddHybridTool(wxID_NEW, _ap_bmp(wxART_NEW, wxART_OTHER, Wx::Size->new(16, 15)));
 	$toolbar->AddTool(wxID_ANY, _ap_bmp(wxART_FILE_OPEN, wxART_OTHER, Wx::Size->new(16, 15)));
-    $toolbar->AddTool(wxID_ANY, _ap_bmp(wxART_FILE_SAVE, wxART_OTHER, Wx::Size->new(16, 15)));
-    $toolbar->AddTool(wxID_ANY, _ap_bmp(wxART_FILE_SAVE_AS, wxART_OTHER, Wx::Size->new(16, 15)));
-    $toolbar->AddSeparator();
-    $toolbar->AddDropdownTool(wxID_UNDO, _ap_bmp(wxART_UNDO, wxART_OTHER, Wx::Size->new(16, 15)));
-    $toolbar->AddDropdownTool(wxID_REDO, _ap_bmp(wxART_REDO, wxART_OTHER, Wx::Size->new(16, 15)));
-    $toolbar->AddSeparator();
-    $toolbar->AddTool(wxID_ANY, _ap_bmp(wxART_REPORT_VIEW, wxART_OTHER, Wx::Size->new(16, 15)));
-    $toolbar->AddTool(wxID_ANY, _ap_bmp(wxART_LIST_VIEW, wxART_OTHER, Wx::Size->new(16, 15)));
-    $toolbar->AddSeparator();
-    my $id_position_left = $toolbar->AddHybridTool(wxID_ANY, _loadxpm( 'position_left_small' ), 
-                                "Align ribbonbar vertically\non the left\nfor demonstration purposes");
-    my $id_position_top  = $toolbar->AddHybridTool(wxID_ANY, _loadxpm( 'position_top_small' ),
-                                "Align the ribbonbar horizontally\nat the top\nfor demonstration purposes");
-    $toolbar->AddSeparator();
-    $toolbar->AddHybridTool(wxID_PRINT, _ap_bmp(wxART_PRINT, wxART_OTHER, Wx::Size->new(16, 15)),
-                                "This is the Print button tooltip\ndemonstrating a tooltip");
-    $toolbar->SetRows(2, 3);
+	$toolbar->AddTool(wxID_ANY, _ap_bmp(wxART_FILE_SAVE, wxART_OTHER, Wx::Size->new(16, 15)));
+	$toolbar->AddTool(wxID_ANY, _ap_bmp(wxART_FILE_SAVE_AS, wxART_OTHER, Wx::Size->new(16, 15)));
+	$toolbar->AddSeparator();
+	$toolbar->AddDropdownTool(wxID_UNDO, _ap_bmp(wxART_UNDO, wxART_OTHER, Wx::Size->new(16, 15)));
+	$toolbar->AddDropdownTool(wxID_REDO, _ap_bmp(wxART_REDO, wxART_OTHER, Wx::Size->new(16, 15)));
+	$toolbar->AddSeparator();
+	$toolbar->AddTool(wxID_ANY, _ap_bmp(wxART_REPORT_VIEW, wxART_OTHER, Wx::Size->new(16, 15)));
+	$toolbar->AddTool(wxID_ANY, _ap_bmp(wxART_LIST_VIEW, wxART_OTHER, Wx::Size->new(16, 15)));
+	$toolbar->AddSeparator();
+	my $id_position_left = $toolbar->AddHybridTool(wxID_ANY, _loadxpm( 'position_left_small' ), 
+								"Align ribbonbar vertically\non the left\nfor demonstration purposes");
+	my $id_position_top  = $toolbar->AddHybridTool(wxID_ANY, _loadxpm( 'position_top_small' ),
+								"Align the ribbonbar horizontally\nat the top\nfor demonstration purposes");
+	$toolbar->AddSeparator();
+	$toolbar->AddHybridTool(wxID_PRINT, _ap_bmp(wxART_PRINT, wxART_OTHER, Wx::Size->new(16, 15)),
+								"This is the Print button tooltip\ndemonstrating a tooltip");
+	$toolbar->SetRows(2, 3);
 	
 	my $selectionpanel = Wx::RibbonPanel->new($page, wxID_ANY, 'Selection', _loadxpm( 'selection_panel' ));
 	
 	my $selectionbar = Wx::RibbonButtonBar->new($selectionpanel);
-        
+		
 	my $id_selection_expand_v = $selectionbar->AddButton(wxID_ANY, 'Expand Vertically',
 								_loadxpm( 'expand_selection_v' ),
-                                "This is a tooltip for Expand Vertically\ndemonstrating a tooltip");
+								"This is a tooltip for Expand Vertically\ndemonstrating a tooltip");
 								
-    my $id_selection_expand_h = $selectionbar->AddButton(wxID_ANY, 'Expand Horizontally',
+	my $id_selection_expand_h = $selectionbar->AddButton(wxID_ANY, 'Expand Horizontally',
 								_loadxpm( 'expand_selection_h' ), '');
 	
-    my $id_selection_contract = $selectionbar->AddButton(wxID_ANY, 'Contract',
+	my $id_selection_contract = $selectionbar->AddButton(wxID_ANY, 'Contract',
 								_loadxpm( 'auto_crop_selection' ),
 								_loadxpm( 'auto_crop_selection_small' ) );
-
+	
 	
 	my $shapes_panel = Wx::RibbonPanel->new($page, wxID_ANY, 'Shapes',
 									   _loadxpm( 'circle_small' ));
 	
-    my $shapes = Wx::RibbonButtonBar->new($shapes_panel);
-    my $id_circle = $shapes->AddButton(wxID_ANY, 'Circle', _loadxpm( 'circle' ),
+	my $shapes = Wx::RibbonButtonBar->new($shapes_panel);
+	my $id_circle = $shapes->AddButton(wxID_ANY, 'Circle', _loadxpm( 'circle' ),
 							_loadxpm( 'circle_small' ), wxNullBitmap,
 							wxNullBitmap, wxRIBBON_BUTTON_NORMAL,
-                            "This is a tooltip for the circle button\ndemonstrating another tooltip");
+							"This is a tooltip for the circle button\ndemonstrating another tooltip");
 	my $id_cross = $shapes->AddButton(wxID_ANY, 'Cross', _loadxpm( 'cross' ), '');
 	my $id_triangle = $shapes->AddHybridButton(wxID_ANY, 'Triangle', _loadxpm( 'triangle' ));
 	my $id_square = $shapes->AddButton(wxID_ANY, 'Square', _loadxpm( 'square' ), '');
-    my $id_polygon = $shapes->AddDropdownButton(wxID_ANY, 'Other Polygon', _loadxpm( 'hexagon' ), '');
-
+	my $id_polygon = $shapes->AddDropdownButton(wxID_ANY, 'Other Polygon', _loadxpm( 'hexagon' ), '');
+	
 	my $sizer_panel = Wx::RibbonPanel->new($page, wxID_ANY, 'Panel with Sizer', 
-                                    wxNullBitmap, wxDefaultPosition, wxDefaultSize, 
-                                    wxRIBBON_PANEL_DEFAULT_STYLE);
-
-    my $sizer_panelcombo = Wx::ComboBox->new($sizer_panel, wxID_ANY, '', wxDefaultPosition, wxDefaultSize,
+									wxNullBitmap, wxDefaultPosition, wxDefaultSize, 
+									wxRIBBON_PANEL_DEFAULT_STYLE);
+	
+	my $sizer_panelcombo = Wx::ComboBox->new($sizer_panel, wxID_ANY, '', wxDefaultPosition, wxDefaultSize,
 							[ 'Item 1 using a box sizer now', 'Item 2 using a box sizer now'],
 							wxCB_READONLY);
-    
+	
 	my $sizer_panelcombo2 = Wx::ComboBox->new($sizer_panel, wxID_ANY, '', wxDefaultPosition, wxDefaultSize,
 							[ 'Item 1 using a box sizer now', 'Item 2 using a box sizer now'],
 							wxCB_READONLY);
 	
 	$sizer_panelcombo->Select(0);
 	$sizer_panelcombo2->Select(1);
-    $sizer_panelcombo->SetMinSize(Wx::Size->new(150, -1));
-    $sizer_panelcombo2->SetMinSize(Wx::Size->new(150, -1));
-
-    my $sizer_panelsizer = Wx::BoxSizer->new(wxVERTICAL);   
-    $sizer_panelsizer->AddStretchSpacer(1);
-    $sizer_panelsizer->Add($sizer_panelcombo, 0, wxALL|wxEXPAND, 2);
-    $sizer_panelsizer->Add($sizer_panelcombo2, 0, wxALL|wxEXPAND, 2);
-    $sizer_panelsizer->AddStretchSpacer(1);
-    $sizer_panel->SetSizer($sizer_panelsizer);
-
-    my $label_font = Wx::Font->new(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_LIGHT);
+	$sizer_panelcombo->SetMinSize(Wx::Size->new(150, -1));
+	$sizer_panelcombo2->SetMinSize(Wx::Size->new(150, -1));
 	
-    $self->{bitmapcreation_dc}->SetFont($label_font);
+	my $sizer_panelsizer = Wx::BoxSizer->new(wxVERTICAL);   
+	$sizer_panelsizer->AddStretchSpacer(1);
+	$sizer_panelsizer->Add($sizer_panelcombo, 0, wxALL|wxEXPAND, 2);
+	$sizer_panelsizer->Add($sizer_panelcombo2, 0, wxALL|wxEXPAND, 2);
+	$sizer_panelsizer->AddStretchSpacer(1);
+	$sizer_panel->SetSizer($sizer_panelsizer);
+	
+	my $label_font = Wx::Font->new(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_LIGHT);
+	
+	$self->{bitmapcreation_dc}->SetFont($label_font);
 	
 	my $scheme = Wx::RibbonPage->new($self, wxID_ANY, 'Appearance', _loadxpm( 'eye' ));
-    
+	
 	my ( $default_primary, $default_secondary, $default_tertiary ) =
 		$self->GetArtProvider()->GetColourScheme();
 		
 	my $provider_panel = Wx::RibbonPanel->new($scheme, wxID_ANY,
-            'Art', wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE);
+			'Art', wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE);
 	
 	my $provider_bar = Wx::RibbonButtonBar->new($provider_panel, wxID_ANY);
 	my $id_default_provider = $provider_bar->AddButton(wxID_ANY, 'Default Provider',
-            _ap_bmp(wxART_QUESTION, wxART_OTHER, Wx::Size->new(32, 32)));
+			_ap_bmp(wxART_QUESTION, wxART_OTHER, Wx::Size->new(32, 32)));
 	
-    my $id_aui_provider = $provider_bar->AddButton(wxID_ANY, 'AUI Provider', _loadxpm( 'aui_style' ));
-    my $id_msw_provider = $provider_bar->AddButton(wxID_ANY, 'MSW Provider', _loadxpm( 'msw_style' ));
-        
+	my $id_aui_provider = $provider_bar->AddButton(wxID_ANY, 'AUI Provider', _loadxpm( 'aui_style' ));
+	my $id_msw_provider = $provider_bar->AddButton(wxID_ANY, 'MSW Provider', _loadxpm( 'msw_style' ));
+		
 	my $primary_panel = Wx::RibbonPanel->new($scheme, wxID_ANY, 'Primary Colour', _loadxpm( 'colours' ));
-    
+	
 	my $id_primary_colour = Wx::NewId();
 	
 	my $primary_gallery = $self->PopulateColoursPanel($primary_panel, $default_primary, $id_primary_colour);
 	$self->{primary_gallery} = $primary_gallery;
 	$self->{primary_panel} = $primary_panel;
 	$self->{primary_id} = $id_primary_colour;
-    
+	
 	my $secondary_panel = Wx::RibbonPanel->new($scheme, wxID_ANY, 'Secondary Colour', _loadxpm( 'colours' ));
-    
+	
 	my $id_secondary_colour = Wx::NewId();
 	
 	my $secondary_gallery = $self->PopulateColoursPanel($secondary_panel, $default_secondary, $id_secondary_colour);
@@ -559,10 +559,10 @@ sub new {
 	$self->{secondary_panel} = $secondary_panel;
 	$self->{secondary_id} = $id_secondary_colour;
 	
-    Wx::RibbonPage->new($self, wxID_ANY, 'Empty Page', _loadxpm( 'empty' ));
-    Wx::RibbonPage->new($self, wxID_ANY, 'Another Page', _loadxpm( 'empty' ));
-
-    $self->Realize();
+	Wx::RibbonPage->new($self, wxID_ANY, 'Empty Page', _loadxpm( 'empty' ));
+	Wx::RibbonPage->new($self, wxID_ANY, 'Another Page', _loadxpm( 'empty' ));
+	
+	$self->Realize();
 	
 	# connect events to parent panel
 	
@@ -598,7 +598,7 @@ sub new {
 	$parent->{menuids}->{position_left} = $id_position_left;
 	$parent->{menuids}->{position_top}  = $id_position_top;
 	
-    return $self;
+	return $self;
 }
 
 sub _loadxpm {
