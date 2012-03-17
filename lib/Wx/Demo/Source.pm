@@ -17,8 +17,10 @@ sub new {
             wxTE_READONLY|wxTE_MULTILINE|wxNO_FULL_REPAINT_ON_RESIZE );
     } else {
         $self = $class->SUPER::new( $parent, -1, [-1, -1], [300, 300] );
-        my $font = Wx::Font->new( 10, wxTELETYPE, wxNORMAL, wxNORMAL );
-
+        
+        my $font = Wx::wxMAC() 
+                   ? Wx::Font->new( 12, wxMODERN, wxNORMAL, wxNORMAL, 0, 'Monaco' )
+                   : Wx::Font->new( 10, wxTELETYPE, wxNORMAL, wxNORMAL);
         $self->SetFont( $font );
         $self->StyleSetFont( wxSTC_STYLE_DEFAULT, $font );
         $self->StyleClearAll();
