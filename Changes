@@ -1,6 +1,7 @@
 Revision history for Perl application Wx::Demo.
 
 0.16  TBR
+    - Added wxWebView
 
 0.15  Fri Mar 16 2012
     - Added wxTreeListCtrl
