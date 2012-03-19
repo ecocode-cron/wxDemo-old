@@ -7,6 +7,7 @@ lib/Wx/DemoModules/files/artprovider/info.xpm
 lib/Wx/DemoModules/files/artprovider/null.xpm
 lib/Wx/DemoModules/files/artprovider/question.xpm
 lib/Wx/DemoModules/files/artprovider/warning.xpm
+lib/Wx/DemoModules/files/bannerwindow/demologo.png
 lib/Wx/DemoModules/files/docview/copy.xpm
 lib/Wx/DemoModules/files/docview/cut.xpm
 lib/Wx/DemoModules/files/docview/help.xpm
@@ -71,6 +72,7 @@ lib/Wx/DemoModules/lib/Utility.pm
 lib/Wx/DemoModules/wxAboutDialog.pm
 lib/Wx/DemoModules/wxArtProvider.pm
 lib/Wx/DemoModules/wxAUI.pm
+lib/Wx/DemoModules/wxBannerWindow.pm
 lib/Wx/DemoModules/wxBitmapButton.pm
 lib/Wx/DemoModules/wxBookCtrl.pm
 lib/Wx/DemoModules/wxBoxSizer.pm
@@ -130,6 +132,7 @@ lib/Wx/DemoModules/wxRadioBox.pm
 lib/Wx/DemoModules/wxRadioButton.pm
 lib/Wx/DemoModules/wxRibbonControl.pm
 lib/Wx/DemoModules/wxRichTextCtrl.pm
+lib/Wx/DemoModules/wxRichToolTip.pm
 lib/Wx/DemoModules/wxScrollBar.pm
 lib/Wx/DemoModules/wxScrolledWindow.pm
 lib/Wx/DemoModules/wxSearchCtrl.pm
@@ -144,12 +147,14 @@ lib/Wx/DemoModules/wxSplitterWindow.pm
 lib/Wx/DemoModules/wxStaticBitmap.pm
 lib/Wx/DemoModules/wxStaticText.pm
 lib/Wx/DemoModules/wxTextEntryDialog.pm
+lib/Wx/DemoModules/wxTimePickerCtrl.pm
 lib/Wx/DemoModules/wxTipDialog.pm
 lib/Wx/DemoModules/wxToolBar.pm
 lib/Wx/DemoModules/wxTreeCtrl.pm
 lib/Wx/DemoModules/wxValidator.pm
 lib/Wx/DemoModules/wxVListBox.pm
 lib/Wx/DemoModules/wxVScrolledWindow.pm
+lib/Wx/DemoModules/wxWebView.pm
 lib/Wx/DemoModules/wxWizard.pm
 lib/Wx/DemoModules/wxXrc.pm
 lib/Wx/DemoModules/wxXrcCustom.pm
