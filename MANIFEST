@@ -115,6 +115,7 @@ lib/Wx/DemoModules/wxHtmlTag.pm
 lib/Wx/DemoModules/wxHtmlWindow.pm
 lib/Wx/DemoModules/wxHVScrolledWindow.pm
 lib/Wx/DemoModules/wxHyperlinkCtrl.pm
+lib/Wx/DemoModules/wxInfoBar.pm
 lib/Wx/DemoModules/wxListBox.pm
 lib/Wx/DemoModules/wxListCtrl.pm
 lib/Wx/DemoModules/wxLocale.pm

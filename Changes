@@ -5,6 +5,7 @@ Revision history for Perl application Wx::Demo.
     - Added wxTimePickerCtrl
     - Added wxRichToolTip
     - Added wxBannerWindow
+    - Added wxInfoBar ( minimally )
 
 0.15  Fri Mar 16 2012
     - Added wxTreeListCtrl
