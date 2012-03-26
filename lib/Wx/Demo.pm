@@ -375,7 +375,6 @@ my @tags =
     [ sizers     => 'Sizers' ],
     [ dnd        => 'Drag & Drop' ],
     [ misc       => 'Miscellanea' ],
-    [ fail       => 'Not Loaded' ],
     );
 
 sub d($) { Wx::TreeItemData->new( $_[0] ) }
@@ -469,6 +468,11 @@ sub populate_modules {
             add_item( $tree, $parent_id, $module );
         }
     }
+    
+    if( @{ $self->failwidgets } ) {
+    	my $id = $tree->AppendItem( $root_id, 'Not Loaded', -1, -1 );
+		$tag_map{fail} = $id;
+	}
     
     foreach my $module ( grep $_->can( 'add_to_tags' ), @{ $self->failwidgets } ) {
 	    foreach my $tag ( $module->add_to_tags ) {

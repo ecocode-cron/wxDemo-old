@@ -142,7 +142,7 @@ package
 	Wx::DemoHints::wxHeaderCtrl;
 use base qw( Wx::DemoHints::CoreHintBase );
 __PACKAGE__->register_hint;
-sub can_load { defined &Wx::PlHeaderCtrl::new; }
+sub can_load { defined &Wx::HeaderCtrl::new; }
 sub title { 'wxHeaderCtrl' }
 sub hint_message { 'Wx::PlHeaderCtrl requires wxWidgets >= 2.9.0'; }
 __PACKAGE__->register_hint;
