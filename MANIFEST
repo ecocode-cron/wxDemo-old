@@ -2,6 +2,8 @@ bin/wxperl_demo.pl
 Changes
 lib/Wx/Demo.pm
 lib/Wx/Demo/Source.pm
+lib/Wx/DemoHints/CoreHints.pm
+lib/Wx/DemoHints/wxBannerWindow.pm
 lib/Wx/DemoModules/files/artprovider/error.xpm
 lib/Wx/DemoModules/files/artprovider/info.xpm
 lib/Wx/DemoModules/files/artprovider/null.xpm
