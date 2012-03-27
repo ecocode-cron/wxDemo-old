@@ -223,10 +223,11 @@ package
 	Wx::DemoHints::wxMediaCtrl;
 use base qw( Wx::DemoHints::CoreHintBase );
 __PACKAGE__->register_hint;
-sub can_load { defined &Wx::MediaCtrl::new; }
+sub can_load { local $@; eval { require Wx::Media }; defined &Wx::MediaCtrl::new; }
 sub title { 'wxMediaCtrl' }
 sub hint_message { 'Your wxWidgets was not compiled with wxMediaCtrl support'; }
 __PACKAGE__->register_hint;
+
 
 
 1;
