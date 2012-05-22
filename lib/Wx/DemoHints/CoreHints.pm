@@ -228,6 +228,15 @@ sub title { 'wxMediaCtrl' }
 sub hint_message { 'Your wxWidgets was not compiled with wxMediaCtrl support'; }
 __PACKAGE__->register_hint;
 
+#---------------------------------------------------------------------------
+package
+	Wx::DemoHints::wxPrintPaperDatabase;
+use base qw( Wx::DemoHints::CoreHintBase );
+__PACKAGE__->register_hint;
+sub can_load { require Wx::Print; return defined(&Wx::PrintPaperDatabase::FindPaperTypeById); }
+sub title { 'wxPrintPaperDatabase' }
+sub hint_message { 'wxPrintPaperDatabase requires Wx >= 0.9908'; }
+
 
 
 1;
