@@ -13,7 +13,7 @@
 package Wx::DemoModules::wxPrintPaperDatabase;
 
 use strict;
-use Wx qw( :listctrl :id :sizer);
+use Wx qw( :listctrl :id :sizer wxThePrintPaperDatabase );
 use base qw(Wx::Panel);
 use Wx::Print;
 use Wx::Event qw(EVT_LIST_ITEM_SELECTED);
@@ -28,10 +28,10 @@ sub new {
     
     # add all papers to the list;
     
-    my $numpapers = Wx::PrintPaperDatabase::GetCount;
+    my $numpapers = wxThePrintPaperDatabase->GetCount;
     for (my $i = 0; $i < $numpapers; $i++){
         # get a Wx::PrintPaperType for each paper
-        my $paper = Wx::PrintPaperDatabase::Item($i);
+        my $paper = wxThePrintPaperDatabase->Item($i);
         $list->InsertStringItem( $i, $paper->GetName );
         # add the PaperId (wxPAPER_A4, wxPAPER_LETTER etc) as itemdata
         $list->SetItemData($i, $paper->GetId);
@@ -54,7 +54,7 @@ sub OnPaperSelected {
     my $papername = $event->GetItem->GetText;
     
     # given a paperid (wxPAPER_A4 etc) we can get the paper details
-    my $paper = Wx::PrintPaperDatabase::FindPaperTypeById($paperid);
+    my $paper = wxThePrintPaperDatabase->FindPaperType($paperid);
     return unless $paper;
     
     my $pname  = $paper->GetName;
@@ -70,14 +70,14 @@ sub OnPaperSelected {
                    $sizedu->GetWidth, $sizedu->GetHeight);
     
     # we can also find a paper given its name
-    my $samepaper = Wx::PrintPaperDatabase::FindPaperTypeByName($papername);
+    my $samepaper = wxThePrintPaperDatabase->FindPaperType($papername);
     return unless $samepaper;
     
     Wx::LogMessage('And Again Width %s, Height %s', $samepaper->GetWidth, $samepaper->GetHeight);
     
     # utility methods
-    my $nameagain = Wx::PrintPaperDatabase::ConvertIdToName( $paperid );
-    my $idagain   = Wx::PrintPaperDatabase::ConvertNameToId( $papername );
+    my $nameagain = wxThePrintPaperDatabase->ConvertIdToName( $paperid );
+    my $idagain   = wxThePrintPaperDatabase->ConvertNameToId( $papername );
     
     Wx::LogMessage(qq($nameagain : $paperid == $idagain : $papername));
     
