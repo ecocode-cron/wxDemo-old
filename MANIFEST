@@ -129,6 +129,7 @@ lib/Wx/DemoModules/wxOverlay.pm
 lib/Wx/DemoModules/wxPasswordEntryDialog.pm
 lib/Wx/DemoModules/wxPopupWindow.pm
 lib/Wx/DemoModules/wxPrinting.pm
+lib/Wx/DemoModules/wxPrintPaperDatabase.pm
 lib/Wx/DemoModules/wxProgressDialog.pm
 lib/Wx/DemoModules/wxPropertyGrid.pm
 lib/Wx/DemoModules/wxRadioBox.pm
