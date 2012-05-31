@@ -1,7 +1,7 @@
 Revision history for Perl application Wx::Demo.
 
-0.17  TBR
-    - Add Wx::PrintPaperDatabase
+0.17  Thu May 31 2012
+    - Added Wx::PrintPaperDatabase
 
 0.16  Tue Mar 27 2012
     - Prettier load fail for modules not supported by host Wx / wxWidgets 

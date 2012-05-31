@@ -235,7 +235,7 @@ use base qw( Wx::DemoHints::CoreHintBase );
 __PACKAGE__->register_hint;
 sub can_load { require Wx::Print; return defined(&Wx::PrintPaperDatabase::FindPaperTypeById); }
 sub title { 'wxPrintPaperDatabase' }
-sub hint_message { 'wxPrintPaperDatabase requires Wx >= 0.9908'; }
+sub hint_message { 'wxPrintPaperDatabase requires Wx >= 0.9909'; }
 
 
 
