@@ -1,6 +1,6 @@
 Revision history for Perl application Wx::Demo.
 
-0.18  TBR
+0.18  Fri Aug 24 2012
     - Added Wx::TreeEvent::GetKeyEvent example
 
 0.17  Thu May 31 2012
