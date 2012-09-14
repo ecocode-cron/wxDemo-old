@@ -460,9 +460,9 @@ sub new {
 	$toolbar->AddTool(wxID_ANY, _ap_bmp(wxART_REPORT_VIEW, wxART_OTHER, Wx::Size->new(16, 15)));
 	$toolbar->AddTool(wxID_ANY, _ap_bmp(wxART_LIST_VIEW, wxART_OTHER, Wx::Size->new(16, 15)));
 	$toolbar->AddSeparator();
-	my $id_position_left = $toolbar->AddHybridTool(wxID_ANY, _loadxpm( 'position_left_small' ), 
+	my $tool_position_left = $toolbar->AddHybridTool(wxID_ANY, _loadxpm( 'position_left_small' ), 
 								"Align ribbonbar vertically\non the left\nfor demonstration purposes");
-	my $id_position_top  = $toolbar->AddHybridTool(wxID_ANY, _loadxpm( 'position_top_small' ),
+	my $tool_position_top  = $toolbar->AddHybridTool(wxID_ANY, _loadxpm( 'position_top_small' ),
 								"Align the ribbonbar horizontally\nat the top\nfor demonstration purposes");
 	$toolbar->AddSeparator();
 	$toolbar->AddHybridTool(wxID_PRINT, _ap_bmp(wxART_PRINT, wxART_OTHER, Wx::Size->new(16, 15)),
@@ -473,14 +473,14 @@ sub new {
 	
 	my $selectionbar = Wx::RibbonButtonBar->new($selectionpanel);
 		
-	my $id_selection_expand_v = $selectionbar->AddButton(wxID_ANY, 'Expand Vertically',
+	my $tool_selection_expand_v = $selectionbar->AddButton(wxID_ANY, 'Expand Vertically',
 								_loadxpm( 'expand_selection_v' ),
 								"This is a tooltip for Expand Vertically\ndemonstrating a tooltip");
 								
-	my $id_selection_expand_h = $selectionbar->AddButton(wxID_ANY, 'Expand Horizontally',
+	my $tool_selection_expand_h = $selectionbar->AddButton(wxID_ANY, 'Expand Horizontally',
 								_loadxpm( 'expand_selection_h' ), '');
 	
-	my $id_selection_contract = $selectionbar->AddButton(wxID_ANY, 'Contract',
+	my $tool_selection_contract = $selectionbar->AddButton(wxID_ANY, 'Contract',
 								_loadxpm( 'auto_crop_selection' ),
 								_loadxpm( 'auto_crop_selection_small' ) );
 	
@@ -489,14 +489,14 @@ sub new {
 									   _loadxpm( 'circle_small' ));
 	
 	my $shapes = Wx::RibbonButtonBar->new($shapes_panel);
-	my $id_circle = $shapes->AddButton(wxID_ANY, 'Circle', _loadxpm( 'circle' ),
+	my $tool_circle = $shapes->AddButton(wxID_ANY, 'Circle', _loadxpm( 'circle' ),
 							_loadxpm( 'circle_small' ), wxNullBitmap,
 							wxNullBitmap, wxRIBBON_BUTTON_NORMAL,
 							"This is a tooltip for the circle button\ndemonstrating another tooltip");
-	my $id_cross = $shapes->AddButton(wxID_ANY, 'Cross', _loadxpm( 'cross' ), '');
-	my $id_triangle = $shapes->AddHybridButton(wxID_ANY, 'Triangle', _loadxpm( 'triangle' ));
-	my $id_square = $shapes->AddButton(wxID_ANY, 'Square', _loadxpm( 'square' ), '');
-	my $id_polygon = $shapes->AddDropdownButton(wxID_ANY, 'Other Polygon', _loadxpm( 'hexagon' ), '');
+	my $tool_cross = $shapes->AddButton(wxID_ANY, 'Cross', _loadxpm( 'cross' ), '');
+	my $tool_triangle = $shapes->AddHybridButton(wxID_ANY, 'Triangle', _loadxpm( 'triangle' ));
+	my $tool_square = $shapes->AddButton(wxID_ANY, 'Square', _loadxpm( 'square' ), '');
+	my $tool_polygon = $shapes->AddDropdownButton(wxID_ANY, 'Other Polygon', _loadxpm( 'hexagon' ), '');
 	
 	my $sizer_panel = Wx::RibbonPanel->new($page, wxID_ANY, 'Panel with Sizer', 
 									wxNullBitmap, wxDefaultPosition, wxDefaultSize, 
@@ -535,11 +535,11 @@ sub new {
 			'Art', wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE);
 	
 	my $provider_bar = Wx::RibbonButtonBar->new($provider_panel, wxID_ANY);
-	my $id_default_provider = $provider_bar->AddButton(wxID_ANY, 'Default Provider',
+	my $tool_default_provider = $provider_bar->AddButton(wxID_ANY, 'Default Provider',
 			_ap_bmp(wxART_QUESTION, wxART_OTHER, Wx::Size->new(32, 32)));
 	
-	my $id_aui_provider = $provider_bar->AddButton(wxID_ANY, 'AUI Provider', _loadxpm( 'aui_style' ));
-	my $id_msw_provider = $provider_bar->AddButton(wxID_ANY, 'MSW Provider', _loadxpm( 'msw_style' ));
+	my $tool_aui_provider = $provider_bar->AddButton(wxID_ANY, 'AUI Provider', _loadxpm( 'aui_style' ));
+	my $tool_msw_provider = $provider_bar->AddButton(wxID_ANY, 'MSW Provider', _loadxpm( 'msw_style' ));
 		
 	my $primary_panel = Wx::RibbonPanel->new($scheme, wxID_ANY, 'Primary Colour', _loadxpm( 'colours' ));
 	
@@ -566,18 +566,18 @@ sub new {
 	
 	# connect events to parent panel
 	
-	EVT_RIBBONBUTTONBAR_CLICKED($parent, $id_default_provider, sub { shift->OnDefaultProvider( @_ ) } );
-	EVT_RIBBONBUTTONBAR_CLICKED($parent, $id_aui_provider, sub { shift->OnAUIProvider( @_ ) } );
-	EVT_RIBBONBUTTONBAR_CLICKED($parent, $id_msw_provider, sub { shift->OnMSWProvider( @_ ) } );
-	EVT_RIBBONBUTTONBAR_CLICKED($parent, $id_selection_expand_h, sub { shift->OnSelectionExpandHButton( @_ ) } );
-	EVT_RIBBONBUTTONBAR_CLICKED($parent, $id_selection_expand_v, sub { shift->OnSelectionExpandVButton( @_ ) } );
-	EVT_RIBBONBUTTONBAR_CLICKED($parent, $id_selection_contract, sub { shift->OnSelectionContractButton( @_ ) } );
-	EVT_RIBBONBUTTONBAR_CLICKED($parent, $id_circle, sub { shift->OnCircleButton( @_ ) } );
-	EVT_RIBBONBUTTONBAR_CLICKED($parent, $id_cross, sub { shift->OnCrossButton( @_ ) } );
-	EVT_RIBBONBUTTONBAR_CLICKED($parent, $id_triangle, sub { shift->OnTriangleButton( @_ ) } );
-	EVT_RIBBONBUTTONBAR_CLICKED($parent, $id_square, sub { shift->OnSquareButton( @_ ) } );
-	EVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED($parent, $id_triangle, sub { shift->OnTriangleDropdown( @_ ) } );
-	EVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED($parent, $id_polygon, sub { shift->OnPolygonDropdown( @_ ) } );
+	EVT_RIBBONBUTTONBAR_CLICKED($parent, $tool_default_provider->GetId, sub { shift->OnDefaultProvider( @_ ) } );
+	EVT_RIBBONBUTTONBAR_CLICKED($parent, $tool_aui_provider->GetId, sub { shift->OnAUIProvider( @_ ) } );
+	EVT_RIBBONBUTTONBAR_CLICKED($parent, $tool_msw_provider->GetId, sub { shift->OnMSWProvider( @_ ) } );
+	EVT_RIBBONBUTTONBAR_CLICKED($parent, $tool_selection_expand_h->GetId, sub { shift->OnSelectionExpandHButton( @_ ) } );
+	EVT_RIBBONBUTTONBAR_CLICKED($parent, $tool_selection_expand_v->GetId, sub { shift->OnSelectionExpandVButton( @_ ) } );
+	EVT_RIBBONBUTTONBAR_CLICKED($parent, $tool_selection_contract->GetId, sub { shift->OnSelectionContractButton( @_ ) } );
+	EVT_RIBBONBUTTONBAR_CLICKED($parent, $tool_circle->GetId, sub { shift->OnCircleButton( @_ ) } );
+	EVT_RIBBONBUTTONBAR_CLICKED($parent, $tool_cross->GetId, sub { shift->OnCrossButton( @_ ) } );
+	EVT_RIBBONBUTTONBAR_CLICKED($parent, $tool_triangle->GetId, sub { shift->OnTriangleButton( @_ ) } );
+	EVT_RIBBONBUTTONBAR_CLICKED($parent, $tool_square->GetId, sub { shift->OnSquareButton( @_ ) } );
+	EVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED($parent, $tool_triangle->GetId, sub { shift->OnTriangleDropdown( @_ ) } );
+	EVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED($parent, $tool_polygon->GetId, sub { shift->OnPolygonDropdown( @_ ) } );
 	EVT_RIBBONGALLERY_HOVER_CHANGED($parent, $id_primary_colour, sub { shift->OnHoveredColourChange( @_ ) } );
 	EVT_RIBBONGALLERY_HOVER_CHANGED($parent, $id_secondary_colour, sub { shift->OnHoveredColourChange( @_ ) } );
 	EVT_RIBBONGALLERY_SELECTED($parent, $id_primary_colour, sub { shift->OnPrimaryColourSelect( @_ ) } );
@@ -588,15 +588,15 @@ sub new {
 	EVT_RIBBONTOOLBAR_DROPDOWN_CLICKED($parent, wxID_PRINT, sub { shift->OnPrintDropdown( @_ ) } );
 	EVT_RIBBONTOOLBAR_DROPDOWN_CLICKED($parent, wxID_REDO, sub { shift->OnRedoDropdown( @_ ) } );
 	EVT_RIBBONTOOLBAR_DROPDOWN_CLICKED($parent, wxID_UNDO, sub { shift->OnUndoDropdown( @_ ) } );
-	EVT_RIBBONTOOLBAR_CLICKED($parent, $id_position_left, sub { shift->OnPositionLeft( @_ ) } );
-	EVT_RIBBONTOOLBAR_DROPDOWN_CLICKED($parent, $id_position_left, sub { shift->OnPositionLeftDropdown( @_ ) } );
-	EVT_RIBBONTOOLBAR_CLICKED($parent, $id_position_top, sub { shift->OnPositionTop( @_ ) } );
-	EVT_RIBBONTOOLBAR_DROPDOWN_CLICKED($parent, $id_position_top, sub { shift->OnPositionTopDropdown( @_ ) } );
+	EVT_RIBBONTOOLBAR_CLICKED($parent, $tool_position_left, sub { shift->OnPositionLeft( @_ ) } );
+	EVT_RIBBONTOOLBAR_DROPDOWN_CLICKED($parent, $tool_position_left->GetId, sub { shift->OnPositionLeftDropdown( @_ ) } );
+	EVT_RIBBONTOOLBAR_CLICKED($parent, $tool_position_top->GetId, sub { shift->OnPositionTop( @_ ) } );
+	EVT_RIBBONTOOLBAR_DROPDOWN_CLICKED($parent, $tool_position_top->GetId, sub { shift->OnPositionTopDropdown( @_ ) } );
 	EVT_BUTTON($parent, $id_primary_colour, sub { shift->OnColourGalleryButton( @_ ) } );
 	EVT_BUTTON($parent, $id_primary_colour, sub { shift->OnColourGalleryButton( @_ ) } );
 	
-	$parent->{menuids}->{position_left} = $id_position_left;
-	$parent->{menuids}->{position_top}  = $id_position_top;
+	$parent->{menuids}->{position_left} = $tool_position_left->GetId;
+	$parent->{menuids}->{position_top}  = $tool_position_top->GetId;
 	
 	return $self;
 }
