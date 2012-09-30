@@ -236,6 +236,14 @@ __PACKAGE__->register_hint;
 sub can_load { require Wx::Print; return defined(&Wx::PrintPaperDatabase::FindPaperTypeById); }
 sub title { 'wxPrintPaperDatabase' }
 sub hint_message { 'wxPrintPaperDatabase requires Wx >= 0.9909'; }
+#---------------------------------------------------------------------------
+package
+	Wx::DemoHints::wxRearrangeCtrl;
+use base qw( Wx::DemoHints::CoreHintBase );
+__PACKAGE__->register_hint;
+sub can_load { return defined(&Wx::RearrangeCtrl::new); }
+sub title { 'wxRearrangeCtrl' }
+sub hint_message { 'wxRearrangeCtrl requires Wx >= 0.9914 and wxWidgets >= 2.9.4'; }
 
 
 
