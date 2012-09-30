@@ -134,6 +134,7 @@ lib/Wx/DemoModules/wxProgressDialog.pm
 lib/Wx/DemoModules/wxPropertyGrid.pm
 lib/Wx/DemoModules/wxRadioBox.pm
 lib/Wx/DemoModules/wxRadioButton.pm
+lib/Wx/DemoModules/wxRearrangeCtrl.pm
 lib/Wx/DemoModules/wxRibbonControl.pm
 lib/Wx/DemoModules/wxRichTextCtrl.pm
 lib/Wx/DemoModules/wxRichToolTip.pm
