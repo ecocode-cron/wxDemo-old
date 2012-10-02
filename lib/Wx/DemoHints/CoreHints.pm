@@ -125,7 +125,6 @@ __PACKAGE__->register_hint;
 sub can_load { defined(&Wx::InfoBar::new); }
 sub title { 'wxInfoBar' }
 sub hint_message { 'Wx::InfoBar requires Wx >= 0.9906 and wxWidgets >= 2.9.3'; }
-__PACKAGE__->register_hint;
 
 #---------------------------------------------------------------------------
 package
@@ -135,7 +134,6 @@ __PACKAGE__->register_hint;
 sub can_load { defined(&Wx::TimePickerCtrl::new); }
 sub title { 'wxTimePickerCtrl' }
 sub hint_message { 'Wx::TimePicker requires Wx >= 0.9906 and wxWidgets >= 2.9.3'; }
-__PACKAGE__->register_hint;
 
 #---------------------------------------------------------------------------
 package
@@ -145,7 +143,6 @@ __PACKAGE__->register_hint;
 sub can_load { defined &Wx::HeaderCtrl::new; }
 sub title { 'wxHeaderCtrl' }
 sub hint_message { 'Wx::PlHeaderCtrl requires wxWidgets >= 2.9.0'; }
-__PACKAGE__->register_hint;
 
 #---------------------------------------------------------------------------
 package
@@ -155,8 +152,6 @@ __PACKAGE__->register_hint;
 sub can_load { defined &Wx::HeaderCtrlSimple::new; }
 sub title { 'wxHeaderCtrlSimple' }
 sub hint_message { 'Wx::HeaderCtrlSimple requires wxWidgets >= 2.9.0'; }
-__PACKAGE__->register_hint;
-
 
 #---------------------------------------------------------------------------
 package
@@ -166,7 +161,6 @@ __PACKAGE__->register_hint;
 sub can_load { eval { return Wx::_wx_optmod_webview(); }; }
 sub title { 'wxWebView' }
 sub hint_message { 'Wx::WebView requires wxWidgets >= 2.9.3, Wx >= 0.9906 and an available backend on your system'; }
-__PACKAGE__->register_hint;
 
 #---------------------------------------------------------------------------
 package
@@ -176,7 +170,6 @@ __PACKAGE__->register_hint;
 sub can_load { eval { return Wx::_wx_optmod_ribbon(); }; }
 sub title { 'wxRibbonControl' }
 sub hint_message { 'Wx::RibbonControl requires wxWidgets >= 2.9.3 and Wx >= 0.9905'; }
-__PACKAGE__->register_hint;
 
 #---------------------------------------------------------------------------
 package
@@ -186,7 +179,6 @@ __PACKAGE__->register_hint;
 sub can_load { (Wx::wxVERSION < 2.009) }
 sub title { 'wxTreeListCtrl' }
 sub hint_message { 'Wx::TreeListCtrl from CPAN cannot work with wxWidgets >= 2.9.0'; }
-__PACKAGE__->register_hint;
 
 #---------------------------------------------------------------------------
 package
@@ -196,7 +188,6 @@ __PACKAGE__->register_hint;
 sub can_load { defined &Wx::PlTreeListItemComparator::new; }
 sub title { 'wxTreeListCtrl (native)' }
 sub hint_message { 'The Native Wx::TreeListCtrl requires Wx >= 0.9906 and wxWidgets >= 2.9.3. For wxWidgets 2.8.x you can use the Wx::TreeListCtrl module from CPAN.'; }
-__PACKAGE__->register_hint;
 
 #---------------------------------------------------------------------------
 package
@@ -206,7 +197,6 @@ __PACKAGE__->register_hint;
 sub can_load { defined &Wx::GraphicsContext::Create; }
 sub title { 'wxGraphicsContext' }
 sub hint_message { 'Your wxWidgets was not compiled with wxGraphicsContext support'; }
-__PACKAGE__->register_hint;
 
 #---------------------------------------------------------------------------
 package
@@ -216,7 +206,6 @@ __PACKAGE__->register_hint;
 sub can_load { eval { my $olay = Wx::Overlay->new; }; ( $@ ) ? 0 : 1; }
 sub title { 'wxOverlay' }
 sub hint_message { 'Your Wx + wxWidgets version combination does not support wxOverlay'; }
-__PACKAGE__->register_hint;
 
 #---------------------------------------------------------------------------
 package
@@ -226,7 +215,6 @@ __PACKAGE__->register_hint;
 sub can_load { local $@; eval { require Wx::Media }; defined &Wx::MediaCtrl::new; }
 sub title { 'wxMediaCtrl' }
 sub hint_message { 'Your wxWidgets was not compiled with wxMediaCtrl support'; }
-__PACKAGE__->register_hint;
 
 #---------------------------------------------------------------------------
 package
@@ -236,6 +224,7 @@ __PACKAGE__->register_hint;
 sub can_load { require Wx::Print; return defined(&Wx::PrintPaperDatabase::FindPaperTypeById); }
 sub title { 'wxPrintPaperDatabase' }
 sub hint_message { 'wxPrintPaperDatabase requires Wx >= 0.9909'; }
+
 #---------------------------------------------------------------------------
 package
 	Wx::DemoHints::wxRearrangeCtrl;

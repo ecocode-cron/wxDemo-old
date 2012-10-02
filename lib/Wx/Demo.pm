@@ -100,8 +100,8 @@ __PACKAGE__->mk_accessors( qw(search_term ) );
 
 #if( Wx::wxMAC()) {
     #Modern Mac defaults look better than our settings
-    #Wx::SystemOptions::SetOptionInt('window-default-variant', wxWINDOW_VARIANT_SMALL);
-    #Wx::SystemOptions::SetOptionInt('mac.listctrl.always_use_generic', 1);
+#   Wx::SystemOptions::SetOptionInt('window-default-variant', wxWINDOW_VARIANT_SMALL);
+#   Wx::SystemOptions::SetOptionInt('mac.listctrl.always_use_generic', 1);
 #}
 
 sub new {

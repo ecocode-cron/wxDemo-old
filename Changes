@@ -1,6 +1,6 @@
 Revision history for Perl application Wx::Demo.
 
-0.19  TBR
+0.19  Tue Oct 02 2012
     - Updated for wxRibbonControl changes in Wx 0.9912
     - Demo for wxRearrangeCtrl and friends added
 
