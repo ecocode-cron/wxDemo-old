@@ -1,6 +1,8 @@
 Revision history for Perl application Wx::Demo.
 
 0.20  TBR
+    - Added wxFontEnumerator demo
+    - demostrate switching off Ubuntu scrollbar overlay
 
 0.19  Tue Oct 02 2012
     - Updated for wxRibbonControl changes in Wx 0.9912

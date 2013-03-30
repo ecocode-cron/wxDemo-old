@@ -99,6 +99,7 @@ lib/Wx/DemoModules/wxFileDialog.pm
 lib/Wx/DemoModules/wxFilePickerCtrl.pm
 lib/Wx/DemoModules/wxFlexGridSizer.pm
 lib/Wx/DemoModules/wxFontDialog.pm
+lib/Wx/DemoModules/wxFontEnumerator.pm
 lib/Wx/DemoModules/wxFontPickerCtrl.pm
 lib/Wx/DemoModules/wxGauge.pm
 lib/Wx/DemoModules/wxGraphicsContext.pm
