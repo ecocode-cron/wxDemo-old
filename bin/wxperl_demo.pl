@@ -14,6 +14,9 @@
 use strict;
 use Wx;
 
+# Demonstrate switching off Ubuntu Scrollbars
+BEGIN { $ENV{LIBOVERLAY_SCROLLBAR} = 0 if $^O =~ /^linux/i ; }
+
 # wxPerl exec only needed on Mac OS X pre Wx 0.98
 
 if( $Wx::VERSION lt '0.98' && $^O eq 'darwin' && $^X !~ m{/wxPerl\.app/} ) {

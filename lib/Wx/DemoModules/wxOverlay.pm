@@ -16,7 +16,7 @@ use Wx 0.97;
 use Wx qw( :misc :window :panel :sizer);
 use base qw( Wx::Panel );
 
-sub add_to_tags { qw(new misc) }
+sub add_to_tags { qw( misc ) }
 sub title { 'wxOverlay' }
 
 sub new {
