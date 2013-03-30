@@ -42,7 +42,16 @@ sub new {
         my $font = Wx::Font->new($points, wxFONTFAMILY_DEFAULT,wxFONTSTYLE_NORMAL,wxFONTWEIGHT_NORMAL,0,$sortednames[$i] );
         my $ffamily = $font->GetFamily;
         if( $sortednames[$i] !~ /(dings|dingbats|symbol)/i ) {     # how do we determine a symbol font?
-            $list->SetItemFont($index, $font);
+            if( $Wx::VERSION < 0.9918 ) {
+                # work around for missing SetItemFont method
+                my $item = $list->GetItem($index);
+                $item->SetFont($font);
+                $list->SetItem($item);
+                
+            } else {
+                # method added in Wx 0.9918
+                $list->SetItemFont($index, $font);
+            }
             $list->SetItem($index, 1, $text);
         }
     }
@@ -100,7 +109,7 @@ sub title { 'wxFontEnumerator' }
 package Wx::DemoModules::wxFontEnumerator::Custom;
 use strict;
 use warnings;
-use base qw( Wx::PlFontEnumerator );
+use base ( $Wx::VERSION < 0.9918 ) ? qw( Wx::FontEnumerator ) : qw( Wx::PlFontEnumerator );
 
 sub new {
     my $class = shift;
