@@ -144,6 +144,10 @@ sub new {
     my $left_nb = Wx::Notebook->new
       ( $split1, -1, wxDefaultPosition, wxDefaultSize,
         wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN );
+      
+    # As per rt#84591
+    $split1->SetMinimumPaneSize( 30 );
+    $split2->SetMinimumPaneSize( 30 );
 
     my $tree        = Wx::TreeCtrl->new( $left_nb, -1 );
     my $widget_tree = Wx::TreeCtrl->new( $left_nb, -1 );

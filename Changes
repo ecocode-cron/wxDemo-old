@@ -1,5 +1,9 @@
 Revision history for Perl application Wx::Demo.
 
+0.21  TBR
+    - Added wxCommandLinkButton demo
+    - Fixes as per rt#84591
+
 0.20  Wed Apr 03 2013
     - Added wxFontEnumerator demo
     - demostrate switching off Ubuntu scrollbar overlay
