@@ -234,6 +234,14 @@ sub can_load { return defined(&Wx::RearrangeCtrl::new); }
 sub title { 'wxRearrangeCtrl' }
 sub hint_message { 'wxRearrangeCtrl requires Wx >= 0.9914 and wxWidgets >= 2.9.4'; }
 
+#---------------------------------------------------------------------------
+package
+	Wx::DemoHints::wxCommandLinkButton;
+use base qw( Wx::DemoHints::CoreHintBase );
+__PACKAGE__->register_hint;
+sub can_load { return defined(&Wx::CommandLinkButton::new); }
+sub title { 'wxCommandLinkButton' }
+sub hint_message { 'wxCommandLinkButton requires Wx >= 0.9922 and wxWidgets >= 2.9.2'; }
 
 
 1;
