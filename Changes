@@ -1,6 +1,6 @@
 Revision history for Perl application Wx::Demo.
 
-0.21  TBR
+0.21  Mon Apr 22 2013
     - Added wxCommandLinkButton demo
     - Fixes as per rt#84591
 
