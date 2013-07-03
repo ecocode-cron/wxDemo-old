@@ -205,6 +205,8 @@ sub OnPrintPage {
 
   if( $page == 1 ) { $this->{CANVAS}->OnDraw( $dc ); }
   if( $page == 2 ) { } # empty page
+  
+  return $page == 1 || $page == 2;
 }
 
 package Wx::DemoModules::wxPrinting::Canvas;
