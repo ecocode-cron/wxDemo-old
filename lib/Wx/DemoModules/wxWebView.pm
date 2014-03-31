@@ -16,12 +16,19 @@ use Wx;
 use Wx::WebView;
 use base qw( Wx::Panel );
 use Wx qw( :webview :misc :id :window :panel :sizer wxYES_NO wxNO :dialog :font);
-use Wx::Event qw(
+use Wx::Event (Wx::wxVERSION >= 3.000000)
+    ? qw(
+	EVT_WEBVIEW_NAVIGATING  EVT_WEBVIEW_NAVIGATED
+	EVT_WEBVIEW_LOADED  EVT_WEBVIEW_ERROR
+	EVT_WEBVIEW_NEWWINDOW	EVT_WEBVIEW_TITLE_CHANGED
+        EVT_BUTTON
+    )
+    : qw(
 	EVT_WEB_VIEW_NAVIGATING  EVT_WEB_VIEW_NAVIGATED
 	EVT_WEB_VIEW_LOADED  EVT_WEB_VIEW_ERROR
 	EVT_WEB_VIEW_NEWWINDOW	EVT_WEB_VIEW_TITLE_CHANGED
-    EVT_BUTTON
-	);
+        EVT_BUTTON
+    );
 
 our $VERSION = '0.01';
 
@@ -48,13 +55,21 @@ sub new {
     $self->{btnforw}->Enable(0);
     
     # Events
+    if(Wx::wxVERSION >= 3.000000)  {
+	EVT_WEBVIEW_NAVIGATING( $self, $self->{webview}, sub { shift->OnWVNavigating( @_ ); });
+	EVT_WEBVIEW_NAVIGATED( $self, $self->{webview}, sub { shift->OnWVNavigated( @_ ); });
+	EVT_WEBVIEW_LOADED( $self, $self->{webview}, sub { shift->OnWVLoaded( @_ ); });
+	EVT_WEBVIEW_ERROR( $self, $self->{webview}, sub { shift->OnWVError( @_ ); });
+	EVT_WEBVIEW_NEWWINDOW( $self, $self->{webview}, sub { shift->OnWVNewWindow( @_ ); });
+	EVT_WEBVIEW_TITLE_CHANGED( $self, $self->{webview}, sub { shift->OnWVTitleChanged( @_ ); });
+    } else {
 	EVT_WEB_VIEW_NAVIGATING( $self, $self->{webview}, sub { shift->OnWVNavigating( @_ ); });
 	EVT_WEB_VIEW_NAVIGATED( $self, $self->{webview}, sub { shift->OnWVNavigated( @_ ); });
 	EVT_WEB_VIEW_LOADED( $self, $self->{webview}, sub { shift->OnWVLoaded( @_ ); });
 	EVT_WEB_VIEW_ERROR( $self, $self->{webview}, sub { shift->OnWVError( @_ ); });
 	EVT_WEB_VIEW_NEWWINDOW( $self, $self->{webview}, sub { shift->OnWVNewWindow( @_ ); });
 	EVT_WEB_VIEW_TITLE_CHANGED( $self, $self->{webview}, sub { shift->OnWVTitleChanged( @_ ); });
-    
+    }
     EVT_BUTTON($self, $btnurl,  sub { shift->OnBtnURL( @_ ); });
     EVT_BUTTON($self, $btnback, sub { shift->OnBtnBack( @_ ); });
     EVT_BUTTON($self, $btnforw, sub { shift->OnBtnForward( @_ ); });
@@ -109,16 +124,27 @@ sub OnWVError {
     my $errorstring = $event->GetString;
     my $url = $event->GetURL;
     
-    my $errormap =  {
-        wxWEB_NAV_ERR_CONNECTION() => 'wxWEB_NAV_ERR_CONNECTION',
-        wxWEB_NAV_ERR_CERTIFICATE() => 'wxWEB_NAV_ERR_CERTIFICATE',
-        wxWEB_NAV_ERR_AUTH() => 'wxWEB_NAV_ERR_AUTH',
-        wxWEB_NAV_ERR_SECURITY() => 'wxWEB_NAV_ERR_SECURITY',
-        wxWEB_NAV_ERR_NOT_FOUND() => 'wxWEB_NAV_ERR_NOT_FOUND',
-        wxWEB_NAV_ERR_REQUEST() => 'wxWEB_NAV_ERR_REQUEST',
-        wxWEB_NAV_ERR_USER_CANCELLED() => 'wxWEB_NAV_ERR_USER_CANCELLED',
-        wxWEB_NAV_ERR_OTHER() => 'wxWEB_NAV_ERR_OTHER',
-    };
+    my $errormap = (Wx::wxVERSION >= 3.000000)
+       ? {
+	    wxWEBVIEW_NAV_ERR_CONNECTION() => 'wxWEB_NAV_ERR_CONNECTION',
+	    wxWEBVIEW_NAV_ERR_CERTIFICATE() => 'wxWEB_NAV_ERR_CERTIFICATE',
+	    wxWEBVIEW_NAV_ERR_AUTH() => 'wxWEB_NAV_ERR_AUTH',
+	    wxWEBVIEW_NAV_ERR_SECURITY() => 'wxWEB_NAV_ERR_SECURITY',
+	    wxWEBVIEW_NAV_ERR_NOT_FOUND() => 'wxWEB_NAV_ERR_NOT_FOUND',
+	    wxWEBVIEW_NAV_ERR_REQUEST() => 'wxWEB_NAV_ERR_REQUEST',
+	    wxWEBVIEW_NAV_ERR_USER_CANCELLED() => 'wxWEB_NAV_ERR_USER_CANCELLED',
+	    wxWEBVIEW_NAV_ERR_OTHER() => 'wxWEB_NAV_ERR_OTHER',
+	}
+       : {
+	    wxWEB_NAV_ERR_CONNECTION() => 'wxWEB_NAV_ERR_CONNECTION',
+	    wxWEB_NAV_ERR_CERTIFICATE() => 'wxWEB_NAV_ERR_CERTIFICATE',
+	    wxWEB_NAV_ERR_AUTH() => 'wxWEB_NAV_ERR_AUTH',
+	    wxWEB_NAV_ERR_SECURITY() => 'wxWEB_NAV_ERR_SECURITY',
+	    wxWEB_NAV_ERR_NOT_FOUND() => 'wxWEB_NAV_ERR_NOT_FOUND',
+	    wxWEB_NAV_ERR_REQUEST() => 'wxWEB_NAV_ERR_REQUEST',
+	    wxWEB_NAV_ERR_USER_CANCELLED() => 'wxWEB_NAV_ERR_USER_CANCELLED',
+	    wxWEB_NAV_ERR_OTHER() => 'wxWEB_NAV_ERR_OTHER',
+	};
     
     my $errorid = $event->GetInt;
     my $errname = exists( $errormap->{$errorid} ) ? $errormap->{$errorid} : '<UNKNOWN ID>';

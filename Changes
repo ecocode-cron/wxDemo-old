@@ -1,6 +1,7 @@
 Revision history for Perl application Wx::Demo.
 
-0.22  TBR
+0.22  Mon Mar 31 2014
+    - compatibility with Wx 0.9923 and wxWidgets 3.0.0
 
 0.21  Mon Apr 22 2013
     - Added wxCommandLinkButton demo

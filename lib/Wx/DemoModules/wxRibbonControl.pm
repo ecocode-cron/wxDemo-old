@@ -376,6 +376,7 @@ sub OnColourGalleryButton {
 
 sub OnDefaultProvider {
 	my ( $self, $event ) = @_;
+    Wx::LogMessage('OnDefaultProvider Called');
     $self->{ribbonbar}->DismissExpandedPanel();
 	
     $self->set_main_artprovider( Wx::RibbonDefaultArtProvider->new() );
@@ -383,12 +384,14 @@ sub OnDefaultProvider {
 
 sub OnAUIProvider {
 	my ( $self, $event ) = @_;
+    Wx::LogMessage('OnAUIProvider Called');
 	$self->{ribbonbar}->DismissExpandedPanel();
     $self->set_main_artprovider( Wx::RibbonAUIArtProvider->new() );
 }
 
 sub OnMSWProvider {
 	my ( $self, $event ) = @_;
+    Wx::LogMessage('OnMSWProvider Called');
 	$self->{ribbonbar}->DismissExpandedPanel();
     $self->set_main_artprovider( Wx::RibbonMSWArtProvider->new() );
 }
